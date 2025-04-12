@@ -1,5 +1,5 @@
 *.html linguist-detectable=true
-*.css linguist-detectable=true
+*.css linguist-detectable=true linguist-vendored=true
 *.js linguist-detectable=true
 *.py linguist-detectable=true
 
@@ -8,4 +8,13 @@
 *.css linguist-language=CSS
 *.js linguist-language=JavaScript
 *.py linguist-language=Python
+
+# Adjust language weights
+frontend/assets/css/* linguist-vendored=true
+frontend/assets/css/*.css linguist-vendored=true
+
+# Give more weight to Python and JavaScript
+*.py linguist-language=Python linguist-vendored=false
+*.js linguist-language=JavaScript linguist-vendored=false
+*.html linguist-language=HTML linguist-vendored=false
 
