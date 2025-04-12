@@ -1,79 +1,77 @@
-# AI Financial Advisor Chatbot
+# Finosage - Financial Knowledge Base Chatbot
 
-A modern, interactive chatbot that provides financial advice and information about various investment topics. The chatbot uses a knowledge base to answer questions about stocks, bonds, mutual funds, ETFs, and other financial concepts.
+A web-based chatbot that provides information about financial terms and concepts.
 
 ## Features
 
-- 💬 Real-time chat interface
-- 🤖 AI-powered responses
-- 📚 Comprehensive financial knowledge base
-- 🔄 Interactive follow-up questions
-- ⚡ Fast and responsive design
-- 💅 Modern and clean UI
+- Interactive chat interface
+- Comprehensive financial knowledge base
+- Real-time responses
+- Follow-up question suggestions
+- Mobile-responsive design
 
-## Tech Stack
+## Prerequisites
 
-- **Frontend:**
-  - HTML/CSS/JavaScript
-  - Modern animations and transitions
-  - Responsive design
+- Docker and Docker Compose
+- Git
 
-- **Backend:**
-  - FastAPI (Python)
-  - Async request handling
-  - Knowledge base integration
-
-## Getting Started
+## Deployment Instructions
 
 1. Clone the repository:
 ```bash
-git clone [your-repo-url]
-cd [repo-name]
+git clone https://github.com/yourusername/finosage.git
+cd finosage
 ```
 
-2. Install backend dependencies:
+2. Make the deployment script executable:
+```bash
+chmod +x deploy.sh
+```
+
+3. Run the deployment script:
+```bash
+./deploy.sh
+```
+
+4. Access the application:
+- Frontend: http://localhost
+- Backend API: http://localhost:8000
+
+## Development
+
+### Local Development
+
+1. Start the backend server:
 ```bash
 cd backend
-pip install -r requirements.txt
+python -m uvicorn main:app --reload
 ```
 
-3. Start the backend server:
+2. Start the frontend server:
 ```bash
-python main.py
+cd frontend
+# Use your preferred static file server
 ```
-
-4. Open the frontend in your browser:
-- Navigate to `frontend/index.html`
-- Or serve it using a local server
-
-## Usage
-
-1. Click the chat icon to open the chat interface
-2. Type your financial question
-3. Get instant responses with relevant information
-4. Click on follow-up questions for more details
 
 ## Project Structure
 
 ```
-.
-├── backend/
-│   ├── main.py
-│   ├── requirements.txt
-│   └── services/
-│       ├── ai_chat.py
-│       └── knowledge_base.py
-└── frontend/
-    ├── assets/
-    │   ├── css/
-    │   └── js/
-    └── index.html
+finosage/
+├── backend/           # FastAPI backend
+├── frontend/          # Frontend static files
+├── docker-compose.yml # Docker Compose configuration
+├── deploy.sh         # Deployment script
+└── README.md         # Project documentation
 ```
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License. 

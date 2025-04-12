@@ -2,6 +2,7 @@ class ChatInterface {
     constructor() {
         this.chatVisible = false;
         this.conversationHistory = [];
+        this.currentConversationId = null;
         this.backendUrl = 'http://localhost:8000'; // Add backend URL
         this.initializeChat();
     }
@@ -76,7 +77,10 @@ class ChatInterface {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ prompt: message })
+                body: JSON.stringify({ 
+                    prompt: message,
+                    conversation_id: this.currentConversationId
+                })
             });
 
             if (!response.ok) {
@@ -87,6 +91,11 @@ class ChatInterface {
             
             // Hide typing indicator
             this.hideTypingIndicator();
+
+            // Update conversation ID if provided
+            if (data.conversation_id) {
+                this.currentConversationId = data.conversation_id;
+            }
 
             // Display AI response with a small delay
             setTimeout(() => {
@@ -100,7 +109,7 @@ class ChatInterface {
 
                 // Add quick reply suggestions for follow-up questions
                 this.addQuickReplies(data.response);
-            }, 500); // 500ms delay before showing response
+            }, 500);
 
         } catch (error) {
             this.hideTypingIndicator();
