@@ -3,11 +3,9 @@
 *.js linguist-detectable=true
 *.py linguist-detectable=true
 
-# Mark CSS as documentation to reduce its impact on language stats
-*.css linguist-documentation=true
-
-# Explicitly mark Python and JavaScript as the main languages
-*.py linguist-language=Python
+# Explicitly declare languages
 *.html linguist-language=HTML
 *.css linguist-language=CSS
 *.js linguist-language=JavaScript
+*.py linguist-language=Python
+
