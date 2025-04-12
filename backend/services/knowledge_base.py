@@ -434,6 +434,18 @@ class KnowledgeBase:
             "Drawdown": {
                 "keywords": ["drawdown", "peak to trough", "decline", "loss", "maximum drawdown", "mdd"],
                 "content": "A drawdown is the peak-to-trough decline during a specific period for an investment, trading account, or fund. It measures the largest percentage drop in value from a peak to a subsequent low. Maximum Drawdown (MDD) is the largest observed loss from a peak to a trough before a new peak is attained. Drawdowns are important risk metrics that help investors understand the potential downside risk of an investment."
+            },
+            "SIP": {
+                "keywords": ["sip", "systematic investment plan", "monthly investment", "regular investment", "periodic investment"],
+                "content": "A Systematic Investment Plan (SIP) is a method of investing a fixed amount regularly (usually monthly) in mutual funds or stocks. SIP is ideal when:\n\n1. You have a regular income\n2. Want to build wealth over the long term\n3. Want to benefit from market volatility through rupee cost averaging\n4. Cannot invest large amounts at once\n5. Want to develop a disciplined savings habit\n\nSIP works best during volatile markets as it helps average out your purchase cost over time (rupee cost averaging)."
+            },
+            "Lumpsum": {
+                "keywords": ["lumpsum", "one-time investment", "bulk investment", "single payment", "one shot"],
+                "content": "A Lumpsum investment is when you invest a large amount of money all at once. Lumpsum investment is suitable when:\n\n1. You have a large amount of money available (like bonus, inheritance, etc.)\n2. Markets are at a low point or undervalued\n3. You have a good understanding of market cycles\n4. You can tolerate higher short-term volatility\n5. You want to maximize returns in a rising market\n\nLumpsum investments can give better returns than SIP if market timing is right, but they carry higher risk due to market volatility."
+            },
+            "SIP vs Lumpsum": {
+                "keywords": ["sip vs lumpsum", "compare sip lumpsum", "better investment option", "sip or lumpsum", "investment choice"],
+                "content": "Choosing between SIP and Lumpsum depends on several factors:\n\n1. Market Conditions:\n   - SIP: Better in volatile or overvalued markets\n   - Lumpsum: Better in undervalued markets or at market bottom\n\n2. Investment Amount:\n   - SIP: For regular income earners with monthly savings\n   - Lumpsum: For large one-time amounts like bonus or inheritance\n\n3. Risk Tolerance:\n   - SIP: Lower risk due to rupee cost averaging\n   - Lumpsum: Higher risk due to market timing\n\n4. Investment Horizon:\n   - SIP: Better for long-term goals and wealth building\n   - Lumpsum: Can be used for both short and long-term goals\n\n5. Market Knowledge:\n   - SIP: Requires less market expertise\n   - Lumpsum: Requires good understanding of market cycles"
             }
         }
 
