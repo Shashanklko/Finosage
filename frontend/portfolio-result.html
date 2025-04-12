@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Results - FinoSage</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/portfolio-result.css">
+    <link rel="stylesheet" href="assets/css/chat.css">
+    <link rel="stylesheet" href="assets/css/advisor.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Dynamic Background -->
+    <div class="dynamic-background">
+        <div class="gradient-orb"></div>
+        <div class="gradient-orb"></div>
+        <div class="gradient-orb"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="index.html">
+                <i class="fas fa-chart-line"></i>
+                <span>FinoSage</span>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="portfolio-builder.html" class="nav-link">Portfolio Builder</a>
+        </div>
+        <button class="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <div class="container">
+        <header class="result-header">
+            <div class="header-content">
+                <h1>Portfolio Analysis Results</h1>
+                <p class="subtitle">Based on your investment preferences and risk profile</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-download">
+                    <i class="fas fa-download"></i>
+                    Download Report
+                </button>
+                <button class="btn-edit">
+                    <i class="fas fa-edit"></i>
+                    Edit Portfolio
+                </button>
+            </div>
+        </header>
+
+        <section class="result-summary">
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>Investment Mode</h3>
+                    <p class="investment-mode">Not specified</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>Investment Horizon</h3>
+                    <p class="investment-horizon">Not specified</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>Investment Style</h3>
+                    <p class="investment-style">Not specified</p>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="summary-content">
+                    <h3>Risk Profile</h3>
+                    <p class="risk-profile">Not specified</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="metrics-grid">
+            <section class="metric-card">
+                <div class="metric-header">
+                    <h2>Asset Allocation</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="assetAllocationChart"></canvas>
+                </div>
+                <div class="metric-details">
+                    <p>Recommended allocation based on your risk profile and investment goals</p>
+                </div>
+            </section>
+
+            <section class="metric-card">
+                <div class="metric-header">
+                    <h2>Expected Annual Return</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                </div>
+                <div class="metric-value">
+                    <span class="expected-return">0%</span>
+                </div>
+                <div class="metric-details">
+                    <p>Projected annual return based on your risk profile and market conditions</p>
+                </div>
+            </section>
+
+            <section class="metric-card">
+                <div class="metric-header">
+                    <h2>Risk Profile</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="riskProfileChart"></canvas>
+                </div>
+                <div class="metric-details">
+                    <p>Comprehensive risk assessment across multiple dimensions</p>
+                </div>
+            </section>
+
+            <section class="metric-card">
+                <div class="metric-header">
+                    <h2>Risk-Adjusted Return</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                </div>
+                <div class="metric-value">
+                    <span class="sharpe-ratio">0.00</span>
+                </div>
+                <div class="metric-details">
+                    <p>Sharpe ratio indicating risk-adjusted return potential</p>
+                </div>
+            </section>
+
+            <section class="metric-card">
+                <div class="metric-header">
+                    <h2>Maximum Drawdown</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                </div>
+                <div class="metric-value">
+                    <span class="max-drawdown">0%</span>
+                </div>
+                <div class="metric-details">
+                    <p>Expected maximum potential loss during market downturns</p>
+                </div>
+            </section>
+
+            <section class="metric-card">
+                <div class="metric-header">
+                    <h2>Volatility</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-wave-square"></i>
+                    </div>
+                </div>
+                <div class="metric-value">
+                    <span class="volatility">0%</span>
+                </div>
+                <div class="metric-details">
+                    <p>Expected price fluctuation range based on your risk profile</p>
+                </div>
+            </section>
+
+            <section class="metric-card wide-card">
+                <div class="metric-header">
+                    <h2>Projected Value Over Time</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="projectedValueChart"></canvas>
+                </div>
+                <div class="metric-details">
+                    <p>Expected portfolio growth over 1, 5, and 10 years</p>
+                </div>
+            </section>
+
+            <section class="metric-card">
+                <div class="metric-header">
+                    <h2>Sector Allocation</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="sectorAllocationChart"></canvas>
+                </div>
+                <div class="metric-details">
+                    <p>Recommended sector-wise distribution of equity investments</p>
+                </div>
+            </section>
+
+            <section class="metric-card">
+                <div class="metric-header">
+                    <h2>Investment Strategy</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                </div>
+                <div class="metric-content">
+                    <div class="investment-strategy">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="metric-details">
+                    <p>Personalized investment approach based on your profile</p>
+                </div>
+            </section>
+
+            <section class="metric-card">
+                <div class="metric-header">
+                    <h2>Personalized Investment Tips</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                </div>
+                <div class="metric-content">
+                    <div class="investment-tips">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="metric-details">
+                    <p>Custom recommendations to optimize your investment strategy</p>
+                </div>
+            </section>
+
+            <section class="metric-card calculator">
+                <div class="metric-header">
+                    <h2>Returns Calculator</h2>
+                    <div class="metric-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                </div>
+                <div class="calculator-tabs">
+                    <button class="calculator-tab active">Lump Sum</button>
+                    <button class="calculator-tab">SIP</button>
+                </div>
+                <div class="calculator-inputs">
+                    <div class="input-group">
+                        <label for="investmentAmount">Investment Amount</label>
+                        <div class="input-with-icon">
+                            <span class="currency-icon">₹</span>
+                            <input type="number" id="investmentAmount" class="calculator-input" placeholder="Enter amount">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="investmentYears">Investment Period (Years)</label>
+                        <input type="number" id="investmentYears" class="calculator-input" placeholder="Enter years">
+                    </div>
+                </div>
+                <div class="calculator-result">
+                    <h3>Projected Value</h3>
+                    <p class="projected-value">₹0</p>
+                </div>
+            </section>
+        </div>
+
+        <section class="mutual-fund-qa">
+            <div class="section-header">
+                <h2><i class="fas fa-book-open"></i> Mutual Fund Knowledge Center</h2>
+                <p>Expand your understanding of mutual fund investments with our comprehensive Q&A and glossary</p>
+            </div>
+            
+            <div class="qa-container">
+                <div class="qa-tabs">
+                    <button class="qa-tab active" data-tab="faq"><i class="fas fa-question-circle"></i> Frequently Asked Questions</button>
+                    <button class="qa-tab" data-tab="terms"><i class="fas fa-bookmark"></i> Key Terms</button>
+                </div>
+                
+                <div class="qa-content active" id="faq-content">
+                    <!-- FAQ content will be loaded from JavaScript -->
+                    <div class="qa-loading"><i class="fas fa-spinner fa-spin"></i> Loading mutual fund FAQs...</div>
+                </div>
+                
+                <div class="qa-content" id="terms-content">
+                    <!-- Terms content will be loaded from JavaScript -->
+                    <div class="qa-loading"><i class="fas fa-spinner fa-spin"></i> Loading mutual fund terms...</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>FinoSage</h4>
+                    <p>Building better financial futures with AI.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="portfolio-builder.html">Portfolio Builder</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 FinoSage. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script type="module" src="assets/js/portfolio-result.js"></script>
+    <script src="assets/js/chat.js"></script>
+</body>
+</html> 

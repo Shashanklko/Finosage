@@ -1,0 +1,72 @@
+{
+    "terms": {
+        "Mutual Fund": "A professionally managed investment fund that pools money from multiple investors to purchase securities.",
+        "ETF": "Exchange-Traded Fund - A type of investment fund traded on stock exchanges, much like stocks.",
+        "SIP": "Systematic Investment Plan - A method of investing a fixed amount regularly in mutual funds.",
+        "Asset Allocation": "The strategy of dividing investments among different asset categories like stocks, bonds, and cash.",
+        "Portfolio": "A collection of financial investments like stocks, bonds, commodities, cash, and cash equivalents.",
+        "Risk Tolerance": "The degree of variability in investment returns that an investor is willing to withstand.",
+        "Diversification": "A risk management strategy that mixes a variety of investments within a portfolio.",
+        "Market Capitalization": "The total value of a company's shares of stock, calculated by multiplying share price by number of shares.",
+        "Bull Market": "A market condition where prices are rising or expected to rise.",
+        "Bear Market": "A market condition where prices are falling or expected to fall.",
+        "Dividend": "A distribution of a company's earnings to shareholders.",
+        "Yield": "The income return on an investment, such as interest or dividends.",
+        "Volatility": "The degree of variation in the price of a financial instrument over time."
+    },
+    "qa": {
+        "mutual_funds": [
+            {
+                "question": "What is a mutual fund?",
+                "answer": "A mutual fund is a professionally managed investment vehicle that pools money from multiple investors to purchase a diversified portfolio of stocks, bonds, or other securities. This provides several benefits:\n\n• Professional management\n• Diversification\n• Lower investment minimums\n• Easy access to different markets\n• Liquidity",
+                "keywords": ["mutual fund", "investment", "pool", "portfolio"]
+            },
+            {
+                "question": "How do I start investing in mutual funds?",
+                "answer": "To start investing in mutual funds, follow these steps:\n\n1. Determine your investment goals and risk tolerance\n2. Choose between Regular or Direct plans\n3. Select a fund type (Equity, Debt, Hybrid)\n4. Decide between SIP or lump sum investment\n5. Complete KYC requirements\n6. Open a mutual fund account\n7. Start your investment\n\nFor beginners, starting with an SIP in a large-cap or index fund is often recommended.",
+                "keywords": ["start", "begin", "invest", "how to"]
+            },
+            {
+                "question": "What is SIP and how does it work?",
+                "answer": "SIP (Systematic Investment Plan) is a method of investing where you invest a fixed amount regularly (usually monthly) in mutual funds. Benefits include:\n\n• Disciplined investing\n• Rupee cost averaging\n• Power of compounding\n• Starting with small amounts\n• Flexibility to modify or stop\n\nThe minimum SIP amount can be as low as ₹500 per month.",
+                "keywords": ["sip", "systematic", "monthly", "regular"]
+            }
+        ],
+        "investment_vehicles": [
+            {
+                "question": "What's the difference between stocks and mutual funds?",
+                "answer": "Key differences between stocks and mutual funds:\n\n• Stocks represent ownership in a single company, while mutual funds own multiple securities\n• Stocks typically require more research and monitoring\n• Mutual funds offer professional management and diversification\n• Stocks can be more volatile but might offer higher returns\n• Mutual funds have minimum investment requirements and expense ratios",
+                "keywords": ["stocks", "difference", "compare", "better"]
+            },
+            {
+                "question": "Should I invest in ETFs?",
+                "answer": "ETFs (Exchange-Traded Funds) can be a good investment choice because:\n\n• They offer diversification like mutual funds\n• Generally have lower expense ratios\n• Can be traded throughout the day like stocks\n• Often track specific indices\n• Typically more tax-efficient\n\nThey're particularly suitable for investors who want index-based investing with flexibility.",
+                "keywords": ["etf", "exchange traded", "index"]
+            }
+        ],
+        "investment_strategies": [
+            {
+                "question": "How should I diversify my portfolio?",
+                "answer": "Effective portfolio diversification involves:\n\n1. Asset Class Diversification:\n• Stocks (Equity)\n• Bonds (Debt)\n• Cash and equivalents\n• Real estate or REITs\n\n2. Sector Diversification:\n• Different industry sectors\n• Various market caps\n\n3. Geographical Diversification:\n• Domestic investments\n• International markets\n\nThe exact allocation depends on your age, risk tolerance, and investment goals.",
+                "keywords": ["diversify", "portfolio", "allocation", "risk"]
+            },
+            {
+                "question": "What investment strategy is best for beginners?",
+                "answer": "For beginners, a simple and systematic approach is recommended:\n\n1. Start with index funds or large-cap mutual funds\n2. Use SIP for regular investing\n3. Maintain an emergency fund\n4. Focus on long-term goals\n5. Keep costs low with direct plans\n6. Diversify gradually\n7. Avoid timing the market\n\nAs you gain experience, you can explore other investment options.",
+                "keywords": ["beginner", "start", "new", "first time"]
+            }
+        ],
+        "financial_planning": [
+            {
+                "question": "How much should I invest monthly?",
+                "answer": "The amount you should invest monthly depends on several factors:\n\n1. Your income and expenses\n2. Financial goals\n3. Time horizon\n4. Risk tolerance\n\nA general guideline is:\n• 50% for needs (expenses)\n• 30% for wants\n• 20% for savings and investments\n\nStart with what you can afford, even if it's small, and increase it gradually.",
+                "keywords": ["monthly", "invest", "amount", "how much"]
+            },
+            {
+                "question": "How do I create a financial plan?",
+                "answer": "Creating a financial plan involves these steps:\n\n1. Set clear financial goals\n2. Assess your current financial situation\n3. Create a budget\n4. Build an emergency fund (3-6 months of expenses)\n5. Plan your investments based on goals\n6. Get adequate insurance coverage\n7. Review and adjust regularly\n\nConsider consulting a financial advisor for personalized guidance.",
+                "keywords": ["plan", "financial", "budget", "goals"]
+            }
+        ]
+    }
+} 
