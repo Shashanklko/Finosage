@@ -3,7 +3,7 @@ class ChatInterface {
         this.chatVisible = false;
         this.conversationHistory = [];
         this.currentConversationId = null;
-        this.backendUrl = 'http://localhost:8000'; // Add backend URL
+        this.backendUrl = 'https://finosage-backend.onrender.com'; // Updated backend URL for production
         this.initializeChat();
     }
 
