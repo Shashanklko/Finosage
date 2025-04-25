@@ -1,14 +1,12 @@
 services:
   - type: web
-    name: finosage-backend
-    runtime: python
+    name: fastapi-backend
+    env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: bash start.sh
+    startCommand: gunicorn backend.app:app
     envVars:
-      - key: PYTHONPATH
-        value: .
-      - key: ENVIRONMENT
-        value: production
+      - key: PYTHON_VERSION
+        value: 3.11
     cors:
       allowedOrigins:
         - https://finosage-frontend.vercel.app

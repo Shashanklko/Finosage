@@ -4,7 +4,7 @@ class KnowledgeBase:
     def __init__(self):
         self.definitions = {
             "Stock": {
-                "keywords": ["stock", "equity", "shares", "ownership"],
+                "keywords": ["stock", "equity", "shares", "ownership", "stocks"],
                 "content": "A stock represents ownership in a company and a claim on part of its assets and earnings. When you buy a stock, you become a shareholder and own a portion of the company."
             },
             "Bond": {

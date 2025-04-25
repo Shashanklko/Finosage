@@ -74,42 +74,43 @@ function updateMetricValues(metrics) {
 function generateInvestmentStrategy(userInputs, allocation, metrics) {
     const strategyContainer = document.querySelector('.investment-strategy');
     const { riskTolerance, investmentHorizon, age } = userInputs;
-    const { stocks = 0, bonds = 0, crypto = 0 } = allocation;
+    const { stocks = 0, bonds = 0, crypto = 0, 'mutual-funds': mutualFunds = 0 } = allocation;
     
-    let strategy = '<ul>';
+    let strategy = '';
     
     // Basic strategy based on risk tolerance
-    strategy += `<li>${RISK_TOLERANCE_LABELS[riskTolerance]} approach with `;
-    strategy += `${stocks}% in stocks and ${bonds}% in fixed income</li>`;
+    strategy += `<div class="strategy-item">${RISK_TOLERANCE_LABELS[riskTolerance]} approach with `;
+    strategy += `${stocks}% in stocks and ${bonds}% in fixed income</div>`;
     
     // Time horizon recommendation
-    strategy += `<li>${HORIZON_LABELS[investmentHorizon]} investment strategy `;
-    strategy += `suitable for ${investmentHorizon} time horizons</li>`;
+    strategy += `<div class="strategy-item">${HORIZON_LABELS[investmentHorizon]} investment strategy `;
+    strategy += `suitable for ${investmentHorizon} time horizons</div>`;
     
     // Age-based recommendation
     if (age < 30) {
-        strategy += '<li>Early career focus: prioritize growth and take advantage of long time horizon</li>';
+        strategy += '<div class="strategy-item">Early career focus: prioritize growth and take advantage of long time horizon</div>';
     } else if (age < 50) {
-        strategy += '<li>Mid-career strategy: balance growth with increasing stability</li>';
+        strategy += '<div class="strategy-item">Mid-career strategy: balance growth with increasing stability</div>';
     } else {
-        strategy += '<li>Pre-retirement phase: focus on capital preservation and income generation</li>';
+        strategy += '<div class="strategy-item">Pre-retirement phase: focus on capital preservation and income generation</div>';
     }
     
     // Asset class recommendations
     if (stocks > 50) {
-        strategy += '<li>Focus on high-quality blue-chip stocks for stability</li>';
+        strategy += '<div class="strategy-item">Focus on high-quality blue-chip stocks for stability</div>';
     }
     if (bonds > 30) {
-        strategy += '<li>Consider government and high-grade corporate bonds</li>';
+        strategy += '<div class="strategy-item">Consider government and high-grade corporate bonds</div>';
     }
     if (crypto > 0) {
-        strategy += '<li>Limit crypto exposure to well-established coins</li>';
+        strategy += '<div class="strategy-item">Limit crypto exposure to well-established coins</div>';
+    }
+    if (mutualFunds > 0) {
+        strategy += '<div class="strategy-item">Focus on mutual funds with low expense ratios and consistent performance</div>';
     }
     
     // Rebalancing strategy
-    strategy += '<li>Rebalance portfolio quarterly to maintain target allocation</li>';
-    
-    strategy += '</ul>';
+    strategy += '<div class="strategy-item">Rebalance portfolio quarterly to maintain target allocation</div>';
     
     strategyContainer.innerHTML = strategy;
 }
@@ -124,35 +125,38 @@ function generateInvestmentTips(userInputs, metrics) {
     const { riskTolerance, investmentHorizon, initialInvestment } = userInputs;
     const { expectedReturn, riskScore } = metrics;
     
-    let tips = '<ul>';
+    let tips = '';
     
     // Risk-based tips
     if (riskScore > 7) {
-        tips += '<li>Consider setting stop-loss orders to protect against market volatility</li>';
+        tips += '<div class="tip-item">Consider setting stop-loss orders to protect against market volatility</div>';
     }
     
     // Investment amount tips
     if (initialInvestment < 50000) {
-        tips += '<li>Focus on low-cost index funds to minimize fees on smaller portfolios</li>';
+        tips += '<div class="tip-item">Focus on low-cost index funds to minimize fees on smaller portfolios</div>';
     } else {
-        tips += '<li>Consider tax-advantaged investment vehicles for larger portfolios</li>';
+        tips += '<div class="tip-item">Consider tax-advantaged investment vehicles for larger portfolios</div>';
     }
     
     // Return expectations
-    tips += `<li>With ${expectedReturn}% expected return, your investment could double in approximately ${Math.round(72/expectedReturn)} years</li>`;
+    tips += `<div class="tip-item">With ${expectedReturn}% expected return, your investment could double in approximately ${Math.round(72/expectedReturn)} years</div>`;
     
     // Horizon-based tips
     if (investmentHorizon === 'short') {
-        tips += '<li>Maintain higher cash reserves for short-term goals</li>';
+        tips += '<div class="tip-item">Maintain higher cash reserves for short-term goals</div>';
     } else if (investmentHorizon === 'long') {
-        tips += '<li>Consider dollar-cost averaging for long-term investments</li>';
+        tips += '<div class="tip-item">Consider dollar-cost averaging for long-term investments</div>';
     }
     
     // General tips
-    tips += '<li>Diversify across sectors and geographies to reduce concentration risk</li>';
-    tips += '<li>Review and adjust your portfolio as your financial goals evolve</li>';
+    tips += '<div class="tip-item">Diversify across sectors and geographies to reduce concentration risk</div>';
+    tips += '<div class="tip-item">Review and adjust your portfolio as your financial goals evolve</div>';
     
-    tips += '</ul>';
+    // Add mutual fund specific tips
+    if (initialInvestment > 10000) {
+        tips += '<div class="tip-item">Consider SIP (Systematic Investment Plan) for regular mutual fund investments</div>';
+    }
     
     tipsContainer.innerHTML = tips;
 } 
