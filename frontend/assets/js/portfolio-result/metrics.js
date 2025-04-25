@@ -1,4 +1,4 @@
- // Portfolio metrics calculation functions
+// Portfolio metrics calculation functions
 
 /**
  * Calculates key portfolio metrics based on allocation and user inputs
@@ -40,7 +40,7 @@ export function calculateMetrics(userInputs, allocation) {
  * @returns {number} Expected annual return percentage
  */
 function calculateExpectedReturn(allocation) {
-    const { stocks = 0, bonds = 0, crypto = 0, etfs = 0, cash = 0 } = allocation;
+    const { stocks = 0, bonds = 0, crypto = 0, etfs = 0, 'mutual-funds': mutualFunds = 0, cash = 0 } = allocation;
     
     // Expected returns for each asset class (historical averages)
     const returns = {
@@ -48,6 +48,7 @@ function calculateExpectedReturn(allocation) {
         bonds: 3.0,    // 3% for bonds
         crypto: 15.0,  // 15% for crypto (higher risk/return)
         etfs: 7.0,     // 7% for ETFs
+        'mutual-funds': 7.5, // 7.5% for mutual funds
         cash: 1.0      // 1% for cash/money market
     };
     
@@ -91,7 +92,7 @@ function calculateRiskScore(allocation, riskTolerance) {
  * @returns {number} Expected annual volatility percentage
  */
 function calculateVolatility(allocation) {
-    const { stocks = 0, bonds = 0, crypto = 0, etfs = 0, cash = 0 } = allocation;
+    const { stocks = 0, bonds = 0, crypto = 0, etfs = 0, 'mutual-funds': mutualFunds = 0, cash = 0 } = allocation;
     
     // Historical volatility for each asset class
     const volatilities = {
@@ -99,6 +100,7 @@ function calculateVolatility(allocation) {
         bonds: 5.0,    // 5% for bonds
         crypto: 40.0,  // 40% for crypto
         etfs: 12.0,    // 12% for ETFs
+        'mutual-funds': 11.0, // 11% for mutual funds
         cash: 0.5      // 0.5% for cash
     };
     

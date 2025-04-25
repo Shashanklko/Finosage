@@ -159,6 +159,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (preferences.includes('etfs')) {
             allocation.etfs = Math.round(equityBase * (riskTolerance === 'conservative' ? 0.5 : 0.4));
         }
+        if (preferences.includes('mutual-funds')) {
+            allocation['mutual-funds'] = Math.round(equityBase * (riskTolerance === 'conservative' ? 0.6 : 0.5));
+        }
         if (preferences.includes('bonds')) {
             allocation.bonds = Math.round((100 - equityBase) * (riskTolerance === 'conservative' ? 0.9 : 0.8));
         }
@@ -193,6 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
             stocks: 12,
             etfs: 10,
             bonds: 6,
+            'mutual-funds': 11,
             crypto: 20,
             cash: 3
         };

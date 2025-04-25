@@ -413,26 +413,59 @@ body {
     margin: 1rem 0;
 }
 
-/* Investment Strategy and Tips Styles */
+/* Investment Strategy and Tips Styles - Fix for bullet points */
 .investment-strategy, .investment-tips {
-    list-style: none;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .investment-strategy li, .investment-tips li {
     margin-bottom: 0.75rem;
-    padding-left: 1.5rem;
     position: relative;
+    list-style-type: none !important;
+    list-style-image: none !important;
+    list-style-position: outside !important;
+    padding-left: 0 !important;
+    display: block !important;
 }
 
 .investment-strategy li::before, .investment-tips li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.5rem;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--primary-color);
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.investment-strategy div, .investment-tips div {
+    margin-bottom: 0.75rem;
+    padding: 0.25rem 0;
+    display: block;
+}
+
+/* Additional fix to ensure no bullets appear */
+.metric-content ul, 
+.metric-content ol {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Investment strategy and tips items styling */
+.strategy-item, .tip-item {
+    margin-bottom: 0.75rem;
+    padding: 0.25rem 0;
+    display: block;
+    position: relative;
+    border-left: 3px solid var(--primary-color);
+    padding-left: 12px;
+    margin-left: 0;
+}
+
+/* Hide any possible bullet points from all elements in these containers */
+.investment-strategy *, .investment-tips * {
+    list-style: none !important;
 }
 
 /* Calculator Styles */

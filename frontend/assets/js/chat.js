@@ -3,7 +3,12 @@ class ChatInterface {
         this.chatVisible = false;
         this.conversationHistory = [];
         this.currentConversationId = null;
-        this.backendUrl = 'https://finosage-backend.onrender.com'; // Updated backend URL for production
+        
+        // Dynamically choose backend URL based on current environment
+        this.backendUrl = window.location.hostname === 'localhost' 
+            ? 'http://localhost:8000'  // Development environment
+            : 'https://finosage-backend.onrender.com';  // Production environment
+        
         this.initializeChat();
     }
 
@@ -14,7 +19,7 @@ class ChatInterface {
         chatContainer.style.display = 'none';
         chatContainer.innerHTML = `
             <div class="chat-header">
-                <h3>AI Assistant</h3>
+                <h3>FinoSage</h3>
                 <button id="closeChat"><i class="fas fa-times"></i></button>
             </div>
             <div class="chat-messages" id="chatMessages"></div>
@@ -31,7 +36,7 @@ class ChatInterface {
         // Create chat toggle button
         const chatToggle = document.createElement('div');
         chatToggle.className = 'chat-toggle';
-        chatToggle.innerHTML = '<i class="fas fa-comments"></i>';
+        chatToggle.innerHTML = '<i class="fa-duotone fa-solid fa-headset"></i>';
         document.body.appendChild(chatToggle);
 
         // Add event listeners
@@ -43,7 +48,7 @@ class ChatInterface {
         });
 
         // Add welcome message
-        this.displayMessage('Hello! I\'m your AI assistant. How can I help you today?', 'assistant');
+        this.displayMessage('Hello! I\'m your FinoSage assistant. How can I help you today?', 'assistant');
     }
 
     toggleChat() {
@@ -191,7 +196,7 @@ class ChatInterface {
         // Add typing animation
         const dots = typingIndicator.querySelector('.typing-dots');
         if (dots) {
-            dots.style.animation = 'typing 1.5s infinite';
+            dots.style.animation = 'typing 2s infinite';
         }
         
         this.scrollToBottom();

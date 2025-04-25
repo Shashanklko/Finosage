@@ -14,7 +14,6 @@ import {
 } from './portfolio-result/charts.js';
 import { updateUI } from './portfolio-result/dom.js';
 import { calculateMetrics } from './portfolio-result/metrics.js';
-import { createFAQMarkup, createTermsMarkup } from './portfolio-result/mutual-funds-qa.js';
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -54,8 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize Edit Portfolio button
         initializeEditPortfolioButton();
         
-        // Initialize mutual fund Q&A section
-        initializeMutualFundQA();
+        // Initialize theme toggle
+        initializeThemeToggle();
         
         // Initialize portfolio visualization
         initializePortfolioVisualization({ userInputs, allocation, metrics });
@@ -219,44 +218,11 @@ function initializeEditPortfolioButton() {
 
 /**
  * Initializes the mutual fund Q&A section
+ * @deprecated - Section removed
  */
 function initializeMutualFundQA() {
-    // Load content into tabs
-    const faqContent = document.getElementById('faq-content');
-    const termsContent = document.getElementById('terms-content');
-    
-    if (faqContent && termsContent) {
-        // Replace loading placeholders with content
-        faqContent.innerHTML = createFAQMarkup();
-        termsContent.innerHTML = createTermsMarkup();
-        
-        // Add tab switching functionality
-        const tabs = document.querySelectorAll('.qa-tab');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Update active tab
-                tabs.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Show corresponding content
-                const tabId = this.getAttribute('data-tab');
-                document.querySelectorAll('.qa-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                document.getElementById(`${tabId}-content`).classList.add('active');
-            });
-        });
-        
-        // Add accordion functionality for FAQs
-        const qaItems = document.querySelectorAll('.qa-item');
-        qaItems.forEach(item => {
-            const question = item.querySelector('.qa-question');
-            question.addEventListener('click', function() {
-                // Toggle active state
-                item.classList.toggle('active');
-            });
-        });
-    }
+    // This function is no longer used as the mutual fund Q&A section has been removed
+    console.log('Mutual fund Q&A section is no longer available');
 }
 
 // Initialize portfolio visualization
@@ -267,4 +233,65 @@ function initializePortfolioVisualization({ userInputs, allocation, metrics }) {
 // Initialize market data
 function initializeMarketData() {
     // Implementation of initializeMarketData function
+}
+
+/**
+ * Initializes the theme toggle button functionality
+ */
+function initializeThemeToggle() {
+    const themeToggleButton = document.querySelector('.theme-toggle');
+    const body = document.body;
+    
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        body.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(themeToggleButton, savedTheme);
+    }
+    
+    // Add click event listener
+    if (themeToggleButton) {
+        themeToggleButton.addEventListener('click', function() {
+            // Toggle theme
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Update body attribute
+            body.setAttribute('data-theme', newTheme);
+            
+            // Save to local storage
+            localStorage.setItem('theme', newTheme);
+            
+            // Update icon
+            updateThemeIcon(themeToggleButton, newTheme);
+            
+            // Reload charts to apply theme
+            reloadCharts();
+        });
+    }
+}
+
+/**
+ * Updates the theme icon based on current theme
+ * @param {HTMLElement} button - The theme toggle button
+ * @param {string} theme - The current theme ('light' or 'dark')
+ */
+function updateThemeIcon(button, theme) {
+    if (!button) return;
+    
+    const iconElement = button.querySelector('i');
+    if (iconElement) {
+        iconElement.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+}
+
+/**
+ * Reloads charts to apply theme changes
+ */
+function reloadCharts() {
+    // Simply reload the page to refresh charts with new theme
+    // This is a simple approach - a more sophisticated approach would redraw charts without reloading
+    setTimeout(() => {
+        location.reload();
+    }, 100);
 } 
