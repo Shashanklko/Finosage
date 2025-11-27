@@ -1,6 +1,6 @@
 # Finosage - Financial Knowledge Base Chatbot
 
-A web-based chatbot that provides information about financial terms and concepts.
+A web-based chatbot that provides information about financial terms and concepts..
 
 ## Features
 
