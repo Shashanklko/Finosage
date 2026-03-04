@@ -1,0 +1,276 @@
+/* ============================================
+   PORTFOLIO ANALYZER — VANILLA CSS
+   ============================================ */
+
+/* Uses .engine-page, .engine-back-btn, .engine-page-header etc.
+   from RetirementEngine.css for shared layout.
+   This file adds portfolio-specific styles only. */
+
+/* ---- Allocation Inputs ---- */
+.alloc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.alloc-field {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid #1F2937;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.3s;
+    position: relative;
+}
+
+.alloc-field:focus-within {
+    border-color: rgba(212, 175, 55, 0.4);
+}
+
+.alloc-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-right: 0.7rem;
+}
+
+.alloc-name {
+    font-size: 0.7rem;
+    color: #9CA3AF;
+    letter-spacing: 0.08em;
+    flex: 1;
+}
+
+.alloc-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    position: relative;
+}
+
+.alloc-input {
+    width: 2.5rem;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 300;
+    text-align: right;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.alloc-input::-webkit-outer-spin-button,
+.alloc-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.alloc-percent {
+    font-size: 0.6rem;
+    color: #4B5563;
+    margin-left: 0.1rem;
+}
+
+.alloc-stepper {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-left: 0.3rem;
+}
+
+.alloc-stepper-btn {
+    background: rgba(31, 41, 55, 0.5);
+    border: none;
+    color: #4B5563;
+    cursor: pointer;
+    font-size: 0.35rem;
+    line-height: 1;
+    padding: 0.15rem 0.25rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.alloc-stepper-btn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--gold-primary);
+}
+
+.alloc-stepper-btn:active {
+    background: rgba(212, 175, 55, 0.2);
+}
+
+.alloc-total {
+    text-align: right;
+    font-size: 0.65rem;
+    margin-bottom: 1.5rem;
+}
+
+.alloc-total span {
+    color: var(--gold-primary);
+    font-weight: 500;
+}
+
+.alloc-total.over {
+    color: #EF4444;
+}
+
+/* ---- Param Row (below allocations) ---- */
+.param-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ---- Risk Toggle ---- */
+.risk-toggle {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+}
+
+.risk-option {
+    text-align: center;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #1F2937;
+    background: rgba(17, 24, 39, 0.3);
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+}
+
+.risk-option:hover {
+    border-color: #374151;
+}
+
+.risk-option.active {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.3);
+    color: #fff;
+}
+
+/* ---- Donut Chart Container ---- */
+.donut-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.donut-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    color: #9CA3AF;
+}
+
+.donut-legend-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* ---- Correlation Matrix ---- */
+.corr-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.6rem;
+}
+
+.corr-matrix th {
+    color: #6B7280;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    padding: 0.5rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.corr-matrix td {
+    text-align: center;
+    padding: 0.5rem;
+    border: 1px solid rgba(31, 41, 55, 0.3);
+    font-weight: 300;
+    font-size: 0.7rem;
+}
+
+/* ---- Monte Carlo Paths ---- */
+.mc-paths-legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    font-size: 0.6rem;
+    color: #6B7280;
+}
+
+.mc-legend-dot {
+    display: inline-block;
+    width: 12px;
+    height: 2px;
+    border-radius: 1px;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+}
+
+/* ---- Portfolio Risk Grid (4 cards) ---- */
+.port-risk-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+/* ---- Two-column chart layout ---- */
+.port-chart-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+    .port-chart-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .alloc-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .param-row {
+        grid-template-columns: 1fr;
+    }
+
+    .port-risk-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .donut-wrap {
+        flex-direction: column;
+    }
+}

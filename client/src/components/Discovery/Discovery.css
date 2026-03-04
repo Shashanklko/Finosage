@@ -1,0 +1,151 @@
+.discovery-container {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, var(--bg-deep) 0%, var(--bg-darker) 100%);
+    overflow: hidden;
+    color: #fff;
+}
+
+.discovery-background {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.glow-orb {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.06) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(80px);
+    z-index: 2;
+}
+
+.technical-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+.radial-overlay {
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 250px rgba(0, 0, 0, 0.9);
+}
+
+.discovery-header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    margin-bottom: 3rem;
+    width: 100%;
+}
+
+.discovery-title {
+    font-size: 1rem;
+    letter-spacing: 0.8em;
+    font-weight: 200;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+}
+
+.divider {
+    width: 30px;
+    height: 1px;
+    background: var(--gold-primary);
+    margin: 1.5rem auto 0;
+    opacity: 0.3;
+}
+
+.pillars-grid.four-modules {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+    width: 100%;
+    max-width: 750px;
+}
+
+.pillar-card.minimal-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.8rem 2rem;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    backdrop-filter: blur(12px);
+    border-radius: 4px;
+}
+
+.minimal-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(212, 175, 55, 0.35);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.module-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--gold-primary);
+    opacity: 0.3;
+    transition: opacity 0.4s ease;
+}
+
+.minimal-card:hover .module-icon {
+    opacity: 0.7;
+}
+
+.pillar-index {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.55rem;
+    color: var(--gold-primary);
+    letter-spacing: 0.5em;
+    opacity: 0.5;
+}
+
+.pillar-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    color: #fff;
+    line-height: 1.5;
+}
+
+.pillar-description {
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    opacity: 0.6;
+}
+
+@media (max-width: 900px) {
+    .pillars-grid.four-modules {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+}

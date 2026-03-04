@@ -1,0 +1,115 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 7, 12, 0.85);
+    backdrop-filter: blur(8px);
+}
+
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 650px;
+    background: #0a121e;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 4rem 3rem;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-inner {
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 2rem;
+    font-weight: 200;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.modal-pre {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--gold-primary);
+    display: block;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+}
+
+.modal-title {
+    font-size: 1.8rem;
+    letter-spacing: 0.2em;
+    font-weight: 200;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+}
+
+.modal-section {
+    margin-bottom: 2.5rem;
+}
+
+.modal-section h3 {
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    color: #fff;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.modal-section p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    font-weight: 300;
+}
+
+.modal-footer {
+    margin-top: 4rem;
+}
+
+.modal-footer .divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 1.5rem;
+}
+
+.status-text {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+    opacity: 0.4;
+}
+
+/* Custom Scrollbar for Modal */
+.modal-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.2);
+}

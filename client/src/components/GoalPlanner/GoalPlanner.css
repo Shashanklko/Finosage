@@ -1,0 +1,248 @@
+/* ============================================
+   WEALTH GOAL PLANNER — VANILLA CSS
+   ============================================ */
+
+/* ---- Goal Input Cards ---- */
+.goal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    max-height: 32vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.15) transparent;
+    padding-right: 0.3rem;
+}
+
+.goal-list::-webkit-scrollbar {
+    width: 3px;
+}
+
+.goal-list::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.2);
+    border-radius: 3px;
+}
+
+.goal-row {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1fr 1fr auto;
+    gap: 0.6rem;
+    align-items: center;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid #1F2937;
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    transition: border-color 0.3s;
+}
+
+.goal-row:focus-within {
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.goal-row input,
+.goal-row select {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 0.75rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    outline: none;
+}
+
+.goal-row select {
+    color: #9CA3AF;
+    cursor: pointer;
+}
+
+.goal-row select option {
+    background: #111827;
+    color: #fff;
+}
+
+.goal-col-label {
+    font-size: 0.5rem;
+    color: #4B5563;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+}
+
+.goal-remove-btn {
+    background: transparent;
+    border: none;
+    color: #374151;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.3s;
+    padding: 0 0.3rem;
+}
+
+.goal-remove-btn:hover {
+    color: #EF4444;
+}
+
+.goal-add-btn {
+    background: transparent;
+    border: 1px dashed #1F2937;
+    border-radius: 8px;
+    color: #4B5563;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 0.6rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    text-align: center;
+}
+
+.goal-add-btn:hover {
+    border-color: rgba(212, 175, 55, 0.3);
+    color: var(--gold-primary);
+}
+
+/* ---- Success Cards per Goal ---- */
+.goal-success-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.goal-success-card {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid #1F2937;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.4s;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.goal-success-card:hover {
+    border-color: rgba(212, 175, 55, 0.2);
+    transform: translateY(-2px);
+}
+
+.goal-success-card .goal-card-priority {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.8rem;
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+}
+
+.goal-card-priority.high {
+    background: rgba(239, 68, 68, 0.15);
+    color: #F87171;
+}
+
+.goal-card-priority.medium {
+    background: rgba(251, 191, 36, 0.15);
+    color: #FCD34D;
+}
+
+.goal-card-priority.low {
+    background: rgba(52, 211, 153, 0.1);
+    color: #34D399;
+}
+
+.goal-success-value {
+    font-size: 2.2rem;
+    font-weight: 200;
+    margin-bottom: 0.3rem;
+}
+
+.goal-success-name {
+    font-size: 0.7rem;
+    color: #9CA3AF;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+}
+
+.goal-success-target {
+    font-size: 0.6rem;
+    color: #4B5563;
+}
+
+/* ---- Timeline Chart ---- */
+.timeline-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1rem 0;
+}
+
+.timeline-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.timeline-label {
+    width: 100px;
+    font-size: 0.65rem;
+    color: #9CA3AF;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.timeline-bar-bg {
+    flex: 1;
+    height: 18px;
+    background: rgba(17, 24, 39, 0.5);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.timeline-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0.4rem;
+    font-size: 0.5rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.timeline-year {
+    font-size: 0.55rem;
+    color: #4B5563;
+    width: 40px;
+    flex-shrink: 0;
+}
+
+/* ---- Tradeoff Matrix ---- */
+.tradeoff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .goal-row {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+    }
+
+    .goal-success-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tradeoff-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,186 @@
+/* ============================================
+   WITHDRAWAL STRATEGY LAB — VANILLA CSS
+   ============================================ */
+
+/* ---- Scenario Selector ---- */
+.scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+}
+
+.scenario-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.8rem;
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid #1F2937;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Inter', sans-serif;
+}
+
+.scenario-chip:hover {
+    border-color: #374151;
+}
+
+.scenario-chip.active {
+    border-color: rgba(212, 175, 55, 0.3);
+    background: rgba(212, 175, 55, 0.06);
+}
+
+.scenario-check {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1px solid #374151;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.6rem;
+    color: transparent;
+    transition: all 0.3s;
+}
+
+.scenario-chip.active .scenario-check {
+    border-color: var(--gold-primary);
+    color: var(--gold-primary);
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.scenario-chip-text {
+    font-size: 0.65rem;
+    color: #9CA3AF;
+    letter-spacing: 0.05em;
+}
+
+.scenario-chip.active .scenario-chip-text {
+    color: #E5E7EB;
+}
+
+/* ---- Stress Test Cards ---- */
+.stress-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.stress-card {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid #1F2937;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.4s;
+    backdrop-filter: blur(10px);
+}
+
+.stress-card:hover {
+    border-color: rgba(212, 175, 55, 0.15);
+    transform: translateY(-2px);
+}
+
+.stress-card-tag {
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 0.8rem;
+}
+
+.stress-card-tag.pass {
+    background: rgba(52, 211, 153, 0.12);
+    color: #34D399;
+}
+
+.stress-card-tag.warn {
+    background: rgba(251, 191, 36, 0.12);
+    color: #FCD34D;
+}
+
+.stress-card-tag.fail {
+    background: rgba(239, 68, 68, 0.12);
+    color: #F87171;
+}
+
+.stress-card-value {
+    font-size: 1.6rem;
+    font-weight: 200;
+    margin-bottom: 0.2rem;
+}
+
+.stress-card-label {
+    font-size: 0.6rem;
+    color: #9CA3AF;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.6rem;
+}
+
+.stress-card-detail {
+    font-size: 0.55rem;
+    color: #4B5563;
+    line-height: 1.6;
+}
+
+/* ---- Schedule Table ---- */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.65rem;
+}
+
+.schedule-table th {
+    color: #6B7280;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid #1F2937;
+}
+
+.schedule-table td {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid rgba(31, 41, 55, 0.3);
+    color: #9CA3AF;
+    font-weight: 300;
+}
+
+.schedule-table tr:hover td {
+    background: rgba(212, 175, 55, 0.02);
+}
+
+/* ---- Guardrail Legend ---- */
+.guardrail-legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    font-size: 0.6rem;
+    color: #6B7280;
+}
+
+.guardrail-dot {
+    display: inline-block;
+    width: 12px;
+    height: 2px;
+    border-radius: 1px;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .scenario-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stress-grid {
+        grid-template-columns: 1fr;
+    }
+}

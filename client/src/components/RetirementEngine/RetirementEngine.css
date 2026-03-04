@@ -1,0 +1,988 @@
+/* ============================================
+   RETIREMENT WEALTH ENGINE — VANILLA CSS
+   ============================================ */
+
+/* ---- Shared Page Shell ---- */
+.engine-page {
+    height: 100vh;
+    width: 100vw;
+    background: #0B0F1C;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.engine-page-scrollable {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* ---- Back Button ---- */
+.engine-back-btn {
+    position: fixed;
+    top: 3rem;
+    right: 5rem;
+    z-index: 100;
+    background: transparent;
+    border: none;
+    color: #6B7280;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    cursor: pointer;
+    transition: color 0.3s;
+    text-transform: uppercase;
+}
+
+.engine-back-btn:hover {
+    color: var(--gold-primary);
+}
+
+/* ---- Page Header ---- */
+.engine-page-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.engine-page-tag {
+    font-size: 0.6rem;
+    color: rgba(212, 175, 55, 0.5);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.engine-page-title {
+    font-size: 1.5rem;
+    font-weight: 200;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+}
+
+.engine-page-divider {
+    width: 2rem;
+    height: 1px;
+    background: var(--gold-primary);
+    opacity: 0.3;
+    margin: 1rem auto 0;
+}
+
+.engine-page-subtitle {
+    font-size: 0.7rem;
+    color: #4B5563;
+    letter-spacing: 0.15em;
+    margin-top: 1rem;
+}
+
+/* ============================================
+   LOADING SCREEN
+   ============================================ */
+.engine-loading {
+    position: fixed;
+    inset: 0;
+    background: #0B0F1C;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.engine-spinner {
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 1px solid #1F2937;
+    border-top: 1px solid var(--gold-primary);
+    border-radius: 50%;
+    animation: engineSpin 1s linear infinite;
+    margin-bottom: 2.5rem;
+}
+
+@keyframes engineSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.engine-loading h1 {
+    font-size: 1.3rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.engine-loading-text {
+    color: #6B7280;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    font-weight: 300;
+}
+
+/* ============================================
+   INPUT FORM
+   ============================================ */
+.engine-form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.engine-field label {
+    display: block;
+    font-size: 0.6rem;
+    color: #6B7280;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.engine-input-wrap {
+    position: relative;
+}
+
+.engine-input-wrap input {
+    width: 100%;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid #1F2937;
+    border-radius: 8px;
+    padding: 0.75rem 3.2rem 0.75rem 1rem;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s;
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.engine-input-wrap input::-webkit-outer-spin-button,
+.engine-input-wrap input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.engine-input-wrap input:focus {
+    border-color: rgba(212, 175, 55, 0.4);
+}
+
+.engine-input-wrap input::placeholder {
+    color: #374151;
+}
+
+.engine-input-unit {
+    position: absolute;
+    right: 2.4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.55rem;
+    color: #4B5563;
+    pointer-events: none;
+}
+
+/* Custom Stepper Buttons */
+.engine-stepper {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    bottom: 1px;
+    width: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #1F2937;
+    border-radius: 0 7px 7px 0;
+    overflow: hidden;
+}
+
+.engine-stepper-btn {
+    flex: 1;
+    background: rgba(17, 24, 39, 0.4);
+    border: none;
+    color: #4B5563;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.5rem;
+    transition: all 0.2s;
+    padding: 0;
+    line-height: 1;
+}
+
+.engine-stepper-btn:first-child {
+    border-bottom: 1px solid rgba(31, 41, 55, 0.5);
+}
+
+.engine-stepper-btn:hover {
+    background: rgba(212, 175, 55, 0.08);
+    color: var(--gold-primary);
+}
+
+.engine-stepper-btn:active {
+    background: rgba(212, 175, 55, 0.15);
+}
+
+/* Strategy selector */
+.engine-strategy-label {
+    font-size: 0.6rem;
+    color: #6B7280;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.engine-strategy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.engine-strategy-btn {
+    text-align: left;
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid #1F2937;
+    background: rgba(17, 24, 39, 0.4);
+    color: #9CA3AF;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Inter', sans-serif;
+}
+
+.engine-strategy-btn:hover {
+    border-color: #374151;
+}
+
+.engine-strategy-btn.active {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.3);
+    color: #fff;
+}
+
+.engine-strategy-btn .strategy-name {
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.35rem;
+}
+
+.engine-strategy-btn .strategy-desc {
+    font-size: 0.6rem;
+    color: #4B5563;
+    line-height: 1.5;
+}
+
+/* Generate button */
+.engine-generate-wrap {
+    text-align: center;
+}
+
+.engine-generate-btn {
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    color: var(--gold-primary);
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 300;
+    padding: 1rem 3rem;
+    cursor: pointer;
+    transition: all 0.4s;
+    font-family: 'Inter', sans-serif;
+}
+
+.engine-generate-btn:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.5);
+}
+
+.engine-generate-note {
+    font-size: 0.55rem;
+    color: #374151;
+    letter-spacing: 0.15em;
+    margin-top: 1rem;
+}
+
+/* ============================================
+   HERO STAT CARD
+   ============================================ */
+.engine-card {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid #1F2937;
+    border-radius: 1rem;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.engine-card-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.hero-stat-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero-stat-value {
+    font-size: 5rem;
+    font-weight: 200;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.hero-stat-value .hero-percent {
+    font-size: 3rem;
+    color: var(--gold-primary);
+}
+
+.hero-stat-label {
+    font-size: 1rem;
+    color: #9CA3AF;
+    letter-spacing: 0.15em;
+    font-weight: 300;
+}
+
+.hero-stat-desc {
+    font-size: 0.8rem;
+    color: #4B5563;
+    margin-top: 0.75rem;
+    max-width: 28rem;
+    line-height: 1.6;
+}
+
+.hero-sparkline-label {
+    font-size: 0.55rem;
+    color: #4B5563;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-align: right;
+    margin-bottom: 0.5rem;
+}
+
+.hero-sub-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(31, 41, 55, 0.5);
+}
+
+.hero-sub-metric {
+    text-align: center;
+}
+
+.hero-sub-metric .sub-value {
+    font-size: 1.2rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+}
+
+.hero-sub-metric .sub-label {
+    font-size: 0.55rem;
+    color: #6B7280;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+}
+
+/* ============================================
+   CHART CARDS
+   ============================================ */
+.engine-chart-title {
+    font-size: 0.75rem;
+    color: #9CA3AF;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 300;
+    margin-bottom: 2rem;
+}
+
+.engine-chart-tooltip {
+    background: rgba(11, 15, 28, 0.95);
+    border: 1px solid #1F2937;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.7rem;
+}
+
+.engine-chart-tooltip .tip-label {
+    color: #9CA3AF;
+    margin-bottom: 0.4rem;
+}
+
+.engine-chart-tooltip .tip-gold {
+    color: var(--gold-primary);
+}
+
+.engine-chart-tooltip .tip-blue {
+    color: #3B82F6;
+}
+
+.engine-chart-tooltip .tip-red {
+    color: #EF4444;
+}
+
+.engine-insight {
+    font-size: 0.75rem;
+    color: #4B5563;
+    font-style: italic;
+    margin-top: 1.5rem;
+    line-height: 1.6;
+}
+
+/* ============================================
+   RISK STAT GRID
+   ============================================ */
+.engine-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+}
+
+.engine-stat-card {
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid #1F2937;
+    border-radius: 0.8rem;
+    padding: 1.2rem;
+    text-align: center;
+    transition: all 0.4s;
+    cursor: default;
+    backdrop-filter: blur(10px);
+}
+
+.engine-stat-card:hover {
+    border-color: rgba(212, 175, 55, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.engine-stat-value {
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+}
+
+.engine-stat-value.text-red {
+    color: #F87171;
+}
+
+.engine-stat-value.text-green {
+    color: #34D399;
+}
+
+.engine-stat-label {
+    font-size: 0.5rem;
+    color: #6B7280;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* ============================================
+   INSIGHT CARDS
+   ============================================ */
+.insight-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.insight-card {
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid #1F2937;
+    border-radius: 0.8rem;
+    padding: 1.2rem;
+    text-align: center;
+    transition: all 0.4s;
+    backdrop-filter: blur(10px);
+}
+
+.insight-card:hover {
+    border-color: rgba(212, 175, 55, 0.15);
+    transform: translateY(-2px);
+}
+
+.insight-icon {
+    font-size: 1.4rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.insight-title {
+    font-size: 0.55rem;
+    color: #6B7280;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.insight-value {
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: #d4af37;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.4rem;
+}
+
+.insight-desc {
+    font-size: 0.65rem;
+    color: #4B5563;
+    line-height: 1.4;
+}
+
+/* ============================================
+   SIMULATION SUMMARY
+   ============================================ */
+.engine-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+}
+
+.engine-summary-item {
+    text-align: center;
+}
+
+.engine-summary-item .sum-value {
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+}
+
+.engine-summary-item .sum-label {
+    font-size: 0.55rem;
+    color: #4B5563;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 0.4rem;
+}
+
+/* ============================================
+   RESULTS PAGE LAYOUT
+   ============================================ */
+.engine-results-shell {
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 8rem;
+    /* Premium clearance for global fixed Navbar */
+    overflow: hidden;
+}
+
+.engine-results-header {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 2rem;
+    margin-bottom: 3rem;
+    flex-shrink: 0;
+}
+
+.engine-results-scroll {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.2) transparent;
+    padding-bottom: 5rem;
+}
+
+.engine-results-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.engine-results-main {
+    min-width: 0;
+}
+
+/* ============================================
+   ANALYSIS EXPLAINER PANEL
+   ============================================ */
+.explainer-panel {
+    position: sticky;
+    top: 0;
+    height: fit-content;
+}
+
+.explainer-card {
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid #1F2937;
+    border-radius: 1rem;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.explainer-tag {
+    font-size: 0.5rem;
+    color: #6B7280;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.explainer-title {
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: none;
+    color: #fff;
+    font-weight: 300;
+    margin-bottom: 0;
+}
+
+.explainer-divider {
+    width: 1.5rem;
+    height: 1px;
+    background: var(--gold-primary);
+    opacity: 0.3;
+    margin: 0.75rem 0 1.5rem;
+}
+
+.explainer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+    max-height: calc(100vh - 15rem);
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.15) transparent;
+}
+
+.explainer-list::-webkit-scrollbar {
+    width: 3px;
+}
+
+.explainer-list::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.2);
+    border-radius: 3px;
+}
+
+.explainer-panel::-webkit-scrollbar {
+    display: none;
+}
+
+.explainer-item {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.explainer-icon {
+    color: var(--gold-primary);
+    opacity: 0.4;
+    font-size: 0.65rem;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+}
+
+.explainer-item-title {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+    color: #E5E7EB;
+}
+
+.explainer-item-text {
+    font-size: 0.65rem;
+    line-height: 1.6;
+    color: #9CA3AF;
+    font-weight: 300;
+}
+
+/* Insight Semantic Colors */
+.insight-positive .explainer-icon {
+    color: #34D399;
+    opacity: 1;
+}
+
+.insight-negative .explainer-icon {
+    color: #F87171;
+    opacity: 1;
+}
+
+.insight-neutral .explainer-icon {
+    color: #60A5FA;
+    opacity: 1;
+}
+
+.insight-action .explainer-icon {
+    color: var(--gold-primary);
+    opacity: 1;
+}
+
+.insight-positive .explainer-item-title {
+    color: #34D399;
+}
+
+.insight-negative .explainer-item-title {
+    color: #F87171;
+}
+
+.insight-neutral .explainer-item-title {
+    color: #60A5FA;
+}
+
+.insight-action .explainer-item-title {
+    color: var(--gold-primary);
+}
+
+/* Retirement Health Matrix */
+.health-matrix {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.matrix-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.8rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.matrix-label {
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.matrix-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+}
+
+.matrix-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.matrix-unit {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+}
+
+.matrix-status {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 0.2rem;
+}
+
+.status-bar {
+    height: 100%;
+    transition: width 1s ease-out;
+}
+
+.status-strong {
+    background: #10b981;
+}
+
+.status-warning {
+    background: #d4af37;
+}
+
+.status-critical {
+    background: #ef4444;
+}
+
+/* Methodology Notes */
+.explainer-methodology {
+    margin-top: 2rem;
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.methodology-title {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--gold-primary);
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+}
+
+.methodology-text {
+    font-size: 0.6rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 0.8rem;
+}
+
+.disclaimer-box {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 0.8rem;
+}
+
+.disclaimer-text {
+    font-size: 0.55rem;
+    font-style: italic;
+    color: #9CA3AF;
+    line-height: 1.5;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+    .engine-results-main {
+        margin-right: 0;
+    }
+
+    .engine-results-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .explainer-panel {
+        position: static;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .engine-results-shell {
+        padding-top: 6rem;
+    }
+
+    .header-top-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .engine-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .engine-strategy-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-stat-layout {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .engine-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .engine-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero-sub-metrics {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   RESULTS SHELL & HEADER CLEARANCE
+   ============================================ */
+.engine-results-shell {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 5.5rem;
+    /* Condensed clearance for fixed Navbar */
+}
+
+.engine-results-header {
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-save {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.7rem;
+    border-radius: 12px;
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.engine-results-scroll {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.2) transparent;
+}
+
+.engine-save-btn {
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--gold-primary);
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+}
+
+.engine-save-btn:hover:not(:disabled) {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: var(--gold-primary);
+}
+
+.engine-save-btn.success {
+    border-color: #10b981;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.engine-save-btn.error {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.engine-save-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}

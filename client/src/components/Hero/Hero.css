@@ -1,0 +1,193 @@
+.hero-container {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, var(--bg-deep) 0%, var(--bg-darker) 100%);
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.fintech-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+.ambient-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, var(--blue-glow) 0%, transparent 70%);
+}
+
+.vignette {
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 250px rgba(0, 0, 0, 0.9);
+}
+
+.professional-side {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 60%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.professional-side.left {
+    left: -10%;
+}
+
+.professional-side.right {
+    right: -10%;
+}
+
+.image-wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+.hero-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    filter: contrast(1.1) brightness(0.9);
+}
+
+.professional-side.left .hero-image {
+    -webkit-mask-image: linear-gradient(to right, black 50%, transparent 90%);
+}
+
+.professional-side.right .hero-image {
+    -webkit-mask-image: linear-gradient(to left, black 50%, transparent 90%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 2rem;
+}
+
+.pre-title {
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-weight: 200;
+    display: block;
+}
+
+.headline.vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.01em;
+}
+
+.headline .line {
+    display: block;
+}
+
+.description.centered {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    letter-spacing: 0.02em;
+}
+
+.description .emphasis {
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    font-size: 0.95rem;
+    display: block;
+}
+
+.gold-text {
+    color: var(--gold-primary);
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+    animation: glowPulse 4s infinite ease-in-out;
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        text-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+
+    50% {
+        text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+    }
+}
+
+.explore-button {
+    background: transparent;
+    border: none;
+    color: var(--gold-primary);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    /* margin-top: 0.2rem; */
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    transition: all 0.4s ease;
+    animation: buttonGlow 3s infinite ease-in-out;
+}
+
+@keyframes buttonGlow {
+
+    0%,
+    100% {
+        text-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+        opacity: 0.7;
+    }
+
+    50% {
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+        opacity: 1;
+    }
+}
+
+.explore-button:hover {
+    color: #fff;
+    text-shadow: 0 0 25px rgba(212, 175, 55, 0.8);
+}
+
+@media (max-width: 1024px) {
+    .headline {
+        font-size: 3.5rem;
+    }
+
+    .professional-side {
+        opacity: 0.4;
+    }
+}
