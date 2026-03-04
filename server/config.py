@@ -6,13 +6,15 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     APP_NAME: str = "Finosage API"
-    CORS_ORIGINS: list[str] = [
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "http://localhost:5175",
-        "http://localhost:3000",
-        "https://finosage.vercel.app", # Add a placeholer for production
-    ]
+    CORS_ORIGINS: list[str] = ["http://localhost:5173"]
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        # If it's a string from env, split it. If it's already a list (default), return it.
+        if isinstance(self.CORS_ORIGINS, str):
+            return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
+        return self.CORS_ORIGINS
+
     MONGO_URL: str = ""
     JWT_SECRET: str = "finosage-secret-key-change-in-production"
     SMTP_EMAIL: str = ""
