@@ -23,8 +23,8 @@ const GoalOverallCard = ({ data }) => {
                     <p className="hero-stat-label">Overall Goal Achievement</p>
                     <p className="hero-stat-desc">
                         Probability of achieving all high-priority goals within their
-                        target timelines, computed via Dynamic Programming backward
-                        induction on Quasi-Monte Carlo paths.
+                        target timelines, using a dynamic target-date glide path on
+                        4k Quasi-Monte Carlo correlated equity/debt parallel paths.
                     </p>
                 </div>
                 <div style={{ textAlign: 'right' }}>

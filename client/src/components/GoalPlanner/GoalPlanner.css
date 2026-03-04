@@ -246,3 +246,323 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* =========================================================================
+   Advanced Goal Insights — Premium Glassmorphism
+   ========================================================================= */
+
+.advanced-insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.col-span-full {
+    grid-column: 1 / -1;
+}
+
+/* Base Card Upgrade */
+.advanced-insights-grid .engine-card {
+    background: rgba(17, 24, 39, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(16px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.advanced-insights-grid .engine-card:hover {
+    border-color: rgba(212, 175, 55, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 40px rgba(212, 175, 55, 0.05);
+}
+
+/* Inner Glow Effect */
+.advanced-insights-grid .engine-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.advanced-insights-grid .engine-card:hover::before {
+    opacity: 1;
+}
+
+/* Shared Header & Typography */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.card-icon {
+    color: #d4af37;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+    margin-top: -2px;
+    /* slight visual adjustment for the icon */
+}
+
+/* Override global title styles for the flex header */
+.advanced-insights-grid .engine-chart-title {
+    margin: 0;
+    line-height: 1;
+}
+
+.card-desc {
+    font-size: 0.7rem;
+    color: #9CA3AF;
+    margin-bottom: 1.5rem;
+    margin-top: 0;
+    line-height: 1.5;
+    font-weight: 300;
+}
+
+.metric-label {
+    font-size: 0.6rem;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.35rem;
+    font-weight: 500;
+}
+
+.metric-value-sm {
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: #F3F4F6;
+    letter-spacing: 0.02em;
+}
+
+/* 1. Shortfall Recovery */
+.metric-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.3), rgba(17, 24, 39, 0.6));
+    padding: 1.25rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.metric-value.highlight {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #34d399;
+    text-shadow: 0 0 15px rgba(52, 211, 153, 0.3);
+}
+
+.direction-arrow {
+    color: #4B5563;
+    font-size: 1.25rem;
+}
+
+.metric-alert {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px dashed rgba(239, 68, 68, 0.3);
+    border-radius: 6px;
+    color: #F87171;
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+/* 2. Efficiency Score */
+.score-container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.score-ring {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    background: linear-gradient(#111827, #111827) padding-box,
+        linear-gradient(45deg, #3B82F6, #8B5CF6) border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+}
+
+.score-value {
+    font-size: 2rem;
+    font-weight: 300;
+    color: #fff;
+    line-height: 1;
+    margin-top: 0.5rem;
+}
+
+.score-max {
+    font-size: 0.65rem;
+    color: #6B7280;
+    letter-spacing: 0.1em;
+}
+
+.score-breakdown {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #9CA3AF;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.breakdown-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.breakdown-val {
+    color: #E5E7EB;
+    font-weight: 400;
+}
+
+/* 3. Risk Split */
+.split-bar {
+    height: 6px;
+    width: 100%;
+    background: #111827;
+    border-radius: 3px;
+    display: flex;
+    overflow: hidden;
+    margin: 1.5rem 0;
+}
+
+.split-equity {
+    background: linear-gradient(90deg, #3B82F6, #60A5FA);
+    height: 100%;
+    font-size: 0;
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.split-debt {
+    background: linear-gradient(90deg, #10B981, #34D399);
+    height: 100%;
+    font-size: 0;
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+/* 4. Time Cushion List */
+.cushion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.cushion-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border-left: 2px solid transparent;
+    transition: background 0.2s;
+}
+
+.cushion-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.cushion-name {
+    color: #D1D5DB;
+    font-size: 0.85rem;
+    font-weight: 300;
+}
+
+.cushion-val {
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+}
+
+.cushion-val.positive {
+    color: #34d399;
+}
+
+.cushion-val.negative {
+    color: #F87171;
+}
+
+/* 5. Inflation Grid */
+.inflation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.inflation-item {
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.2), rgba(17, 24, 39, 0.4));
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 1.25rem;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.inflation-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(212, 175, 55, 0.1);
+}
+
+.inf-name {
+    color: #d4af37;
+    font-size: 0.8rem;
+    margin-bottom: 1.2rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.inf-compare {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.inf-label {
+    font-size: 0.55rem;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.35rem;
+}
+
+.inf-val-sm {
+    color: #D1D5DB;
+    font-size: 1.15rem;
+    font-weight: 300;
+}
+
+.inf-val-danger {
+    color: #F87171;
+    font-size: 1.3rem;
+    font-weight: 400;
+}

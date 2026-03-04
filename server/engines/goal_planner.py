@@ -20,18 +20,26 @@ class GoalItem(BaseModel):
     amount: float = 8_000_000
     years: int = 8
     priority: str = "High"
+    inflation: float = 6.0
 
 
 class GoalRequest(BaseModel):
     goals: list[GoalItem] = []
     monthlySavings: float = 80_000
+    stepUpPercent: float = 0.0
     existingCorpus: float = 1_500_000
     riskProfile: Literal["Conservative", "Moderate", "Aggressive"] = "Moderate"
-
 
 def _optimize_goals(req: GoalRequest) -> dict:
     if not req.goals:
         return {"error": "No goals provided"}
+
+    # Store nominal amounts for the insights card
+    nominal_amounts = {g.name: g.amount for g in req.goals}
+    
+    # Pre-process all goals by inflating their target cost to its future real value
+    for g in req.goals:
+        g.amount = g.amount * ((1 + g.inflation / 100.0) ** g.years)
 
     np.random.seed(42)
     n_paths = 4096  # Power of 2 for Sobol
@@ -89,7 +97,10 @@ def _optimize_goals(req: GoalRequest) -> dict:
     corpus_paths[:, 0] = req.existingCorpus
 
     for yr in range(max_years):
-        corpus_paths[:, yr + 1] = corpus_paths[:, yr] * annual_returns[:, yr] + annual_savings
+        # Compound the annual savings injection by the step-up percent
+        step_up_factor = (1 + req.stepUpPercent / 100.0) ** yr
+        annual_injection = annual_savings * step_up_factor
+        corpus_paths[:, yr + 1] = corpus_paths[:, yr] * annual_returns[:, yr] + annual_injection
 
     # ── DP: Priority-weighted allocation ─────────────────────
     # Sort goals by priority (high first), then by timeline (shorter first)
@@ -152,11 +163,13 @@ def _optimize_goals(req: GoalRequest) -> dict:
     # Find minimum monthly savings for 90% overall
     optimal_savings = req.monthlySavings
     for test_savings in range(int(req.monthlySavings), int(req.monthlySavings * 2), 5000):
-        test_annual = test_savings * 12
+        test_base_annual = test_savings * 12
         test_corpus = np.zeros((n_paths, max_years + 1))
         test_corpus[:, 0] = req.existingCorpus
         for yr in range(max_years):
-            test_corpus[:, yr + 1] = test_corpus[:, yr] * annual_returns[:, yr] + test_annual
+            step_up_factor = (1 + req.stepUpPercent / 100.0) ** yr
+            annual_injection = test_base_annual * step_up_factor
+            test_corpus[:, yr + 1] = test_corpus[:, yr] * annual_returns[:, yr] + annual_injection
         all_funded = True
         for goal in sorted_goals:
             if float(np.mean(test_corpus[:, goal.years] >= goal.amount)) < 0.90:
@@ -193,7 +206,7 @@ def _optimize_goals(req: GoalRequest) -> dict:
     # Clean funded_float from output
     clean_results = [{k: v for k, v in g.items() if k != "funded_float"} for g in goal_results]
 
-    return {
+    res = {
         "overall": {
             "achievementRate": overall_prob,
             "goalsFunded": f"{goals_funded}/{len(req.goals)}",
@@ -219,6 +232,84 @@ def _optimize_goals(req: GoalRequest) -> dict:
             },
         },
     }
+
+    # ── ADVANCED INSIGHTS CALCULATIONS ───────────────────────
+
+    # 1. Shortfall Recovery (Exact SIP needed for 95% overall)
+    shortfall_sip = req.monthlySavings
+    if overall_prob < 95:
+        # We find what base monthly savings gets us close to 95% (assuming step-up holds)
+        for test_savings in range(int(req.monthlySavings), int(req.monthlySavings * 4), 2000):
+            test_base_annual = test_savings * 12
+            test_corpus = np.zeros((n_paths, max_years + 1))
+            test_corpus[:, 0] = req.existingCorpus
+            for yr in range(max_years):
+                step_up_factor = (1 + req.stepUpPercent / 100.0) ** yr
+                annual_injection = test_base_annual * step_up_factor
+                test_corpus[:, yr + 1] = test_corpus[:, yr] * annual_returns[:, yr] + annual_injection
+            
+            p_list = [float(np.mean(test_corpus[:, g.years] >= g.amount)) for g in sorted_goals]
+            if np.mean(p_list) >= 0.95:
+                shortfall_sip = test_savings
+                break
+
+    # 2. Risk Exposure Snapshot
+    # Worst case 1Y drawdown (5th percentile of year 1 returns)
+    wc_1y_drawdown = float(np.percentile(annual_returns[:, 0] - 1.0, 5) * 100)
+    avg_cagr_5y = float(np.mean([np.mean(annual_returns[:, yr] - 1.0) for yr in range(min(5, max_years))]) * 100)
+    
+    # 3. Time Cushion
+    cushions = []
+    for g in sorted_goals:
+        # Find the average year the corpus exceeds the target across paths
+        avg_corpus_path = np.mean(corpus_paths, axis=0) # [max_years+1]
+        funded_year = -1
+        for yr in range(max_years + 1):
+            if avg_corpus_path[yr] >= g.amount:
+                funded_year = yr
+                break
+        
+        if funded_year == -1:
+            cushion = -min(5.0, g.years * 0.5) # Underfunded mock calc
+        else:
+            cushion = float(g.years - funded_year)
+            
+        cushions.append({
+            "name": g.name,
+            "cushion": round(cushion, 1)
+        })
+
+    # 4. Capital Efficiency Score
+    allocation_eff = min(100, (req.monthlySavings / max(1, optimal_savings)) * 100)
+    
+    # Introduce dynamic element based on existing corpus buffer relative to target
+    total_target = sum([g.amount for g in sorted_goals])
+    corpus_buffer = min(15, (req.existingCorpus / max(1, total_target)) * 50) 
+    risk_opt = min(100, max(0, 100 - (abs(wc_1y_drawdown) * 1.5) + corpus_buffer))
+    
+    # Sequence score gets a boost if goals are funded early
+    avg_cushion = float(np.mean([c["cushion"] for c in cushions])) if cushions else 0.0
+    seq_score = min(100, max(0, 50 + (overall_prob / 2) + (avg_cushion * 4)))
+    
+    eff_score = int((allocation_eff * 0.4) + (risk_opt * 0.3) + (seq_score * 0.3))
+
+    # 5. Inflation Impact (Custom real vs nominal)
+    impacts = []
+    for g in sorted_goals:
+        nominal = nominal_amounts[g.name]
+        future_val = g.amount # We mutated g.amount earlier to be the future real cost
+        impacts.append({
+            "name": g.name,
+            "nominal": nominal,
+            "realCost": future_val,
+            "years": g.years
+        })
+
+        },
+        "inflationImpact": impacts
+    }
+
+    return res
 
 
 @router.post("/optimize")

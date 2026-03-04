@@ -18,7 +18,7 @@ const GoalTradeoffPanel = ({ data }) => {
         },
         {
             title: 'Optimized Plan',
-            desc: 'DP-optimized allocation with priority rebalancing',
+            desc: 'System-optimized allocation with dynamic target-date glide path',
             metrics: [
                 { label: 'Monthly Savings', value: data.optimized?.savings },
                 { label: 'Goals Achieved', value: data.optimized?.goals },

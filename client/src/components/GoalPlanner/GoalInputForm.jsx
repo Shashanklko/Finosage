@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const defaultGoals = [
-    { id: 1, name: 'Dream Home', amount: 8000000, years: 8, priority: 'High' },
-    { id: 2, name: "Child's Education", amount: 3000000, years: 12, priority: 'High' },
-    { id: 3, name: 'International Vacation', amount: 500000, years: 3, priority: 'Low' },
-    { id: 4, name: 'Emergency Fund', amount: 1000000, years: 2, priority: 'Medium' },
+    { id: 1, name: 'Dream Home', amount: 8000000, years: 8, priority: 'High', inflation: 6 },
+    { id: 2, name: "Child's Education", amount: 3000000, years: 12, priority: 'High', inflation: 10 },
+    { id: 3, name: 'International Vacation', amount: 500000, years: 3, priority: 'Low', inflation: 8 },
+    { id: 4, name: 'Emergency Fund', amount: 1000000, years: 2, priority: 'Medium', inflation: 5 },
 ];
 
 let nextId = 5;
@@ -13,6 +13,7 @@ let nextId = 5;
 const GoalInputForm = ({ onGenerate, onBack }) => {
     const [goals, setGoals] = useState(defaultGoals);
     const [monthlySavings, setMonthlySavings] = useState(80000);
+    const [stepUpPercent, setStepUpPercent] = useState(5);
     const [existingCorpus, setExistingCorpus] = useState(1500000);
     const [riskProfile, setRiskProfile] = useState('Moderate');
 
@@ -23,7 +24,7 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
     };
 
     const addGoal = () => {
-        setGoals(prev => [...prev, { id: nextId++, name: '', amount: 0, years: 5, priority: 'Medium' }]);
+        setGoals(prev => [...prev, { id: nextId++, name: '', amount: 0, years: 5, priority: 'Medium', inflation: 6 }]);
     };
 
     const removeGoal = (id) => {
@@ -81,6 +82,15 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                                     <span style={{ fontSize: '0.55rem', color: '#4B5563', marginLeft: '0.3rem' }}>yrs</span>
                                 </div>
                                 <div>
+                                    <div className="goal-col-label">Inflation (%)</div>
+                                    <input
+                                        type="number"
+                                        value={goal.inflation}
+                                        onChange={e => updateGoal(goal.id, 'inflation', Number(e.target.value))}
+                                        style={{ width: '3rem' }}
+                                    />
+                                </div>
+                                <div>
                                     <div className="goal-col-label">Priority</div>
                                     <select
                                         value={goal.priority}
@@ -113,6 +123,17 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => setMonthlySavings(v => v + 5000)}>▲</button>
                                 <button className="engine-stepper-btn" onClick={() => setMonthlySavings(v => Math.max(0, v - 5000))}>▼</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="engine-field">
+                        <label>Annual Step-Up</label>
+                        <div className="engine-input-wrap">
+                            <input type="number" value={stepUpPercent} onChange={e => setStepUpPercent(Number(e.target.value))} />
+                            <span className="engine-input-unit">%</span>
+                            <div className="engine-stepper">
+                                <button className="engine-stepper-btn" onClick={() => setStepUpPercent(v => Math.min(100, v + 1))}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => setStepUpPercent(v => Math.max(0, v - 1))}>▼</button>
                             </div>
                         </div>
                     </div>
@@ -160,7 +181,7 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                         className="engine-generate-btn"
                         disabled={goals.length === 0}
                         style={goals.length === 0 ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
-                        onClick={() => onGenerate({ goals, monthlySavings, existingCorpus, riskProfile })}
+                        onClick={() => onGenerate({ goals, monthlySavings, stepUpPercent, existingCorpus, riskProfile })}
                     >
                         Optimize Goals
                     </button>

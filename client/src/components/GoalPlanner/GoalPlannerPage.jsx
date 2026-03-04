@@ -8,6 +8,7 @@ import GoalTimelineChart from './GoalTimelineChart';
 import GoalFundingChart from './GoalFundingChart';
 import GoalTradeoffPanel from './GoalTradeoffPanel';
 import GoalExplainer from './GoalExplainer';
+import AdvancedGoalInsights from './AdvancedGoalInsights';
 import '../RetirementEngine/RetirementEngine.css';
 import './GoalPlanner.css';
 
@@ -99,6 +100,7 @@ const GoalPlannerPage = ({ onBack, initialData, backRef, onPhaseChange }) => {
                                     <GoalTimelineChart data={results.timeline} />
                                     <GoalFundingChart data={results.fundingData} />
                                     <GoalTradeoffPanel data={results.tradeoff} />
+                                    <AdvancedGoalInsights insights={results.insights} />
                                     <div style={{ height: '3rem' }} />
                                 </div>
                                 <div className="explainer-panel">
