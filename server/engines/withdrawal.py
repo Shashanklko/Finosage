@@ -18,6 +18,7 @@ class WithdrawalRequest(BaseModel):
     horizon: int = 30
     inflationRate: float = 6.0
     strategy: str = "guardrail"
+    taxRate: float = 10.0
     scenarios: list[str] = ["baseline", "crash", "inflation"]
 
 
@@ -50,10 +51,16 @@ def _stress_test(req: WithdrawalRequest) -> dict:
     guardrail_data = None
     corpus_projection = None
     schedule = None
+    
+    # Track baseline for insights
+    baseline_actual_arr = None
+    baseline_inflation = inflation
+    baseline_withdrawal_paths = None
+    baseline_final_median = 0.0
 
     for scenario_id in req.scenarios:
         meta = SCENARIO_META.get(scenario_id, SCENARIO_META["baseline"])
-        sc_mu = base_mu + meta["mu_adj"]
+        sc_mu = base_mu + meta["mu_adj"] - (req.taxRate / 100.0 * 0.15) # Simplified tax drag on growth
         sc_sigma = base_sigma + meta["sigma_adj"]
         sc_inflation = inflation + meta["inflation_adj"]
         sc_horizon = req.horizon + meta["extra_years"]
@@ -157,6 +164,13 @@ def _stress_test(req: WithdrawalRequest) -> dict:
             "detail": detail_map.get(scenario_id, ""),
         })
 
+        # Capture baseline data for insights
+        if scenario_id == "baseline":
+            baseline_actual_arr = actual_arr.copy()
+            baseline_inflation = sc_inflation
+            baseline_withdrawal_paths = yearly_withdrawal.copy()
+            baseline_final_median = float(np.median(final))
+
         # For first scenario, generate detailed data
         if guardrail_data is None:
             guardrail_data = [
@@ -221,6 +235,36 @@ def _stress_test(req: WithdrawalRequest) -> dict:
         last_positive = [p for p in corpus_projection if p["corpus"] > 0]
         buffer_years = max(0, len(last_positive) - req.horizon) if len(last_positive) > req.horizon else round(float(np.mean(yearly_corpus[:, -1] > 0)) * 6, 1)
 
+    # ── Advanced Insights tier ──────────────────────────────
+    # 1. Longevity Risk (Failure prob in longevity scenario)
+    longevity_res = next((s for s in stress_results if s["scenario"] == "Baseline"), stress_results[0])
+    # Better: check if we actually ran longevity
+    long_sc = next((s for s in stress_results if "Longevity" in s["scenario"]), None)
+    longevity_prob = int(long_sc["survivalRate"].replace("%", "")) if long_sc else int(longevity_res["survivalRate"].replace("%", ""))
+    longevity_score = 100 - longevity_prob
+
+    # 2. Sequence Penalty (₹ loss in crash vs baseline withdrawal median)
+    # Using baseline stats if captured, else fallback
+    seq_penalty = 12.5 
+    crash_sc = next((s for s in stress_results if "Crash" in s["scenario"]), None)
+    if crash_sc:
+        crash_surv = int(crash_sc["survivalRate"].replace("%", ""))
+        base_surv = int(longevity_res["survivalRate"].replace("%", ""))
+        seq_penalty = max(0, base_surv - crash_surv) * 0.8
+
+    # 3. Purchasing Power Erosion (Based on Baseline)
+    if baseline_actual_arr is not None:
+        y1_w = baseline_actual_arr[0]
+        y20_idx = min(19, req.horizon - 1)
+        y20_w = baseline_actual_arr[y20_idx]
+        y20_real = y20_w / ((1 + baseline_inflation) ** y20_idx)
+        erosion_pct = round(max(0, (1 - y20_real / y1_w) * 100), 1) if y1_w > 0 else 0
+    else:
+        erosion_pct = 0.0
+
+    # 4. Estate Buffer (Final median Cr)
+    final_estate = baseline_final_median if baseline_actual_arr is not None else float(np.median(yearly_corpus[:, -1]))
+
     return {
         "hero": {
             "optimalRate": round(optimal_rate, 1),
@@ -228,6 +272,13 @@ def _stress_test(req: WithdrawalRequest) -> dict:
             "year1Withdrawal": round(year1_w),
             "medianCorpus15": round(median_15),
             "buffer": round(buffer_years, 1),
+        },
+        "advancedInsights": {
+            "longevityRisk": int(min(100, longevity_score * 1.2)),
+            "sequencePenalty": f"₹{req.annualWithdrawal * (seq_penalty/100) / 100000:.1f} L / yr",
+            "purchasingPower": f"{erosion_pct}%",
+            "estateBuffer": f"₹{final_estate / 10000000:.2f} Cr",
+            "erosionValue": erosion_pct
         },
         "guardrail": guardrail_data or [],
         "stressTests": stress_results,

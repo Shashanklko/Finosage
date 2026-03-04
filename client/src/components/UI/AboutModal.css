@@ -68,11 +68,23 @@
     margin-bottom: 2.5rem;
 }
 
-.modal-section h3 {
-    font-size: 0.85rem;
-    letter-spacing: 0.25em;
-    color: #fff;
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     margin-bottom: 1rem;
+}
+
+.section-icon {
+    color: var(--gold-primary);
+    opacity: 0.8;
+}
+
+.modal-section h3 {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: #fff;
+    margin: 0;
     font-weight: 600;
 }
 
@@ -81,6 +93,35 @@
     line-height: 1.8;
     color: var(--text-muted);
     font-weight: 300;
+}
+
+.scenario-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 2px solid var(--gold-primary);
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 0 4px 4px 0;
+}
+
+.scenario-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--gold-primary);
+    margin-bottom: 0.4rem;
+}
+
+.scenario-item p {
+    font-size: 0.85rem;
+    margin: 0;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.mechanism-section strong {
+    color: #fff;
+    font-weight: 500;
 }
 
 .modal-footer {

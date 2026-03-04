@@ -8,10 +8,10 @@ import Discovery from './components/Discovery/Discovery';
 import AuthPage from './components/Auth/AuthPage';
 import ProfilePage from './components/Auth/ProfilePage';
 import HistoryPage from './components/Auth/HistoryPage';
-import RetirementResultsPage from './components/RetirementEngine/RetirementResultsPage';
-import PortfolioAnalyzerPage from './components/PortfolioAnalyzer/PortfolioAnalyzerPage';
-import GoalPlannerPage from './components/GoalPlanner/GoalPlannerPage';
-import WithdrawalLabPage from './components/WithdrawalLab/WithdrawalLabPage';
+import RetirementResultsPage from './components/engine/RetirementEngine/RetirementResultsPage';
+import PortfolioAnalyzerPage from './components/engine/PortfolioAnalyzer/PortfolioAnalyzerPage';
+import GoalPlannerPage from './components/engine/GoalPlanner/GoalPlannerPage';
+import WithdrawalLabPage from './components/engine/WithdrawalLab/WithdrawalLabPage';
 import Loader from './components/UI/Loader';
 import './styles/theme.css';
 
@@ -24,6 +24,7 @@ const App = () => {
     const [user, setUser] = useState(null);
     const [activeAnalysis, setActiveAnalysis] = useState(null);
     const [engineInResults, setEngineInResults] = useState(false);
+    const [usageCount, setUsageCount] = useState(() => Number(localStorage.getItem('finosage_usage') || 0));
     const engineBackRef = React.useRef(null);
 
     useEffect(() => {
@@ -34,6 +35,14 @@ const App = () => {
             setUser(JSON.parse(storedUser));
         }
     }, []);
+
+    const incrementUsage = () => {
+        if (!user) {
+            const newCount = usageCount + 1;
+            setUsageCount(newCount);
+            localStorage.setItem('finosage_usage', newCount);
+        }
+    };
 
     const handleAuthStatus = (userData) => {
         setUser(userData);
@@ -63,13 +72,13 @@ const App = () => {
             case 'signup':
                 return <AuthPage mode="signup" onBack={() => setView('discovery')} onSwitch={() => setView('login')} onAuth={handleAuthStatus} />;
             case 'retirement':
-                return <RetirementResultsPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} />;
+                return <RetirementResultsPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setView('login')} />;
             case 'analyzer':
-                return <PortfolioAnalyzerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} />;
+                return <PortfolioAnalyzerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setView('login')} />;
             case 'planner':
-                return <GoalPlannerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} />;
+                return <GoalPlannerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setView('login')} />;
             case 'lab':
-                return <WithdrawalLabPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} />;
+                return <WithdrawalLabPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setView('login')} />;
             case 'profile':
                 return <ProfilePage onBack={() => setView(prevViewRef.current || 'discovery')} onHistoryClick={() => setView('history')} />;
             case 'history':

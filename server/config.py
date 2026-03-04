@@ -11,6 +11,7 @@ class Settings(BaseSettings):
         "http://localhost:5174",
         "http://localhost:5175",
         "http://localhost:3000",
+        "https://finosage.vercel.app", # Add a placeholer for production
     ]
     MONGO_URL: str = ""
     JWT_SECRET: str = "finosage-secret-key-change-in-production"
