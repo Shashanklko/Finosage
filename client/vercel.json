@@ -2,7 +2,7 @@
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "https://finosage-api.render.com/api/$1"
+            "destination": "https://finosage-0v8e.onrender.com/api/$1"
         },
         {
             "source": "/(.*)",

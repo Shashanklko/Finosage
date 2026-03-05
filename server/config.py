@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     APP_NAME: str = "Finosage API"
-    CORS_ORIGINS: Union[str, list[str]] = ["http://localhost:5173"]
+    CORS_ORIGINS: Union[str, list[str]] = ["http://localhost:5173", "https://finosage-wealth.vercel.app"]
 
     @property
     def cors_origins_list(self) -> list[str]:
