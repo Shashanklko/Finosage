@@ -88,135 +88,110 @@ def generate_otp() -> str:
     return str(random.randint(100000, 999999))
 
 
-def send_otp_email(to_email: str, otp: str, first_name: str = ""):
-    """Send OTP via SMTP (Gmail)."""
+def _send_email_robust(to_email: str, subject: str, html_content: str, label: str = "OTP") -> bool:
+    """Centralized robust SMTP sender for Render environments."""
     if not settings.SMTP_EMAIL or not settings.SMTP_PASSWORD:
-        print(f"[!] SMTP not configured — OTP for {to_email}: {otp}")
-        return True  # Allow dev testing without email
+        print(f"[!] SMTP not configured — {label} for {to_email} (check .env)")
+        return True
 
     try:
         msg = MIMEMultipart("alternative")
         msg["From"] = f"Finosage <{settings.SMTP_EMAIL}>"
         msg["To"] = to_email
-        msg["Subject"] = f"Finosage — Your Verification Code: {otp}"
+        msg["Subject"] = subject
+        msg.attach(MIMEText(html_content, "html"))
 
-        greeting = f"Hi {first_name}," if first_name else "Hi,"
-        html = f"""
-        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 480px; margin: 0 auto;
-                    background: #0a0f1a; color: #ffffff; padding: 40px 30px; border-radius: 8px;
-                    border: 1px solid rgba(212, 175, 55, 0.15);">
-            <p style="font-size: 11px; letter-spacing: 4px; color: #d4af37; opacity: 0.6;
-                      text-transform: uppercase; margin-bottom: 24px;">FINOSAGE</p>
-            <p style="font-size: 14px; color: #ccc; margin-bottom: 20px;">{greeting}</p>
-            <p style="font-size: 13px; color: #999; line-height: 1.7; margin-bottom: 28px;">
-                Use the code below to verify your email address and activate your Finosage account.
-            </p>
-            <div style="background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.25);
-                        border-radius: 6px; text-align: center; padding: 20px; margin-bottom: 28px;">
-                <span style="font-size: 32px; letter-spacing: 10px; font-weight: 300;
-                             color: #d4af37;">{otp}</span>
-            </div>
-            <p style="font-size: 11px; color: #666; line-height: 1.6;">
-                This code expires in <strong style="color: #999;">10 minutes</strong>.
-                If you didn't request this, please ignore this email.
-            </p>
-            <hr style="border: none; border-top: 1px solid #1a1f2e; margin: 24px 0;" />
-            <p style="font-size: 10px; color: #444; letter-spacing: 1px;">
-                The Analytical Engine · Finosage
-            </p>
-        </div>
-        """
-
-        msg.attach(MIMEText(html, "html"))
-
-        # Force IPv4 resolution to avoid Render/Gmail IPv6 issues
+        # 1. DNS Resolution (Forcing IPv4 to avoid Render/Gmail IPv6 issues)
         try:
             smtp_ip = socket.gethostbyname(settings.SMTP_SERVER)
+            target = smtp_ip
             print(f"[debug] Resolved {settings.SMTP_SERVER} to {smtp_ip}")
         except Exception as res_err:
             print(f"[!] DNS Resolution failed: {res_err}")
-            smtp_ip = settings.SMTP_SERVER
+            target = settings.SMTP_SERVER
 
-        # Port 465 uses SMTP_SSL, 587 uses starttls
+        # 2. Connection with high timeout (30s for Render cold starts/latency)
+        print(f"→ [SMTP] Connecting to {target}:{settings.SMTP_PORT} (Timeout: 30s)...")
         if settings.SMTP_PORT == 465:
-            server = smtplib.SMTP_SSL(smtp_ip, settings.SMTP_PORT, timeout=10)
+            server = smtplib.SMTP_SSL(target, settings.SMTP_PORT, timeout=30)
         else:
-            server = smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=10)
+            server = smtplib.SMTP(target, settings.SMTP_PORT, timeout=30)
             server.starttls()
 
+        # 3. Authentication
         server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
+        
+        # 4. Transmission
         server.sendmail(settings.SMTP_EMAIL, to_email, msg.as_string())
         server.quit()
-        print(f"[+] OTP sent to {to_email}")
+        
+        print(f"[+] {label} successfully sent to {to_email}")
         return True
     except Exception as e:
-        print(f"[-] [send_otp_email] Failed: {type(e).__name__}: {str(e)}")
+        print(f"[-] [SMTP:{label}] Failed for {to_email}: {type(e).__name__}: {str(e)}")
         return False
+
+
+def send_otp_email(to_email: str, otp: str, first_name: str = ""):
+    """Send OTP via SMTP (Gmail)."""
+    greeting = f"Hi {first_name}," if first_name else "Hi,"
+    html = f"""
+    <div style="font-family: 'Inter', Arial, sans-serif; max-width: 480px; margin: 0 auto;
+                background: #0a0f1a; color: #ffffff; padding: 40px 30px; border-radius: 8px;
+                border: 1px solid rgba(212, 175, 55, 0.15);">
+        <p style="font-size: 11px; letter-spacing: 4px; color: #d4af37; opacity: 0.6;
+                    text-transform: uppercase; margin-bottom: 24px;">FINOSAGE</p>
+        <p style="font-size: 14px; color: #ccc; margin-bottom: 20px;">{greeting}</p>
+        <p style="font-size: 13px; color: #999; line-height: 1.7; margin-bottom: 28px;">
+            Use the code below to verify your email address and activate your Finosage account.
+        </p>
+        <div style="background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.25);
+                    border-radius: 6px; text-align: center; padding: 20px; margin-bottom: 28px;">
+            <span style="font-size: 32px; letter-spacing: 10px; font-weight: 300;
+                            color: #d4af37;">{otp}</span>
+        </div>
+        <p style="font-size: 11px; color: #666; line-height: 1.6;">
+            This code expires in <strong style="color: #999;">10 minutes</strong>.
+            If you didn't request this, please ignore this email.
+        </p>
+        <hr style="border: none; border-top: 1px solid #1a1f2e; margin: 24px 0;" />
+        <p style="font-size: 10px; color: #444; letter-spacing: 1px;">
+            The Analytical Engine · Finosage
+        </p>
+    </div>
+    """
+    return _send_email_robust(to_email, f"Finosage — Your Verification Code: {otp}", html, label="OTP")
 
 
 def send_reset_otp_email(to_email: str, otp: str, first_name: str = ""):
     """Send Password Reset OTP via SMTP."""
-    if not settings.SMTP_EMAIL or not settings.SMTP_PASSWORD:
-        print(f"[!] SMTP not configured — Reset OTP for {to_email}: {otp}")
-        return True
-
-    try:
-        msg = MIMEMultipart("alternative")
-        msg["From"] = f"Finosage <{settings.SMTP_EMAIL}>"
-        msg["To"] = to_email
-        msg["Subject"] = f"Finosage — Password Reset Code: {otp}"
-
-        greeting = f"Hi {first_name}," if first_name else "Hi,"
-        html = f"""
-        <div style="font-family: 'Inter', Arial, sans-serif; max-width: 480px; margin: 0 auto;
-                    background: #0a0f1a; color: #ffffff; padding: 40px 30px; border-radius: 8px;
-                    border: 1px solid rgba(212, 175, 55, 0.15);">
-            <p style="font-size: 11px; letter-spacing: 4px; color: #d4af37; opacity: 0.6;
-                      text-transform: uppercase; margin-bottom: 24px;">FINOSAGE</p>
-            <p style="font-size: 14px; color: #ccc; margin-bottom: 20px;">{greeting}</p>
-            <p style="font-size: 13px; color: #999; line-height: 1.7; margin-bottom: 28px;">
-                You requested to reset your password. Use the code below to proceed.
-            </p>
-            <div style="background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.25);
-                        border-radius: 6px; text-align: center; padding: 20px; margin-bottom: 28px;">
-                <span style="font-size: 32px; letter-spacing: 10px; font-weight: 300;
-                             color: #d4af37;">{otp}</span>
-            </div>
-            <p style="font-size: 11px; color: #666; line-height: 1.6;">
-                This code expires in <strong style="color: #999;">10 minutes</strong>.
-                If you didn't request this, please ignore this email.
-            </p>
-            <hr style="border: none; border-top: 1px solid #1a1f2e; margin: 24px 0;" />
-            <p style="font-size: 10px; color: #444; letter-spacing: 1px;">
-                The Analytical Engine · Finosage
-            </p>
+    greeting = f"Hi {first_name}," if first_name else "Hi,"
+    html = f"""
+    <div style="font-family: 'Inter', Arial, sans-serif; max-width: 480px; margin: 0 auto;
+                background: #0a0f1a; color: #ffffff; padding: 40px 30px; border-radius: 8px;
+                border: 1px solid rgba(212, 175, 55, 0.15);">
+        <p style="font-size: 11px; letter-spacing: 4px; color: #d4af37; opacity: 0.6;
+                    text-transform: uppercase; margin-bottom: 24px;">FINOSAGE</p>
+        <p style="font-size: 14px; color: #ccc; margin-bottom: 20px;">{greeting}</p>
+        <p style="font-size: 13px; color: #999; line-height: 1.7; margin-bottom: 28px;">
+            You requested to reset your password. Use the code below to proceed.
+        </p>
+        <div style="background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.25);
+                    border-radius: 6px; text-align: center; padding: 20px; margin-bottom: 28px;">
+            <span style="font-size: 32px; letter-spacing: 10px; font-weight: 300;
+                            color: #d4af37;">{otp}</span>
         </div>
-        """
-        msg.attach(MIMEText(html, "html"))
-
-        # Force IPv4 resolution to avoid Render/Gmail IPv6 issues
-        try:
-            smtp_ip = socket.gethostbyname(settings.SMTP_SERVER)
-            print(f"[debug] Resolved {settings.SMTP_SERVER} to {smtp_ip}")
-        except Exception as res_err:
-            print(f"[!] DNS Resolution failed: {res_err}")
-            smtp_ip = settings.SMTP_SERVER
-
-        # Port 465 uses SMTP_SSL, 587 uses starttls
-        if settings.SMTP_PORT == 465:
-            server = smtplib.SMTP_SSL(smtp_ip, settings.SMTP_PORT, timeout=10)
-        else:
-            server = smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=10)
-            server.starttls()
-
-        server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
-        server.sendmail(settings.SMTP_EMAIL, to_email, msg.as_string())
-        server.quit()
-        print(f"[+] Reset OTP sent to {to_email}")
-        return True
-    except Exception as e:
-        print(f"[-] [send_reset_otp_email] Failed: {type(e).__name__}: {str(e)}")
-        return False
+        <p style="font-size: 11px; color: #666; line-height: 1.6;">
+            This code expires in <strong style="color: #999;">10 minutes</strong>.
+            If you didn't request this, please ignore this email.
+        </p>
+        <hr style="border: none; border-top: 1px solid #1a1f2e; margin: 24px 0;" />
+        <p style="font-size: 10px; color: #444; letter-spacing: 1px;">
+            The Analytical Engine · Finosage
+        </p>
+    </div>
+    """
+    return _send_email_robust(to_email, f"Finosage — Password Reset Code: {otp}", html, label="Reset OTP")
 
 
 # ---------- endpoints ----------
