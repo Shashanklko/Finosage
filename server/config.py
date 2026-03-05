@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     MONGO_URL: str = ""
     JWT_SECRET: str = "finosage-secret-key-change-in-production"
     SMTP_EMAIL: str = ""
+    GMAIL_TOKEN_JSON: str = ""
     SMTP_PASSWORD: str = ""
     SMTP_SERVER: str = "smtp.gmail.com"
     SMTP_PORT: int = 587

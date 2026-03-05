@@ -88,77 +88,62 @@ def generate_otp() -> str:
     return str(random.randint(100000, 999999))
 
 
-def _send_email_robust(to_email: str, subject: str, html_content: str, label: str = "OTP") -> bool:
-    """Centralized robust SMTP sender for Render environments."""
-    if not settings.SMTP_EMAIL or not settings.SMTP_PASSWORD:
-        print(f"[!] SMTP not configured — {label} for {to_email} (check .env)")
-        return False
+import base64
+import os
+import json
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
 
-    def try_connect(target: str, port: int, use_ssl: bool, timeout: int = 15):
-        if use_ssl:
-            return smtplib.SMTP_SSL(target, port, timeout=timeout)
-        else:
-            s = smtplib.SMTP(target, port, timeout=timeout)
-            s.starttls()
-            return s
-
-    error_history = []
+def _get_gmail_service():
+    """Helper to initialize the Gmail API service robustly."""
+    creds = None
     
-    # Strategy 1: Standard Hostname Connection (Best for SSL)
-    print(f"→ [SMTP] Strategy 1: Connecting to {settings.SMTP_SERVER}:{settings.SMTP_PORT} via hostname...")
-    try:
-        if settings.SMTP_PORT == 465:
-            server = smtplib.SMTP_SSL(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=15)
-        else:
-            server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=15)
-            server.starttls()
+    # 1. Try reading from token.json file first (local dev)
+    if os.path.exists('token.json'):
+        with open('token.json', 'r') as token_file:
+            creds_data = json.load(token_file)
+            creds = Credentials.from_authorized_user_info(creds_data, ['https://www.googleapis.com/auth/gmail.send'])
             
-        server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
-        server.sendmail(settings.SMTP_EMAIL, to_email, _prepare_msg(to_email, subject, html_content).as_string())
-        server.quit()
-        print(f"[+] {label} successfully sent to {to_email} (Strategy 1)")
-        return True
-    except Exception as e:
-        error_history.append(f"Strategy 1 Failed: {type(e).__name__}: {str(e)}")
-        print(f"[-] Strategy 1 Failed: {str(e)}")
+    # 2. Try reading from environment variable (Render production)
+    elif settings.GMAIL_TOKEN_JSON:
+        try:
+            creds_data = json.loads(settings.GMAIL_TOKEN_JSON)
+            creds = Credentials.from_authorized_user_info(creds_data, ['https://www.googleapis.com/auth/gmail.send'])
+        except Exception as e:
+            print(f"[-] Failed to parse GMAIL_TOKEN_JSON from env: {e}")
 
-    # Strategy 2: IPv4 Fallback (Bypasses Render IPv6 resolution issues)
-    print(f"→ [SMTP] Strategy 2: Falling back to IPv4 resolution for {settings.SMTP_SERVER}...")
-    try:
-        smtp_ip = socket.gethostbyname(settings.SMTP_SERVER)
-        print(f"[debug] Resolved {settings.SMTP_SERVER} to {smtp_ip}")
+    if not creds or not creds.valid:
+        raise Exception("Invalid or missing Gmail OAuth credentials. Run generate_token.py first, or set GMAIL_TOKEN_JSON env var.")
         
-        if settings.SMTP_PORT == 465:
-            server = smtplib.SMTP_SSL(smtp_ip, settings.SMTP_PORT, timeout=15)
-        else:
-            server = smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=15)
-            server.starttls()
-            
-        server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
-        server.sendmail(settings.SMTP_EMAIL, to_email, _prepare_msg(to_email, subject, html_content).as_string())
-        server.quit()
-        print(f"[+] {label} successfully sent to {to_email} (Strategy 2)")
+    return build('gmail', 'v1', credentials=creds)
+
+def _send_email_robust(to_email: str, subject: str, html_content: str, label: str = "OTP") -> bool:
+    """Centralized robust sender using the official Gmail API for Render environments."""
+    try:
+        service = _get_gmail_service()
+        
+        # Prepare the MIME message
+        msg = MIMEMultipart("alternative")
+        msg["From"] = f"Finosage <{settings.SMTP_EMAIL}>"
+        msg["To"] = to_email
+        msg["Subject"] = subject
+        msg.attach(MIMEText(html_content, "html"))
+        
+        # Encode for Gmail API
+        b64_encoded_msg = base64.urlsafe_b64encode(msg.as_bytes()).decode("utf-8")
+        body = {'raw': b64_encoded_msg}
+        
+        print(f"→ [Gmail API] Sending {label} to {to_email}...")
+        sent_message = service.users().messages().send(userId='me', body=body).execute()
+        
+        print(f"[+] {label} successfully sent to {to_email}. Message ID: {sent_message.get('id')}")
         return True
     except Exception as e:
-        error_history.append(f"Strategy 2 Failed: {type(e).__name__}: {str(e)}")
-        print(f"[-] Strategy 2 Failed: {str(e)}")
-
-    # If all strategies fail
-    import traceback
-    print(f"[-] [SMTP:{label}] All connection strategies failed for {to_email}")
-    for err in error_history:
-        print(f"    - {err}")
-    traceback.print_exc()
-    raise Exception(f"Failed to send email after multiple attempts: {'; '.join(error_history)}")
-
-
-def _prepare_msg(to_email: str, subject: str, html_content: str) -> MIMEMultipart:
-    msg = MIMEMultipart("alternative")
-    msg["From"] = f"Finosage <{settings.SMTP_EMAIL}>"
-    msg["To"] = to_email
-    msg["Subject"] = subject
-    msg.attach(MIMEText(html_content, "html"))
-    return msg
+        import traceback
+        print(f"[-] [SMTP:{label}] Failed to send email via Gmail API")
+        traceback.print_exc()
+        # Fallback to older code if it somehow doesn't work? No, raising exception is safer so we know it failed.
+        return False
 
 
 def send_otp_email(to_email: str, otp: str, first_name: str = ""):
