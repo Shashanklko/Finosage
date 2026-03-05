@@ -16,16 +16,85 @@ const riskLevels = ['Conservative', 'Moderate', 'Aggressive'];
 
 const PortfolioInputForm = ({ onGenerate, onBack }) => {
     const [weights, setWeights] = useState(
-        Object.fromEntries(assets.map(a => [a.id, a.defaultWeight]))
+        Object.fromEntries(assets.map(a => [a.id, '']))
     );
-    const [amount, setAmount] = useState(5000000);
-    const [horizon, setHorizon] = useState(10);
+    const [amount, setAmount] = useState('');
+    const [horizon, setHorizon] = useState('');
     const [risk, setRisk] = useState('Moderate');
+    const [error, setError] = useState('');
+    const [touched, setTouched] = useState({});
 
-    const totalWeight = Object.values(weights).reduce((s, v) => s + v, 0);
+    const totalWeight = Object.values(weights).reduce((s, v) => s + (Number(v) || 0), 0);
 
     const handleWeightChange = (id, val) => {
-        setWeights(prev => ({ ...prev, [id]: Number(val) || 0 }));
+        setWeights(prev => ({ ...prev, [id]: val }));
+    };
+
+    const handleBlur = (fieldId) => {
+        setTouched(prev => ({ ...prev, [fieldId]: true }));
+    };
+
+    const getFieldError = (fieldId) => {
+        if (fieldId === 'amount') {
+            if (amount !== '' && Number(amount) <= 0) return 'Invalid amount';
+        }
+        if (fieldId === 'horizon') {
+            if (horizon !== '' && (Number(horizon) <= 0 || Number(horizon) > 50)) return 'Horizon 1-50 years';
+        }
+        if (fieldId.startsWith('weight-')) {
+            const assetId = fieldId.replace('weight-', '');
+            const val = weights[assetId];
+            if (val !== '' && (Number(val) < 0 || Number(val) > 100)) return 'Weight 0-100%';
+        }
+        return null;
+    };
+
+    const validate = () => {
+        if (amount === '' || horizon === '') {
+            setError('');
+            return false;
+        }
+
+        const paramError = getFieldError('amount') || getFieldError('horizon');
+        if (paramError) {
+            setError(paramError);
+            return false;
+        }
+
+        for (const asset of assets) {
+            const wErr = getFieldError(`weight-${asset.id}`);
+            if (wErr) {
+                setError(wErr);
+                return false;
+            }
+        }
+
+        if (totalWeight !== 100 && totalWeight !== 0) {
+            setError('Total portfolio allocation must equal exactly 100%.');
+            return false;
+        }
+
+        setError('');
+        return true;
+    };
+
+    React.useEffect(() => {
+        validate();
+    }, [weights, amount, horizon]);
+
+    const isFormValid = () => {
+        return totalWeight === 100 && amount !== '' && horizon !== '' && !error;
+    };
+
+    const validateAndSubmit = () => {
+        if (isFormValid()) {
+            onGenerate({
+                weights: Object.fromEntries(Object.entries(weights).map(([k, v]) => [k, Number(v || 0)])),
+                amount: Number(amount),
+                horizon: Number(horizon),
+                risk
+            });
+        }
     };
 
     return (
@@ -50,7 +119,7 @@ const PortfolioInputForm = ({ onGenerate, onBack }) => {
                 >
                     <div className="alloc-grid">
                         {assets.map(asset => (
-                            <div key={asset.id} className="alloc-field">
+                            <div key={asset.id} className={`alloc-field ${touched[`weight-${asset.id}`] && getFieldError(`weight-${asset.id}`) ? 'has-error' : ''}`}>
                                 <div className="alloc-color" style={{ background: asset.color }} />
                                 <span className="alloc-name">{asset.name}</span>
                                 <div className="alloc-input-wrap">
@@ -59,20 +128,21 @@ const PortfolioInputForm = ({ onGenerate, onBack }) => {
                                         className="alloc-input"
                                         value={weights[asset.id]}
                                         onChange={(e) => handleWeightChange(asset.id, e.target.value)}
+                                        onBlur={() => handleBlur(`weight-${asset.id}`)}
                                         min={0}
                                         max={100}
                                     />
                                     <span className="alloc-percent">%</span>
                                     <div className="alloc-stepper">
-                                        <button className="alloc-stepper-btn" onClick={() => handleWeightChange(asset.id, Math.min(100, weights[asset.id] + 1))}>▲</button>
-                                        <button className="alloc-stepper-btn" onClick={() => handleWeightChange(asset.id, Math.max(0, weights[asset.id] - 1))}>▼</button>
+                                        <button className="alloc-stepper-btn" onClick={() => { handleWeightChange(asset.id, Math.min(100, Number(weights[asset.id] || 0) + 1)); handleBlur(`weight-${asset.id}`); }}>▲</button>
+                                        <button className="alloc-stepper-btn" onClick={() => { handleWeightChange(asset.id, Math.max(0, Number(weights[asset.id] || 0) - 1)); handleBlur(`weight-${asset.id}`); }}>▼</button>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <p className={`alloc-total ${totalWeight !== 100 ? 'over' : ''}`}>
-                        Total: <span>{totalWeight}%</span> {totalWeight !== 100 && '(must equal 100%)'}
+                    <p className={`alloc-total ${totalWeight !== 100 && totalWeight !== 0 ? 'over' : ''}`}>
+                        Total: <span>{totalWeight}%</span> {totalWeight !== 100 && totalWeight !== 0 && '(must equal 100%)'}
                     </p>
                 </motion.div>
 
@@ -85,23 +155,23 @@ const PortfolioInputForm = ({ onGenerate, onBack }) => {
                 >
                     <div className="engine-field">
                         <label>Investment Amount</label>
-                        <div className="engine-input-wrap">
-                            <input type="number" value={amount} onChange={e => setAmount(Number(e.target.value))} />
+                        <div className={`engine-input-wrap ${touched['amount'] && getFieldError('amount') ? 'has-error' : ''}`}>
+                            <input type="number" value={amount} onChange={e => { setAmount(e.target.value); setError(''); }} onBlur={() => handleBlur('amount')} />
                             <span className="engine-input-unit">₹</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setAmount(a => a + 100000)}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setAmount(a => Math.max(0, a - 100000))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => { setAmount(a => Number(a || 0) + 100000); handleBlur('amount'); }}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => { setAmount(a => Math.max(0, Number(a || 0) - 100000)); handleBlur('amount'); }}>▼</button>
                             </div>
                         </div>
                     </div>
                     <div className="engine-field">
                         <label>Time Horizon</label>
-                        <div className="engine-input-wrap">
-                            <input type="number" value={horizon} onChange={e => setHorizon(Number(e.target.value))} />
+                        <div className={`engine-input-wrap ${touched['horizon'] && getFieldError('horizon') ? 'has-error' : ''}`}>
+                            <input type="number" value={horizon} onChange={e => { setHorizon(e.target.value); setError(''); }} onBlur={() => handleBlur('horizon')} />
                             <span className="engine-input-unit">years</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setHorizon(h => h + 1)}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setHorizon(h => Math.max(1, h - 1))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => { setHorizon(h => Number(h || 0) + 1); handleBlur('horizon'); }}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => { setHorizon(h => Math.max(1, Number(h || 0) - 1)); handleBlur('horizon'); }}>▼</button>
                             </div>
                         </div>
                     </div>
@@ -126,7 +196,7 @@ const PortfolioInputForm = ({ onGenerate, onBack }) => {
                             <button
                                 key={level}
                                 className={`risk-option ${risk === level ? 'active' : ''}`}
-                                onClick={() => setRisk(level)}
+                                onClick={() => { setRisk(level); setError(''); }}
                             >
                                 {level}
                             </button>
@@ -141,11 +211,12 @@ const PortfolioInputForm = ({ onGenerate, onBack }) => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.6 }}
                 >
+                    {error && <p className="auth-error" style={{ marginBottom: '1.5rem', textAlign: 'center' }}>{error}</p>}
                     <button
                         className="engine-generate-btn"
-                        disabled={totalWeight !== 100}
-                        style={totalWeight !== 100 ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
-                        onClick={() => onGenerate({ weights, amount, horizon, risk })}
+                        onClick={validateAndSubmit}
+                        disabled={!isFormValid()}
+                        style={!isFormValid() ? { opacity: 0.5, cursor: 'not-allowed', filter: 'grayscale(1)' } : {}}
                     >
                         Analyze Portfolio
                     </button>

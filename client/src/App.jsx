@@ -18,9 +18,18 @@ import './styles/theme.css';
 const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [view, setViewState] = useState(() => sessionStorage.getItem('finosage_view') || 'hero');
+    const [theme, setTheme] = useState(() => localStorage.getItem('finosage_theme') || 'dark');
     const prevViewRef = React.useRef(view);
+
     const setView = (v) => { prevViewRef.current = view; sessionStorage.setItem('finosage_view', v); setViewState(v); };
+
+    const toggleTheme = () => {
+        const newTheme = theme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+        localStorage.setItem('finosage_theme', newTheme);
+    };
     const [isAboutOpen, setIsAboutOpen] = useState(false);
+    const [activeAuthModal, setActiveAuthModal] = useState(null); // 'login' or 'signup'
     const [user, setUser] = useState(null);
     const [activeAnalysis, setActiveAnalysis] = useState(null);
     const [engineInResults, setEngineInResults] = useState(false);
@@ -60,7 +69,7 @@ const App = () => {
 
     const handleAuthStatus = (userData) => {
         setUser(userData);
-        setView('discovery');
+        setActiveAuthModal(null);
     };
 
     const handleLogout = () => {
@@ -80,19 +89,15 @@ const App = () => {
             case 'hero':
                 return <Hero onExplore={() => setView('discovery')} />;
             case 'discovery':
-                return <Discovery onBack={() => setView('hero')} onModuleClick={(id) => { setActiveAnalysis(null); setView(id); }} onAuthClick={() => setView('login')} />;
-            case 'login':
-                return <AuthPage mode="login" onBack={() => setView('discovery')} onSwitch={() => setView('signup')} onAuth={handleAuthStatus} />;
-            case 'signup':
-                return <AuthPage mode="signup" onBack={() => setView('discovery')} onSwitch={() => setView('login')} onAuth={handleAuthStatus} />;
+                return <Discovery onBack={() => setView('hero')} onModuleClick={(id) => { setActiveAnalysis(null); setView(id); }} onAuthClick={() => setActiveAuthModal('login')} />;
             case 'retirement':
-                return <RetirementResultsPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setView('login')} />;
+                return <RetirementResultsPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} />;
             case 'analyzer':
-                return <PortfolioAnalyzerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setView('login')} />;
+                return <PortfolioAnalyzerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} />;
             case 'planner':
-                return <GoalPlannerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setView('login')} />;
+                return <GoalPlannerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} />;
             case 'lab':
-                return <WithdrawalLabPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setView('login')} />;
+                return <WithdrawalLabPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} />;
             case 'profile':
                 return <ProfilePage onBack={() => setView(prevViewRef.current || 'discovery')} onHistoryClick={() => setView('history')} />;
             case 'history':
@@ -103,7 +108,7 @@ const App = () => {
     };
 
     return (
-        <div className="app-container">
+        <div className={`app-container ${theme}-theme`}>
             <AnimatePresence mode="wait">
                 {isLoading ? (
                     <Loader key="loader" onLoadingComplete={() => setIsLoading(false)} />
@@ -113,24 +118,26 @@ const App = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 1.2, ease: "easeInOut" }}
+                        transition={{ duration: 0.8, ease: "easeInOut" }}
                     >
                         <Navbar
+                            theme={theme}
+                            onThemeToggle={toggleTheme}
                             onBackClick={
                                 view === 'discovery' ? () => setView('hero') :
-                                    view === 'login' || view === 'signup' || view === 'profile' ? () => setView('discovery') :
+                                    view === 'profile' ? () => setView(prevViewRef.current || 'discovery') :
                                         view === 'retirement' || view === 'analyzer' || view === 'planner' || view === 'lab' ? () => { if (engineBackRef.current) { engineBackRef.current(); } else { setView('discovery'); } } :
                                             view === 'history' ? () => setView('profile') :
                                                 null
                             }
                             backLabel={
                                 view === 'discovery' ? 'OVERVIEW' :
-                                    view === 'login' || view === 'signup' || view === 'profile' ? 'DISCOVERY' :
+                                    view === 'profile' ? 'DISCOVERY' :
                                         view === 'retirement' || view === 'analyzer' || view === 'planner' || view === 'lab' ? (engineInResults ? 'RECONFIGURE' : 'MODULES') :
                                             view === 'history' ? 'PROFILE' :
                                                 null
                             }
-                            onAuthClick={view === 'discovery' && !user ? () => setView('login') : null}
+                            onAuthClick={!user ? () => setActiveAuthModal('login') : null}
                             user={view !== 'hero' ? user : null}
                             onLogout={handleLogout}
                             onProfileClick={() => setView('profile')}
@@ -144,17 +151,31 @@ const App = () => {
                         />
                         <main>{renderView()}</main>
 
-                        {(view === 'discovery' || view === 'retirement' || view === 'analyzer' || view === 'planner' || view === 'lab' || view === 'login' || view === 'signup' || view === 'profile' || view === 'history') && (
+                        {(view === 'discovery' || view === 'retirement' || view === 'analyzer' || view === 'planner' || view === 'lab' || view === 'profile' || view === 'history') && (
                             <Footer
                                 onHomeClick={() => setView('hero')}
                                 onAboutClick={() => setIsAboutOpen(true)}
                             />
                         )}
 
-                        <AboutModal
-                            isOpen={isAboutOpen}
-                            onClose={() => setIsAboutOpen(false)}
-                        />
+                        <div className="modals">
+                            <AnimatePresence>
+                                {activeAuthModal && (
+                                    <AuthPage
+                                        key="auth-modal"
+                                        mode={activeAuthModal}
+                                        onBack={() => setActiveAuthModal(null)}
+                                        onSwitch={() => setActiveAuthModal(activeAuthModal === 'login' ? 'signup' : 'login')}
+                                        onAuth={handleAuthStatus}
+                                    />
+                                )}
+                            </AnimatePresence>
+
+                            <AboutModal
+                                isOpen={isAboutOpen}
+                                onClose={() => setIsAboutOpen(false)}
+                            />
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>

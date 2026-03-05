@@ -173,6 +173,15 @@
     border-color: rgba(212, 175, 55, 0.4);
 }
 
+.engine-input-wrap.has-error input {
+    border-color: rgba(239, 68, 68, 0.8);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
+}
+
+.engine-input-wrap.has-error .engine-stepper {
+    border-left-color: rgba(239, 68, 68, 0.5);
+}
+
 .engine-input-wrap input::placeholder {
     color: #374151;
 }
@@ -1033,4 +1042,27 @@
     flex-direction: column;
     gap: 1rem;
     align-items: center;
+    width: 100%;
+}
+
+.limit-back-btn {
+    width: 100%;
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #9CA3AF;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'Inter', sans-serif;
+}
+
+.limit-back-btn:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
 }

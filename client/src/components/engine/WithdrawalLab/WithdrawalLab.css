@@ -32,6 +32,11 @@
     background: rgba(212, 175, 55, 0.06);
 }
 
+.engine-input-wrap.has-error input {
+    border-color: rgba(239, 68, 68, 0.8) !important;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
+}
+
 .scenario-check {
     width: 14px;
     height: 14px;

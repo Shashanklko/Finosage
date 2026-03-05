@@ -1,34 +1,101 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
-const defaultGoals = [
-    { id: 1, name: 'Dream Home', amount: 8000000, years: 8, priority: 'High', inflation: 6 },
-    { id: 2, name: "Child's Education", amount: 3000000, years: 12, priority: 'High', inflation: 10 },
-    { id: 3, name: 'International Vacation', amount: 500000, years: 3, priority: 'Low', inflation: 8 },
-    { id: 4, name: 'Emergency Fund', amount: 1000000, years: 2, priority: 'Medium', inflation: 5 },
-];
+const defaultGoals = [];
 
-let nextId = 5;
+let nextId = 1;
 
 const GoalInputForm = ({ onGenerate, onBack }) => {
     const [goals, setGoals] = useState(defaultGoals);
-    const [monthlySavings, setMonthlySavings] = useState(80000);
-    const [stepUpPercent, setStepUpPercent] = useState(5);
-    const [existingCorpus, setExistingCorpus] = useState(1500000);
+    const [monthlySavings, setMonthlySavings] = useState('');
+    const [stepUpPercent, setStepUpPercent] = useState('');
+    const [existingCorpus, setExistingCorpus] = useState('');
     const [riskProfile, setRiskProfile] = useState('Moderate');
+    const [error, setError] = useState('');
 
     const riskLevels = ['Conservative', 'Moderate', 'Aggressive'];
 
     const updateGoal = (id, field, value) => {
         setGoals(prev => prev.map(g => g.id === id ? { ...g, [field]: value } : g));
+        if (error) setError('');
     };
 
     const addGoal = () => {
-        setGoals(prev => [...prev, { id: nextId++, name: '', amount: 0, years: 5, priority: 'Medium', inflation: 6 }]);
+        setGoals(prev => [...prev, { id: nextId++, name: '', amount: '', years: '', priority: 'Medium', inflation: '' }]);
+        if (error) setError('');
     };
 
     const removeGoal = (id) => {
         setGoals(prev => prev.filter(g => g.id !== id));
+        if (error) setError('');
+    };
+
+    const [touched, setTouched] = useState({});
+
+    const handleBlur = (fieldId) => {
+        setTouched(prev => ({ ...prev, [fieldId]: true }));
+    };
+
+    const getFieldError = (fieldId) => {
+        if (fieldId === 'monthlySavings') {
+            if (monthlySavings !== '' && Number(monthlySavings) < 0) return 'Invalid amount';
+        }
+
+        // For individual goals
+        if (fieldId.startsWith('goal-')) {
+            const [, id, type] = fieldId.split('-');
+            const goal = goals.find(g => g.id === Number(id));
+            if (!goal) return null;
+            if (type === 'amount' && goal.amount !== '' && Number(goal.amount) <= 0) return 'Invalid amount';
+        }
+
+        return null;
+    };
+
+    const validate = () => {
+        if (goals.length === 0) {
+            setError('');
+            return false;
+        }
+
+        for (const goal of goals) {
+            const amountError = getFieldError(`goal-${goal.id}-amount`);
+            if (amountError) {
+                setError(amountError);
+                return false;
+            }
+        }
+
+        const savingsError = getFieldError('monthlySavings');
+        if (savingsError) {
+            setError(savingsError);
+            return false;
+        }
+
+        setError('');
+        return true;
+    };
+
+    React.useEffect(() => {
+        validate();
+    }, [goals, monthlySavings, stepUpPercent, existingCorpus]);
+
+    const isFormValid = () => {
+        const hasGoals = goals.length > 0;
+        const allGoalsComplete = goals.every(g => g.name && g.amount !== '' && g.years !== '');
+        return hasGoals && allGoalsComplete && monthlySavings !== '' && !error;
+    };
+
+    const validateAndSubmit = () => {
+        if (isFormValid()) {
+            onGenerate({
+                goals: goals.map(g => ({ ...g, amount: Number(g.amount), years: Number(g.years), inflation: Number(g.inflation || 6) })),
+                monthlySavings: Number(monthlySavings),
+                stepUpPercent: Number(stepUpPercent || 0),
+                existingCorpus: Number(existingCorpus || 0),
+                riskProfile
+            });
+        }
     };
 
     return (
@@ -63,12 +130,24 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                                         placeholder="e.g. Dream Home"
                                     />
                                 </div>
+                        <div key={goal.id} className={`goal-row ${touched[`goal-${goal.id}-amount`] && getFieldError(`goal-${goal.id}-amount`) ? 'has-error' : ''}`}>
+                                <div>
+                                    <div className="goal-col-label">Goal Name</div>
+                                    <input
+                                        type="text"
+                                        value={goal.name}
+                                        onChange={e => updateGoal(goal.id, 'name', e.target.value)}
+                                        onBlur={() => handleBlur(`goal-${goal.id}-name`)}
+                                        placeholder="e.g. Retirement"
+                                    />
+                                </div>
                                 <div>
                                     <div className="goal-col-label">Target Amount</div>
                                     <input
                                         type="number"
                                         value={goal.amount}
-                                        onChange={e => updateGoal(goal.id, 'amount', Number(e.target.value))}
+                                        onChange={e => updateGoal(goal.id, 'amount', e.target.value)}
+                                        onBlur={() => handleBlur(`goal-${goal.id}-amount`)}
                                     />
                                 </div>
                                 <div>
@@ -76,7 +155,8 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                                     <input
                                         type="number"
                                         value={goal.years}
-                                        onChange={e => updateGoal(goal.id, 'years', Number(e.target.value))}
+                                        onChange={e => updateGoal(goal.id, 'years', e.target.value)}
+                                        onBlur={() => handleBlur(`goal-${goal.id}-years`)}
                                         style={{ width: '3rem' }}
                                     />
                                     <span style={{ fontSize: '0.55rem', color: '#4B5563', marginLeft: '0.3rem' }}>yrs</span>
@@ -86,7 +166,9 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                                     <input
                                         type="number"
                                         value={goal.inflation}
-                                        onChange={e => updateGoal(goal.id, 'inflation', Number(e.target.value))}
+                                        onChange={e => updateGoal(goal.id, 'inflation', e.target.value)}
+                                        onBlur={() => handleBlur(`goal-${goal.id}-inflation`)}
+                                        placeholder="6"
                                         style={{ width: '3rem' }}
                                     />
                                 </div>
@@ -117,34 +199,34 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                 >
                     <div className="engine-field">
                         <label>Monthly Savings</label>
-                        <div className="engine-input-wrap">
-                            <input type="number" value={monthlySavings} onChange={e => setMonthlySavings(Number(e.target.value))} />
+                        <div className={`engine-input-wrap ${touched['monthlySavings'] && getFieldError('monthlySavings') ? 'has-error' : ''}`}>
+                            <input type="number" value={monthlySavings} onChange={e => setMonthlySavings(e.target.value)} onBlur={() => handleBlur('monthlySavings')} />
                             <span className="engine-input-unit">₹</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setMonthlySavings(v => v + 5000)}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setMonthlySavings(v => Math.max(0, v - 5000))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => { setMonthlySavings(v => Number(v || 0) + 5000); handleBlur('monthlySavings'); }}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => { setMonthlySavings(v => Math.max(0, Number(v || 0) - 5000)); handleBlur('monthlySavings'); }}>▼</button>
                             </div>
                         </div>
                     </div>
                     <div className="engine-field">
                         <label>Yearly Savings Increase</label>
                         <div className="engine-input-wrap">
-                            <input type="number" value={stepUpPercent} onChange={e => setStepUpPercent(Number(e.target.value))} />
+                            <input type="number" value={stepUpPercent} onChange={e => setStepUpPercent(e.target.value)} onBlur={() => handleBlur('stepUpPercent')} />
                             <span className="engine-input-unit">%</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setStepUpPercent(v => Math.min(100, v + 1))}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setStepUpPercent(v => Math.max(0, v - 1))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => { setStepUpPercent(v => Math.min(100, Number(v || 0) + 1)); handleBlur('stepUpPercent'); }}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => { setStepUpPercent(v => Math.max(0, Number(v || 0) - 1)); handleBlur('stepUpPercent'); }}>▼</button>
                             </div>
                         </div>
                     </div>
                     <div className="engine-field">
                         <label>Current Savings</label>
                         <div className="engine-input-wrap">
-                            <input type="number" value={existingCorpus} onChange={e => setExistingCorpus(Number(e.target.value))} />
+                            <input type="number" value={existingCorpus} onChange={e => setExistingCorpus(e.target.value)} onBlur={() => handleBlur('existingCorpus')} />
                             <span className="engine-input-unit">₹</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setExistingCorpus(v => v + 100000)}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setExistingCorpus(v => Math.max(0, v - 100000))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => { setExistingCorpus(v => Number(v || 0) + 1000000); handleBlur('existingCorpus'); }}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => { setExistingCorpus(v => Math.max(0, Number(v || 0) - 1000000)); handleBlur('existingCorpus'); }}>▼</button>
                             </div>
                         </div>
                     </div>
@@ -177,11 +259,12 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.55 }}
                 >
+                    {error && <p className="auth-error" style={{ marginBottom: '1.5rem', textAlign: 'center' }}>{error}</p>}
                     <button
                         className="engine-generate-btn"
-                        disabled={goals.length === 0}
-                        style={goals.length === 0 ? { opacity: 0.3, cursor: 'not-allowed' } : {}}
-                        onClick={() => onGenerate({ goals, monthlySavings, stepUpPercent, existingCorpus, riskProfile })}
+                        onClick={validateAndSubmit}
+                        disabled={!isFormValid()}
+                        style={!isFormValid() ? { opacity: 0.5, cursor: 'not-allowed', filter: 'grayscale(1)' } : {}}
                     >
                         Optimize Goals
                     </button>

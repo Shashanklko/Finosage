@@ -49,13 +49,13 @@
 .navbar .nav-back {
     background: transparent;
     border: none;
-    color: var(--text-muted);
-    font-size: 0.6rem;
+    color: var(--text-primary);
+    font-size: 0.65rem;
     letter-spacing: 0.3em;
     cursor: pointer;
     transition: all 0.4s ease;
     text-transform: uppercase;
-    opacity: 0.4;
+    opacity: 0.8;
     font-family: 'Inter', sans-serif;
 }
 
@@ -66,52 +66,60 @@
 
 .navbar .nav-auth {
     background: transparent;
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    border: 1px solid var(--gold-primary);
     color: var(--gold-primary);
-    font-size: 0.55rem;
+    font-size: 0.6rem;
     letter-spacing: 0.3em;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     text-transform: uppercase;
-    opacity: 0.6;
-    padding: 0.45rem 1.2rem;
+    opacity: 1;
+    padding: 0.5rem 1.4rem;
     font-family: 'Inter', sans-serif;
-    border-radius: 3px;
+    border-radius: 4px;
+}
+
+.navbar .nav-auth.filled {
+    background: var(--gold-primary);
+    color: var(--bg-deep);
+    border: 1px solid var(--gold-primary);
+    font-weight: 600;
 }
 
 .navbar .nav-auth:hover {
-    opacity: 1;
-    border-color: rgba(212, 175, 55, 0.5);
-    background: rgba(212, 175, 55, 0.06);
-    box-shadow: 0 2px 15px rgba(212, 175, 55, 0.08);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px var(--gold-glow);
+}
+
+.navbar .nav-auth.filled:hover {
+    background: #e5c04a;
 }
 
 .navbar .nav-auth-group {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.2rem;
 }
 
 .navbar .nav-profile {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-muted);
-    font-size: 0.55rem;
+    border: 1px solid var(--text-muted);
+    color: var(--text-primary);
+    font-size: 0.6rem;
     letter-spacing: 0.3em;
     cursor: pointer;
     transition: all 0.4s ease;
     text-transform: uppercase;
-    opacity: 0.5;
-    padding: 0.45rem 1rem;
+    opacity: 0.9;
+    padding: 0.5rem 1.2rem;
     font-family: 'Inter', sans-serif;
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
 .navbar .nav-profile:hover {
     opacity: 1;
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--text-primary);
+    background: var(--bg-card);
 }
 
 .navbar .nav-links {

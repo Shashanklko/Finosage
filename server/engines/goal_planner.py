@@ -306,7 +306,7 @@ def _optimize_goals(req: GoalRequest) -> dict:
         })
 
     # 5. Final Insights Assembly
-    res = {
+    insights_res = {
         "shortfallRecovery": {
             "currentSip": req.monthlySavings,
             "targetSip": round(shortfall_sip),
@@ -331,6 +331,7 @@ def _optimize_goals(req: GoalRequest) -> dict:
         "nudge": "Increase monthly savings by ₹2,000 to achieve 95% certainty across all goals."
     }
 
+    res.update({"insights": insights_res})
     return res
 
 

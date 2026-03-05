@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import RetirementInputForm from './RetirementInputForm';
 import LoadingScreen from './LoadingScreen';
 import HeroStatCard from './HeroStatCard';
@@ -90,11 +90,11 @@ const RetirementResultsPage = ({ onBack, initialData, backRef, onPhaseChange, us
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                             >
-                                <h2>Free Limit Reached</h2>
+                                <h2>FREE LIMIT REACHED</h2>
                                 <p>You've used your 2 free simulations. Please login or sign up to continue using Finosage engines and save your progress.</p>
                                 <div className="limit-actions">
                                     <button className="engine-generate-btn" onClick={onAuthRedirect}>LOGIN / SIGNUP</button>
-                                    <button className="engine-back-btn" onClick={onBack} style={{ marginTop: '1rem', width: '100%', background: 'transparent', border: '1px solid #374151', color: '#9CA3AF' }}>BACK TO DISCOVERY</button>
+                                    <button className="limit-back-btn" onClick={onBack}>BACK TO DISCOVERY</button>
                                 </div>
                             </motion.div>
                         </div>

@@ -30,6 +30,11 @@
     border-color: rgba(212, 175, 55, 0.4);
 }
 
+.alloc-field.has-error {
+    border-color: rgba(239, 68, 68, 0.5) !important;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.05);
+}
+
 .alloc-color {
     width: 8px;
     height: 8px;

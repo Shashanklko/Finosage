@@ -25,13 +25,13 @@ const Navbar = ({ onBackClick, backLabel, onAuthClick, user, onLogout, onProfile
                         <button className="nav-profile" onClick={onProfileClick}>
                             PROFILE
                         </button>
-                        <button className="nav-auth" onClick={onLogout}>
+                        <button className="nav-auth filled" onClick={onLogout}>
                             LOGOUT
                         </button>
                     </div>
                 ) : (
                     onAuthClick && (
-                        <button className="nav-auth" onClick={onAuthClick}>
+                        <button className="nav-auth filled" onClick={onAuthClick}>
                             SIGN IN
                         </button>
                     )

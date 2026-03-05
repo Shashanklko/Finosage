@@ -1,9 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { X } from 'lucide-react';
 import './Auth.css';
 
 const AuthPage = ({ mode = 'login', onBack, onSwitch, onAuth }) => {
     const isSignup = mode === 'signup';
+
+    const handleBackdropClick = (e) => {
+        if (e.target.className === 'auth-container') {
+            onBack();
+        }
+    };
 
     const [form, setForm] = useState({
         firstName: '',
@@ -265,11 +272,12 @@ const AuthPage = ({ mode = 'login', onBack, onSwitch, onAuth }) => {
     // ---------- Forgot Password Screens ----------
     if (forgotStep === 'email') {
         return (
-            <div className="auth-container">
+            <div className="auth-container" onClick={handleBackdropClick}>
                 <div className="auth-bg">
                     <div className="technical-grid" /><div className="radial-overlay" /><div className="glow-orb" />
                 </div>
                 <motion.div className="auth-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                    <button className="auth-close-btn" onClick={onBack} title="Close"><X size={18} /></button>
                     <div className="auth-header">
                         <p className="auth-logo">FINOSAGE</p>
                         <h1 className="auth-title">Reset Password</h1>
@@ -292,11 +300,12 @@ const AuthPage = ({ mode = 'login', onBack, onSwitch, onAuth }) => {
 
     if (forgotStep === 'otp') {
         return (
-            <div className="auth-container">
+            <div className="auth-container" onClick={handleBackdropClick}>
                 <div className="auth-bg">
                     <div className="technical-grid" /><div className="radial-overlay" /><div className="glow-orb" />
                 </div>
                 <motion.div className="auth-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                    <button className="auth-close-btn" onClick={onBack} title="Close"><X size={18} /></button>
                     <div className="auth-header">
                         <p className="auth-logo">FINOSAGE</p>
                         <h1 className="auth-title">New Password</h1>
@@ -324,11 +333,12 @@ const AuthPage = ({ mode = 'login', onBack, onSwitch, onAuth }) => {
 
     if (forgotStep === 'success') {
         return (
-            <div className="auth-container">
+            <div className="auth-container" onClick={handleBackdropClick}>
                 <div className="auth-bg">
                     <div className="technical-grid" /><div className="radial-overlay" /><div className="glow-orb" />
                 </div>
                 <motion.div className="auth-card" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
+                    <button className="auth-close-btn" onClick={onBack} title="Close"><X size={18} /></button>
                     <div className="auth-header">
                         <p className="auth-logo">FINOSAGE</p>
                         <h1 className="auth-title" style={{ color: '#d4af37' }}>SUCCESS</h1>
@@ -344,7 +354,7 @@ const AuthPage = ({ mode = 'login', onBack, onSwitch, onAuth }) => {
     // ---------- OTP verification screen (Signup) ----------
     if (otpStep) {
         return (
-            <div className="auth-container">
+            <div className="auth-container" onClick={handleBackdropClick}>
                 <div className="auth-bg">
                     <div className="technical-grid" />
                     <div className="radial-overlay" />
@@ -357,6 +367,7 @@ const AuthPage = ({ mode = 'login', onBack, onSwitch, onAuth }) => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 >
+                    <button className="auth-close-btn" onClick={onBack} title="Close"><X size={18} /></button>
                     <div className="auth-card-glow" />
                     <div className="auth-header">
                         <p className="auth-logo">FINOSAGE</p>
@@ -418,7 +429,7 @@ const AuthPage = ({ mode = 'login', onBack, onSwitch, onAuth }) => {
 
     // ---------- Login / Signup screen ----------
     return (
-        <div className="auth-container">
+        <div className="auth-container" onClick={handleBackdropClick}>
             <div className="auth-bg">
                 <div className="technical-grid" />
                 <div className="radial-overlay" />
@@ -431,6 +442,7 @@ const AuthPage = ({ mode = 'login', onBack, onSwitch, onAuth }) => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
+                <button className="auth-close-btn" onClick={onBack} title="Close"><X size={18} /></button>
                 <div className="auth-card-glow" />
                 <div className="auth-header">
                     <p className="auth-logo">FINOSAGE</p>

@@ -21,14 +21,83 @@ const strategies = [
 
 const RetirementInputForm = ({ onGenerate, onBack }) => {
     const [formData, setFormData] = React.useState({
-        currentAge: 35, retirementAge: 60, lifeExpectancy: 90,
-        portfolioValue: 5000000, monthlyContribution: 50000,
-        expectedReturn: 11, volatility: 14, inflationRate: 6,
-        annualWithdrawal: 600000, strategy: 'guardrail'
+        currentAge: '', retirementAge: '', lifeExpectancy: '',
+        portfolioValue: '', monthlyContribution: '',
+        expectedReturn: '', volatility: '', inflationRate: '',
+        annualWithdrawal: '', strategy: 'guardrail'
     });
+    const [error, setError] = React.useState('');
+
+    const [touchedFields, setTouchedFields] = React.useState({});
 
     const handleChange = (id, value) => {
         setFormData(prev => ({ ...prev, [id]: value }));
+    };
+
+    const handleBlur = (id) => {
+        setTouchedFields(prev => ({ ...prev, [id]: true }));
+    };
+
+    const getFieldError = (id) => {
+        const { currentAge, retirementAge, lifeExpectancy, portfolioValue, monthlyContribution } = formData;
+
+        switch (id) {
+            case 'currentAge':
+                if (currentAge !== '' && (Number(currentAge) < 15 || Number(currentAge) > 100)) return 'Current age must be between 15 and 100.';
+                break;
+            case 'retirementAge':
+                if (retirementAge !== '' && currentAge !== '' && Number(retirementAge) <= Number(currentAge)) return 'Retirement age must be greater than current age.';
+                break;
+            case 'lifeExpectancy':
+                if (lifeExpectancy !== '' && Number(lifeExpectancy) > 130) return 'Life expectancy cannot exceed 130 years.';
+                if (lifeExpectancy !== '' && retirementAge !== '' && Number(lifeExpectancy) <= Number(retirementAge)) return 'Life expectancy must be greater than retirement age.';
+                break;
+            case 'portfolioValue':
+                if (portfolioValue !== '' && Number(portfolioValue) < 0) return 'Invalid savings.';
+                break;
+            case 'monthlyContribution':
+                if (monthlyContribution !== '' && Number(monthlyContribution) < 0) return 'Invalid contribution.';
+                break;
+            default:
+                return null;
+        }
+        return null;
+    };
+
+    const validate = () => {
+        const { currentAge, retirementAge, lifeExpectancy, portfolioValue, monthlyContribution } = formData;
+
+        if (currentAge === '' || retirementAge === '' || lifeExpectancy === '' || portfolioValue === '' || monthlyContribution === '') {
+            setError('');
+            return false;
+        }
+
+        const ageError = getFieldError('currentAge') || getFieldError('retirementAge') || getFieldError('lifeExpectancy');
+        if (ageError) {
+            setError(ageError);
+            return false;
+        }
+
+        setError('');
+        return true;
+    };
+
+    React.useEffect(() => {
+        validate();
+    }, [formData]);
+
+    const isFormValid = () => {
+        const { currentAge, retirementAge, lifeExpectancy, portfolioValue, monthlyContribution } = formData;
+        return currentAge !== '' && retirementAge !== '' && lifeExpectancy !== '' &&
+            portfolioValue !== '' && monthlyContribution !== '' && !error;
+    };
+
+    const handleSubmit = () => {
+        if (validate()) {
+            onGenerate(Object.fromEntries(
+                Object.entries(formData).map(([k, v]) => [k, k === 'strategy' ? v : Number(v)])
+            ));
+        }
     };
 
     return (
@@ -54,17 +123,18 @@ const RetirementInputForm = ({ onGenerate, onBack }) => {
                     {fields.map((field) => (
                         <div key={field.id} className="engine-field">
                             <label>{field.label}</label>
-                            <div className="engine-input-wrap">
+                            <div className={`engine-input-wrap ${touchedFields[field.id] && getFieldError(field.id) ? 'has-error' : ''}`}>
                                 <input
                                     type="number"
                                     value={formData[field.id]}
-                                    onChange={(e) => handleChange(field.id, Number(e.target.value))}
+                                    onChange={(e) => handleChange(field.id, e.target.value)}
+                                    onBlur={() => handleBlur(field.id)}
                                     placeholder={field.placeholder}
                                 />
                                 <span className="engine-input-unit">{field.unit}</span>
                                 <div className="engine-stepper">
-                                    <button className="engine-stepper-btn" onClick={() => handleChange(field.id, formData[field.id] + 1)}>▲</button>
-                                    <button className="engine-stepper-btn" onClick={() => handleChange(field.id, formData[field.id] - 1)}>▼</button>
+                                    <button className="engine-stepper-btn" onClick={() => { handleChange(field.id, Number(formData[field.id] || 0) + 1); handleBlur(field.id); }}>▲</button>
+                                    <button className="engine-stepper-btn" onClick={() => { handleChange(field.id, Number(formData[field.id] || 0) - 1); handleBlur(field.id); }}>▼</button>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +167,13 @@ const RetirementInputForm = ({ onGenerate, onBack }) => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.6 }}
                 >
-                    <button className="engine-generate-btn" onClick={() => onGenerate(formData)}>
+                    {error && <p className="auth-error" style={{ marginBottom: '1.5rem', textAlign: 'center' }}>{error}</p>}
+                    <button
+                        className="engine-generate-btn"
+                        onClick={handleSubmit}
+                        disabled={!isFormValid()}
+                        style={!isFormValid() ? { opacity: 0.5, cursor: 'not-allowed', filter: 'grayscale(1)' } : {}}
+                    >
                         Generate Analysis
                     </button>
                     <p className="engine-generate-note">Advanced Market Simulation · Real-world Risk Factors · Dynamic Inflation</p>

@@ -1,13 +1,41 @@
 .auth-container {
-    height: 100vh;
-    width: 100vw;
-    position: relative;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at center, var(--bg-deep) 0%, var(--bg-darker) 100%);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
     overflow: hidden;
     color: #fff;
+}
+
+.auth-close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0.6;
+}
+
+.auth-close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(212, 175, 55, 0.3);
+    color: var(--gold-primary);
+    opacity: 1;
+    transform: rotate(90deg);
 }
 
 .auth-bg {
@@ -235,25 +263,7 @@
 
 /* Back button */
 .auth-back {
-    position: fixed;
-    top: 3rem;
-    left: 5rem;
-    z-index: 100;
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
-    cursor: pointer;
-    text-transform: uppercase;
-    opacity: 0.4;
-    transition: all 0.4s;
-    font-family: 'Inter', sans-serif;
-}
-
-.auth-back:hover {
-    color: var(--gold-primary);
-    opacity: 1;
+    display: none;
 }
 
 /* Error */

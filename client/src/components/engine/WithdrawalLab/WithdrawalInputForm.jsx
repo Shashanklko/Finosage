@@ -18,25 +18,91 @@ const scenarios = [
 ];
 
 const WithdrawalInputForm = ({ onGenerate, onBack }) => {
-    const [corpus, setCorpus] = useState(30000000);
-    const [annualWithdrawal, setAnnualWithdrawal] = useState(1200000);
-    const [retirementAge, setRetirementAge] = useState(60);
-    const [horizon, setHorizon] = useState(30);
-    const [inflationRate, setInflationRate] = useState(6);
+    const [corpus, setCorpus] = useState('');
+    const [annualWithdrawal, setAnnualWithdrawal] = useState('');
+    const [retirementAge, setRetirementAge] = useState('');
+    const [horizon, setHorizon] = useState('');
+    const [inflationRate, setInflationRate] = useState('');
     const [selectedStrategy, setSelectedStrategy] = useState('guardrail');
-    const [taxRate, setTaxRate] = useState(10);
+    const [taxRate, setTaxRate] = useState('');
     const [selectedScenarios, setSelectedScenarios] = useState(['baseline', 'crash', 'inflation']);
+    const [error, setError] = useState('');
+    const [touched, setTouched] = useState({});
+
+    const handleBlur = (fieldId) => {
+        setTouched(prev => ({ ...prev, [fieldId]: true }));
+    };
+
+    const getFieldError = (fieldId) => {
+        switch (fieldId) {
+            case 'corpus':
+                if (corpus !== '' && Number(corpus) <= 0) return 'Invalid savings';
+                break;
+            case 'annualWithdrawal':
+                if (annualWithdrawal !== '' && Number(annualWithdrawal) <= 0) return 'Invalid withdrawal';
+                break;
+            case 'retirementAge':
+                if (retirementAge !== '' && (Number(retirementAge) < 15 || Number(retirementAge) > 100)) return 'Age 15-100';
+                break;
+            case 'horizon':
+                if (horizon !== '' && Number(horizon) <= 0) return 'Invalid horizon';
+                break;
+            default:
+                return null;
+        }
+        return null;
+    };
+
+    const validate = () => {
+        if (corpus === '' || annualWithdrawal === '' || retirementAge === '' || horizon === '') {
+            setError('');
+            return false;
+        }
+
+        const fieldError = getFieldError('corpus') || getFieldError('annualWithdrawal') ||
+            getFieldError('retirementAge') || getFieldError('horizon');
+        if (fieldError) {
+            setError(fieldError);
+            return false;
+        }
+
+        setError('');
+        return true;
+    };
+
+    React.useEffect(() => {
+        validate();
+    }, [corpus, annualWithdrawal, retirementAge, horizon, inflationRate, taxRate, selectedStrategy, selectedScenarios]);
+
+    const isFormValid = () => {
+        return corpus !== '' && annualWithdrawal !== '' && retirementAge !== '' &&
+            horizon !== '' && !error;
+    };
+
+    const validateAndSubmit = () => {
+        if (isFormValid()) {
+            onGenerate({
+                corpus: Number(corpus),
+                annualWithdrawal: Number(annualWithdrawal),
+                retirementAge: Number(retirementAge),
+                horizon: Number(horizon),
+                inflationRate: Number(inflationRate || 6),
+                taxRate: Number(taxRate || 0),
+                strategy: selectedStrategy,
+                scenarios: selectedScenarios
+            });
+        }
+    };
 
     const toggleScenario = (id) => {
         setSelectedScenarios(prev =>
             prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
         );
+        setError('');
     };
 
     return (
         <div className="engine-page">
-
-
             <div className="engine-page-scrollable">
                 <motion.div
                     className="engine-page-header"
@@ -56,67 +122,67 @@ const WithdrawalInputForm = ({ onGenerate, onBack }) => {
                 >
                     <div className="engine-field">
                         <label>Retirement Savings</label>
-                        <div className="engine-input-wrap">
-                            <input type="number" value={corpus} onChange={e => setCorpus(Number(e.target.value))} />
+                        <div className={`engine-input-wrap ${touched['corpus'] && getFieldError('corpus') ? 'has-error' : ''}`}>
+                            <input type="number" value={corpus} onChange={e => setCorpus(e.target.value)} onBlur={() => handleBlur('corpus')} />
                             <span className="engine-input-unit">₹</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setCorpus(v => v + 1000000)}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setCorpus(v => Math.max(0, v - 1000000))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => { setCorpus(v => Number(v || 0) + 1000000); handleBlur('corpus'); }}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => { setCorpus(v => Math.max(0, Number(v || 0) - 1000000)); handleBlur('corpus'); }}>▼</button>
                             </div>
                         </div>
                     </div>
                     <div className="engine-field">
                         <label>Annual Withdrawal</label>
-                        <div className="engine-input-wrap">
-                            <input type="number" value={annualWithdrawal} onChange={e => setAnnualWithdrawal(Number(e.target.value))} />
+                        <div className={`engine-input-wrap ${touched['annualWithdrawal'] && getFieldError('annualWithdrawal') ? 'has-error' : ''}`}>
+                            <input type="number" value={annualWithdrawal} onChange={e => setAnnualWithdrawal(e.target.value)} onBlur={() => handleBlur('annualWithdrawal')} />
                             <span className="engine-input-unit">₹</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setAnnualWithdrawal(v => v + 100000)}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setAnnualWithdrawal(v => Math.max(0, v - 100000))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => { setAnnualWithdrawal(v => Number(v || 0) + 100000); handleBlur('annualWithdrawal'); }}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => { setAnnualWithdrawal(v => Math.max(0, Number(v || 0) - 100000)); handleBlur('annualWithdrawal'); }}>▼</button>
                             </div>
                         </div>
                     </div>
                     <div className="engine-field">
                         <label>Retirement Age</label>
-                        <div className="engine-input-wrap">
-                            <input type="number" value={retirementAge} onChange={e => setRetirementAge(Number(e.target.value))} />
+                        <div className={`engine-input-wrap ${touched['retirementAge'] && getFieldError('retirementAge') ? 'has-error' : ''}`}>
+                            <input type="number" value={retirementAge} onChange={e => setRetirementAge(e.target.value)} onBlur={() => handleBlur('retirementAge')} />
                             <span className="engine-input-unit">yrs</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setRetirementAge(v => v + 1)}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setRetirementAge(v => Math.max(40, v - 1))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => { setRetirementAge(v => Number(v || 0) + 1); handleBlur('retirementAge'); }}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => { setRetirementAge(v => Math.max(15, Number(v || 0) - 1)); handleBlur('retirementAge'); }}>▼</button>
                             </div>
                         </div>
                     </div>
                     <div className="engine-field">
                         <label>How many years to plan for</label>
-                        <div className="engine-input-wrap">
-                            <input type="number" value={horizon} onChange={e => setHorizon(Number(e.target.value))} />
+                        <div className={`engine-input-wrap ${touched['horizon'] && getFieldError('horizon') ? 'has-error' : ''}`}>
+                            <input type="number" value={horizon} onChange={e => setHorizon(e.target.value)} onBlur={() => handleBlur('horizon')} />
                             <span className="engine-input-unit">yrs</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setHorizon(v => v + 1)}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setHorizon(v => Math.max(5, v - 1))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => { setHorizon(v => Number(v || 0) + 1); handleBlur('horizon'); }}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => { setHorizon(v => Math.max(5, Number(v || 0) - 1)); handleBlur('horizon'); }}>▼</button>
                             </div>
                         </div>
                     </div>
                     <div className="engine-field">
                         <label>Rising Cost of Living</label>
                         <div className="engine-input-wrap">
-                            <input type="number" value={inflationRate} onChange={e => setInflationRate(Number(e.target.value))} />
+                            <input type="number" value={inflationRate} onChange={e => setInflationRate(e.target.value)} />
                             <span className="engine-input-unit">%</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setInflationRate(v => v + 1)}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setInflationRate(v => Math.max(0, v - 1))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => setInflationRate(v => Number(v || 0) + 1)}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => setInflationRate(v => Math.max(0, Number(v || 0) - 1))}>▼</button>
                             </div>
                         </div>
                     </div>
                     <div className="engine-field">
                         <label>Estimated Tax Rate</label>
                         <div className="engine-input-wrap">
-                            <input type="number" value={taxRate} onChange={e => setTaxRate(Number(e.target.value))} />
+                            <input type="number" value={taxRate} onChange={e => setTaxRate(e.target.value)} />
                             <span className="engine-input-unit">%</span>
                             <div className="engine-stepper">
-                                <button className="engine-stepper-btn" onClick={() => setTaxRate(v => v + 1)}>▲</button>
-                                <button className="engine-stepper-btn" onClick={() => setTaxRate(v => Math.max(0, v - 1))}>▼</button>
+                                <button className="engine-stepper-btn" onClick={() => setTaxRate(v => Number(v || 0) + 1)}>▲</button>
+                                <button className="engine-stepper-btn" onClick={() => setTaxRate(v => Math.max(0, Number(v || 0) - 1))}>▼</button>
                             </div>
                         </div>
                     </div>
@@ -171,9 +237,12 @@ const WithdrawalInputForm = ({ onGenerate, onBack }) => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.55 }}
                 >
+                    {error && <p className="auth-error" style={{ marginBottom: '1.5rem', textAlign: 'center' }}>{error}</p>}
                     <button
                         className="engine-generate-btn"
-                        onClick={() => onGenerate({ corpus, annualWithdrawal, retirementAge, horizon, inflationRate, taxRate, strategy: selectedStrategy, scenarios: selectedScenarios })}
+                        onClick={validateAndSubmit}
+                        disabled={!isFormValid()}
+                        style={!isFormValid() ? { opacity: 0.5, cursor: 'not-allowed', filter: 'grayscale(1)' } : {}}
                     >
                         Run Stress Test
                     </button>
