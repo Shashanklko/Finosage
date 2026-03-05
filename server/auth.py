@@ -128,7 +128,7 @@ def send_otp_email(to_email: str, otp: str, first_name: str = ""):
 
         msg.attach(MIMEText(html, "html"))
 
-        server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT)
+        server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=10)
         server.starttls()
         server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
         server.sendmail(settings.SMTP_EMAIL, to_email, msg.as_string())
@@ -179,7 +179,7 @@ def send_reset_otp_email(to_email: str, otp: str, first_name: str = ""):
         </div>
         """
         msg.attach(MIMEText(html, "html"))
-        server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT)
+        server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=10)
         server.starttls()
         server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
         server.sendmail(settings.SMTP_EMAIL, to_email, msg.as_string())

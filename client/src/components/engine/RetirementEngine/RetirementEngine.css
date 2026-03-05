@@ -986,3 +986,51 @@
     opacity: 0.6;
     cursor: default;
 }
+
+/* ============================================
+   USAGE LIMIT CARD
+   ============================================ */
+.engine-usage-limit {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0B0F1C;
+    z-index: 200;
+    padding: 2rem;
+}
+
+.limit-card {
+    max-width: 500px;
+    text-align: center;
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 3rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.05);
+}
+
+.limit-card h2 {
+    font-size: 1.8rem;
+    font-weight: 200;
+    letter-spacing: 0.3em;
+    color: var(--gold-primary);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.limit-card p {
+    font-size: 0.9rem;
+    color: #9CA3AF;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+}
+
+.limit-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}

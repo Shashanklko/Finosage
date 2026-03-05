@@ -36,6 +36,20 @@ const App = () => {
         }
     }, []);
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // BACKEND KEEP-ALIVE (Render Pulse)
+    // Pings the backend health endpoint every 10 minutes to prevent sleeping.
+    // ─────────────────────────────────────────────────────────────────────────
+    useEffect(() => {
+        const keepAlive = setInterval(() => {
+            fetch('/api/health').catch(() => {
+                // Silently handle errors (backend might be starting up)
+            });
+        }, 600000); // 10 minutes (Render sleeps after 15m of inactivity)
+
+        return () => clearInterval(keepAlive);
+    }, []);
+
     const incrementUsage = () => {
         if (!user) {
             const newCount = usageCount + 1;
