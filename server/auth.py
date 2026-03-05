@@ -137,8 +137,13 @@ def send_otp_email(to_email: str, otp: str, first_name: str = ""):
             print(f"[!] DNS Resolution failed: {res_err}")
             smtp_ip = settings.SMTP_SERVER
 
-        server = smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=10)
-        server.starttls()
+        # Port 465 uses SMTP_SSL, 587 uses starttls
+        if settings.SMTP_PORT == 465:
+            server = smtplib.SMTP_SSL(smtp_ip, settings.SMTP_PORT, timeout=10)
+        else:
+            server = smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=10)
+            server.starttls()
+
         server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
         server.sendmail(settings.SMTP_EMAIL, to_email, msg.as_string())
         server.quit()
@@ -197,8 +202,13 @@ def send_reset_otp_email(to_email: str, otp: str, first_name: str = ""):
             print(f"[!] DNS Resolution failed: {res_err}")
             smtp_ip = settings.SMTP_SERVER
 
-        server = smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=10)
-        server.starttls()
+        # Port 465 uses SMTP_SSL, 587 uses starttls
+        if settings.SMTP_PORT == 465:
+            server = smtplib.SMTP_SSL(smtp_ip, settings.SMTP_PORT, timeout=10)
+        else:
+            server = smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=10)
+            server.starttls()
+
         server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
         server.sendmail(settings.SMTP_EMAIL, to_email, msg.as_string())
         server.quit()
