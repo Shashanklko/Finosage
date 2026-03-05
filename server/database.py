@@ -11,7 +11,13 @@ async def connect_db():
     db = client["finosage"]
     # Ensure unique email index
     await db.users.create_index("email", unique=True)
-    print("✓ Connected to MongoDB — finosage database")
+    
+    # Sanity check
+    try:
+        await client.admin.command('ping')
+        print("✓ Connected to MongoDB — finosage database and verified ping")
+    except Exception as e:
+        print(f"[-] MongoDB Ping failed: {e}")
 
 
 async def close_db():

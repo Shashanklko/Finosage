@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime, timedelta, timezone
@@ -6,6 +6,7 @@ import bcrypt
 import jwt
 import random
 import smtplib
+import socket
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from bson import ObjectId
@@ -128,7 +129,15 @@ def send_otp_email(to_email: str, otp: str, first_name: str = ""):
 
         msg.attach(MIMEText(html, "html"))
 
-        server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=10)
+        # Force IPv4 resolution to avoid Render/Gmail IPv6 issues
+        try:
+            smtp_ip = socket.gethostbyname(settings.SMTP_SERVER)
+            print(f"[debug] Resolved {settings.SMTP_SERVER} to {smtp_ip}")
+        except Exception as res_err:
+            print(f"[!] DNS Resolution failed: {res_err}")
+            smtp_ip = settings.SMTP_SERVER
+
+        server = smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=10)
         server.starttls()
         server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
         server.sendmail(settings.SMTP_EMAIL, to_email, msg.as_string())
@@ -179,7 +188,16 @@ def send_reset_otp_email(to_email: str, otp: str, first_name: str = ""):
         </div>
         """
         msg.attach(MIMEText(html, "html"))
-        server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=10)
+
+        # Force IPv4 resolution to avoid Render/Gmail IPv6 issues
+        try:
+            smtp_ip = socket.gethostbyname(settings.SMTP_SERVER)
+            print(f"[debug] Resolved {settings.SMTP_SERVER} to {smtp_ip}")
+        except Exception as res_err:
+            print(f"[!] DNS Resolution failed: {res_err}")
+            smtp_ip = settings.SMTP_SERVER
+
+        server = smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=10)
         server.starttls()
         server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
         server.sendmail(settings.SMTP_EMAIL, to_email, msg.as_string())
@@ -193,7 +211,7 @@ def send_reset_otp_email(to_email: str, otp: str, first_name: str = ""):
 
 # ---------- endpoints ----------
 @router.post("/signup")
-async def signup(req: SignupRequest):
+async def signup(req: SignupRequest, background_tasks: BackgroundTasks):
     db = get_db()
     if db is None:
         raise HTTPException(status_code=500, detail="Database not connected")
@@ -223,10 +241,9 @@ async def signup(req: SignupRequest):
         upsert=True,
     )
 
-    # Send OTP email
-    sent = send_otp_email(req.email.lower(), otp, req.firstName)
-    if not sent:
-        raise HTTPException(status_code=500, detail="Failed to send verification email")
+    # Send OTP email in background for instant response
+    print(f"→ [signup] Queuing OTP for {req.email.lower()}...")
+    background_tasks.add_task(send_otp_email, req.email.lower(), otp, req.firstName)
 
     return {
         "success": True,
@@ -291,7 +308,7 @@ async def verify_otp(req: VerifyOTPRequest):
 
 
 @router.post("/resend-otp")
-async def resend_otp(req: ResendOTPRequest):
+async def resend_otp(req: ResendOTPRequest, background_tasks: BackgroundTasks):
     db = get_db()
     if db is None:
         raise HTTPException(status_code=500, detail="Database not connected")
@@ -308,9 +325,8 @@ async def resend_otp(req: ResendOTPRequest):
         {"$set": {"otp": otp, "otpExpiry": otp_expiry}},
     )
 
-    sent = send_otp_email(req.email.lower(), otp, pending.get("firstName", ""))
-    if not sent:
-        raise HTTPException(status_code=500, detail="Failed to resend OTP")
+    # Background task for resending
+    background_tasks.add_task(send_otp_email, req.email.lower(), otp, pending.get("firstName", ""))
 
     return {"success": True, "message": "New OTP sent to your email."}
 
@@ -343,7 +359,7 @@ async def login(req: LoginRequest):
 
 
 @router.post("/forgot-password")
-async def forgot_password(req: ForgotPasswordRequest):
+async def forgot_password(req: ForgotPasswordRequest, background_tasks: BackgroundTasks):
     db = get_db()
     if db is None:
         raise HTTPException(status_code=500, detail="Database not connected")
@@ -362,7 +378,8 @@ async def forgot_password(req: ForgotPasswordRequest):
         upsert=True
     )
 
-    send_reset_otp_email(req.email.lower(), otp, user.get("firstName", ""))
+    # Background task for reset email
+    background_tasks.add_task(send_reset_otp_email, req.email.lower(), otp, user.get("firstName", ""))
 
     return {"success": True, "message": "Reset code sent to your email."}
 

@@ -93,11 +93,26 @@ const AuthPage = ({ mode = 'login', onBack, onSwitch, onAuth }) => {
                 ? { firstName: form.firstName, lastName: form.lastName, email: form.email, password: form.password }
                 : { email: form.email, password: form.password };
 
-            const res = await fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-            });
+            let res;
+            let attempts = 0;
+            const maxAttempts = 2;
+
+            while (attempts < maxAttempts) {
+                try {
+                    res = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body),
+                    });
+                    break; // Success or server error handled below
+                } catch (err) {
+                    attempts++;
+                    if (attempts >= maxAttempts) throw err;
+                    // Wait 1s before retry for transient network issues
+                    await new Promise(r => setTimeout(r, 1000));
+                }
+            }
+
             const data = await res.json();
 
             if (!res.ok) {
