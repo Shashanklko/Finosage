@@ -120,17 +120,7 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                 >
                     <div className="goal-list">
                         {goals.map(goal => (
-                            <div key={goal.id} className="goal-row">
-                                <div>
-                                    <div className="goal-col-label">Goal Name</div>
-                                    <input
-                                        type="text"
-                                        value={goal.name}
-                                        onChange={e => updateGoal(goal.id, 'name', e.target.value)}
-                                        placeholder="e.g. Dream Home"
-                                    />
-                                </div>
-                        <div key={goal.id} className={`goal-row ${touched[`goal-${goal.id}-amount`] && getFieldError(`goal-${goal.id}-amount`) ? 'has-error' : ''}`}>
+                            <div key={goal.id} className={`goal-row ${touched[`goal-${goal.id}-amount`] && getFieldError(`goal-${goal.id}-amount`) ? 'has-error' : ''}`}>
                                 <div>
                                     <div className="goal-col-label">Goal Name</div>
                                     <input
