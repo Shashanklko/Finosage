@@ -35,6 +35,14 @@ app.include_router(withdrawal_router, prefix="/api/withdrawal", tags=["Withdrawa
 app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
 app.include_router(history_router, prefix="/api/history", tags=["History"])
 
+@app.get("/")
+async def root():
+    return {
+        "message": f"{settings.APP_NAME} is running",
+        "docs": "/docs",
+        "health": "/api/health"
+    }
+
 
 @app.get("/api/health")
 async def health():
