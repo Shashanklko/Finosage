@@ -92,44 +92,73 @@ def _send_email_robust(to_email: str, subject: str, html_content: str, label: st
     """Centralized robust SMTP sender for Render environments."""
     if not settings.SMTP_EMAIL or not settings.SMTP_PASSWORD:
         print(f"[!] SMTP not configured — {label} for {to_email} (check .env)")
-        return True
+        return False
 
-    try:
-        msg = MIMEMultipart("alternative")
-        msg["From"] = f"Finosage <{settings.SMTP_EMAIL}>"
-        msg["To"] = to_email
-        msg["Subject"] = subject
-        msg.attach(MIMEText(html_content, "html"))
-
-        # 1. DNS Resolution (Forcing IPv4 to avoid Render/Gmail IPv6 issues)
-        try:
-            smtp_ip = socket.gethostbyname(settings.SMTP_SERVER)
-            target = smtp_ip
-            print(f"[debug] Resolved {settings.SMTP_SERVER} to {smtp_ip}")
-        except Exception as res_err:
-            print(f"[!] DNS Resolution failed: {res_err}")
-            target = settings.SMTP_SERVER
-
-        # 2. Connection with high timeout (30s for Render cold starts/latency)
-        print(f"→ [SMTP] Connecting to {target}:{settings.SMTP_PORT} (Timeout: 30s)...")
-        if settings.SMTP_PORT == 465:
-            server = smtplib.SMTP_SSL(target, settings.SMTP_PORT, timeout=30)
+    def try_connect(target: str, port: int, use_ssl: bool, timeout: int = 15):
+        if use_ssl:
+            return smtplib.SMTP_SSL(target, port, timeout=timeout)
         else:
-            server = smtplib.SMTP(target, settings.SMTP_PORT, timeout=30)
-            server.starttls()
+            s = smtplib.SMTP(target, port, timeout=timeout)
+            s.starttls()
+            return s
 
-        # 3. Authentication
+    error_history = []
+    
+    # Strategy 1: Standard Hostname Connection (Best for SSL)
+    print(f"→ [SMTP] Strategy 1: Connecting to {settings.SMTP_SERVER}:{settings.SMTP_PORT} via hostname...")
+    try:
+        if settings.SMTP_PORT == 465:
+            server = smtplib.SMTP_SSL(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=15)
+        else:
+            server = smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT, timeout=15)
+            server.starttls()
+            
         server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
-        
-        # 4. Transmission
-        server.sendmail(settings.SMTP_EMAIL, to_email, msg.as_string())
+        server.sendmail(settings.SMTP_EMAIL, to_email, _prepare_msg(to_email, subject, html_content).as_string())
         server.quit()
-        
-        print(f"[+] {label} successfully sent to {to_email}")
+        print(f"[+] {label} successfully sent to {to_email} (Strategy 1)")
         return True
     except Exception as e:
-        print(f"[-] [SMTP:{label}] Failed for {to_email}: {type(e).__name__}: {str(e)}")
-        return False
+        error_history.append(f"Strategy 1 Failed: {type(e).__name__}: {str(e)}")
+        print(f"[-] Strategy 1 Failed: {str(e)}")
+
+    # Strategy 2: IPv4 Fallback (Bypasses Render IPv6 resolution issues)
+    print(f"→ [SMTP] Strategy 2: Falling back to IPv4 resolution for {settings.SMTP_SERVER}...")
+    try:
+        smtp_ip = socket.gethostbyname(settings.SMTP_SERVER)
+        print(f"[debug] Resolved {settings.SMTP_SERVER} to {smtp_ip}")
+        
+        if settings.SMTP_PORT == 465:
+            server = smtplib.SMTP_SSL(smtp_ip, settings.SMTP_PORT, timeout=15)
+        else:
+            server = smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=15)
+            server.starttls()
+            
+        server.login(settings.SMTP_EMAIL, settings.SMTP_PASSWORD)
+        server.sendmail(settings.SMTP_EMAIL, to_email, _prepare_msg(to_email, subject, html_content).as_string())
+        server.quit()
+        print(f"[+] {label} successfully sent to {to_email} (Strategy 2)")
+        return True
+    except Exception as e:
+        error_history.append(f"Strategy 2 Failed: {type(e).__name__}: {str(e)}")
+        print(f"[-] Strategy 2 Failed: {str(e)}")
+
+    # If all strategies fail
+    import traceback
+    print(f"[-] [SMTP:{label}] All connection strategies failed for {to_email}")
+    for err in error_history:
+        print(f"    - {err}")
+    traceback.print_exc()
+    raise Exception(f"Failed to send email after multiple attempts: {'; '.join(error_history)}")
+
+
+def _prepare_msg(to_email: str, subject: str, html_content: str) -> MIMEMultipart:
+    msg = MIMEMultipart("alternative")
+    msg["From"] = f"Finosage <{settings.SMTP_EMAIL}>"
+    msg["To"] = to_email
+    msg["Subject"] = subject
+    msg.attach(MIMEText(html_content, "html"))
+    return msg
 
 
 def send_otp_email(to_email: str, otp: str, first_name: str = ""):
@@ -160,7 +189,10 @@ def send_otp_email(to_email: str, otp: str, first_name: str = ""):
         </p>
     </div>
     """
-    return _send_email_robust(to_email, f"Finosage — Your Verification Code: {otp}", html, label="OTP")
+    try:
+        return _send_email_robust(to_email, f"Finosage — Your Verification Code: {otp}", html, label="OTP")
+    except Exception:
+        return False
 
 
 def send_reset_otp_email(to_email: str, otp: str, first_name: str = ""):
@@ -191,10 +223,35 @@ def send_reset_otp_email(to_email: str, otp: str, first_name: str = ""):
         </p>
     </div>
     """
-    return _send_email_robust(to_email, f"Finosage — Password Reset Code: {otp}", html, label="Reset OTP")
+    try:
+        return _send_email_robust(to_email, f"Finosage — Password Reset Code: {otp}", html, label="Reset OTP")
+    except Exception:
+        return False
 
 
 # ---------- endpoints ----------
+@router.post("/test-email")
+async def test_email():
+    """Diagnostic endpoint to test SMTP settings synchronously."""
+    if not settings.SMTP_EMAIL:
+        return {"success": False, "error": "SMTP_EMAIL not configured in settings"}
+    
+    test_otp = "123456"
+    print(f"→ [test-email] Attempting to send diagnostic email to {settings.SMTP_EMAIL}...")
+    try:
+        # We use a real call but catch errors to return to client
+        html = f"<p>This is a diagnostic email from Finosage API.</p><p>OTP: <b>{test_otp}</b></p>"
+        res = _send_email_robust(settings.SMTP_EMAIL, "Finosage — SMTP Diagnostic", html, label="DIAGNOSTIC")
+        return {"success": res, "message": "Email sent successfully (check your inbox)"}
+    except Exception as e:
+        return {
+            "success": False, 
+            "error_type": type(e).__name__, 
+            "error_message": str(e),
+            "hint": "Check if your Gmail App Password is correct and SMTP_PORT is 587."
+        }
+
+
 @router.post("/signup")
 async def signup(req: SignupRequest, background_tasks: BackgroundTasks):
     db = get_db()
