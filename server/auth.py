@@ -92,6 +92,7 @@ import base64
 import os
 import json
 from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 
 def _get_gmail_service():
@@ -113,7 +114,13 @@ def _get_gmail_service():
             print(f"[-] Failed to parse GMAIL_TOKEN_JSON from env: {e}")
 
     if not creds or not creds.valid:
-        raise Exception("Invalid or missing Gmail OAuth credentials. Run generate_token.py first, or set GMAIL_TOKEN_JSON env var.")
+        if creds and creds.expired and creds.refresh_token:
+            try:
+                creds.refresh(Request())
+            except Exception as e:
+                raise Exception(f"Failed to refresh Gmail OAuth credentials: {e}")
+        else:
+            raise Exception("Invalid or missing Gmail OAuth credentials. Run generate_token.py first, or set GMAIL_TOKEN_JSON env var.")
         
     return build('gmail', 'v1', credentials=creds)
 
