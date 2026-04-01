@@ -61,7 +61,8 @@ const Hero = ({ onExplore }) => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
-                    Let's explore financial Journey
+                    
+                   < Let's explore financial Journey >
                 </motion.button>
 
             </motion.div>
