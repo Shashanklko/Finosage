@@ -93,7 +93,7 @@ const Hero = ({ onExplore }) => {
                             ease: "easeInOut"
                         }}
                     />
-
+                    👉🏼
                     {/* Button Text */}
                     <span className="btn-text">
                         Let's explore financial Journey
@@ -109,7 +109,6 @@ const Hero = ({ onExplore }) => {
                             ease: "easeInOut"
                         }}
                     >
-                        👉
                     </motion.span>
                 </motion.button>
             </motion.div>
