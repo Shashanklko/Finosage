@@ -12,7 +12,7 @@ const Hero = ({ onExplore }) => {
                 <div className="vignette" />
             </div>
 
-            {/* Symmetrical Split - Professional Images */}
+            {/* Left Professional */}
             <div className="professional-side left">
                 <motion.div
                     className="image-wrapper"
@@ -20,10 +20,15 @@ const Hero = ({ onExplore }) => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 1.2, delay: 0.2 }}
                 >
-                    <img src="/assets/woman.png" alt="Executive Director" className="hero-image" />
+                    <img
+                        src="/assets/woman.png"
+                        alt="Executive Director"
+                        className="hero-image"
+                    />
                 </motion.div>
             </div>
 
+            {/* Right Professional */}
             <div className="professional-side right">
                 <motion.div
                     className="image-wrapper"
@@ -31,27 +36,41 @@ const Hero = ({ onExplore }) => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 1.2, delay: 0.2 }}
                 >
-                    <img src="/assets/man.png" alt="Managing Partner" className="hero-image" />
+                    <img
+                        src="/assets/man.png"
+                        alt="Managing Partner"
+                        className="hero-image"
+                    />
                 </motion.div>
             </div>
 
-            {/* Central Content Column */}
+            {/* Center Content */}
             <motion.div
                 className="hero-content"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: 'easeOut' }}
             >
-                <span className="pre-title">STRATEGIC FINANCIAL INTELLIGENCE</span>
+                <span className="pre-title">
+                    STRATEGIC FINANCIAL INTELLIGENCE
+                </span>
+
                 <h1 className="headline vertical">
-                    <span className="line"><span className="gold-text">PRECISION</span> YOU CAN TRUST.</span>
-                    <span className="line"><span className="gold-text">GROWTH</span> YOU CAN FEEL CONFIDENT IN.</span>
+                    <span className="line">
+                        <span className="gold-text">PRECISION</span> YOU CAN TRUST.
+                    </span>
+                    <span className="line">
+                        <span className="gold-text">GROWTH</span> YOU CAN FEEL CONFIDENT IN.
+                    </span>
                 </h1>
+
                 <p className="description centered">
                     Advanced analytics and predictive modeling —<br />
                     guided by a deep understanding of your ambitions.<br />
                     <span className="emphasis">Because wealth is personal.</span>
                 </p>
+
+                {/* Button with Ping + Pointer */}
                 <motion.button
                     className="explore-button"
                     onClick={onExplore}
@@ -61,10 +80,38 @@ const Hero = ({ onExplore }) => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
-                    
-                   < Let's explore financial Journey >
-                </motion.button>
+                    {/* Ping Glow */}
+                    <motion.span
+                        className="ping"
+                        animate={{
+                            scale: [1, 1.4, 1],
+                            opacity: [0.5, 0, 0.5]
+                        }}
+                        transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    />
 
+                    {/* Button Text */}
+                    <span className="btn-text">
+                        Let's explore financial Journey
+                    </span>
+
+                    {/* Pointer Character */}
+                    <motion.span
+                        className="pointer"
+                        animate={{ x: [0, 8, 0] }}
+                        transition={{
+                            repeat: Infinity,
+                            duration: 1,
+                            ease: "easeInOut"
+                        }}
+                    >
+                        👉
+                    </motion.span>
+                </motion.button>
             </motion.div>
         </div>
     );
