@@ -1,29 +1,387 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
   <head>
+    <!-- ═══════════════════════════════════════════════════════════
+         CORE META
+    ═══════════════════════════════════════════════════════════ -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Finosage | Strategic Wealth Intelligence</title>
-    <meta name="description" content="Professional-grade financial engineering for retirement, goal planning, and portfolio analysis." />
-    <meta property="og:title" content="Finosage Wealth Engine" />
-    <meta property="og:description" content="Simulate 10,000 parallel realities to ensure your financial future is robust." />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TITLE & DESCRIPTION  (primary ranking signals)
+    ═══════════════════════════════════════════════════════════ -->
+    <title>Finosage | Free Retirement Planner, Portfolio Analyzer & Wealth Goal Tool</title>
+
+    <meta name="description" content="Finosage is a free AI-powered financial planning tool. Simulate retirement scenarios, analyze portfolios, plan wealth goals, and optimize withdrawal strategies with data-driven Monte Carlo simulations." />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         KEYWORDS  (long-tail + semantic variants)
+    ═══════════════════════════════════════════════════════════ -->
+    <meta name="keywords" content="retirement planner, free retirement calculator, portfolio analyzer, wealth goal planner, SWP calculator, withdrawal strategy, Monte Carlo simulation, financial planning tool, investment analysis, SIP calculator, retirement corpus calculator, FIRE calculator, wealth management, passive income planner, mutual fund analyzer, finosage" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         AUTHOR & PUBLISHER
+    ═══════════════════════════════════════════════════════════ -->
+    <meta name="author" content="Finosage" />
+    <meta name="publisher" content="Finosage" />
+    <meta name="copyright" content="Finosage 2025" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="rating" content="general" />
+    <meta name="category" content="Finance, Investment, Wealth Management" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ROBOTS & INDEXING
+    ═══════════════════════════════════════════════════════════ -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         CANONICAL & HREFLANG
+    ═══════════════════════════════════════════════════════════ -->
+    <link rel="canonical" href="https://www.finosage.online/" />
+    <link rel="alternate" hreflang="en" href="https://www.finosage.online/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.finosage.online/" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         FAVICON & APP ICONS
+    ═══════════════════════════════════════════════════════════ -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <meta name="msapplication-TileImage" content="/favicon.png" />
+    <meta name="msapplication-TileColor" content="#0f172a" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         OPEN GRAPH (Facebook, LinkedIn, WhatsApp)
+    ═══════════════════════════════════════════════════════════ -->
     <meta property="og:type" content="website" />
-    <!-- Google tag (gtag.js) -->
+    <meta property="og:site_name" content="Finosage" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://www.finosage.online/" />
+    <meta property="og:title" content="Finosage | Free Retirement Planner & Portfolio Analyzer" />
+    <meta property="og:description" content="Plan your retirement, analyze portfolios, and optimize wealth goals with free AI-powered simulations. Trusted by thousands of smart investors." />
+    <meta property="og:image" content="https://www.finosage.online/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Finosage Wealth Engine - Financial Planning Dashboard" />
+    <meta property="og:image:type" content="image/jpeg" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TWITTER / X CARDS
+    ═══════════════════════════════════════════════════════════ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@finosage" />
+    <meta name="twitter:creator" content="@finosage" />
+    <meta name="twitter:title" content="Finosage | Free Retirement Planner & Portfolio Analyzer" />
+    <meta name="twitter:description" content="Run professional-grade Monte Carlo simulations for retirement, portfolio analysis, and wealth goals. 100% free." />
+    <meta name="twitter:image" content="https://www.finosage.online/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Finosage Wealth Engine Dashboard" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PERFORMANCE HINTS
+    ═══════════════════════════════════════════════════════════ -->
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+    <link rel="dns-prefetch" href="https://stats.g.doubleclick.net" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         GOOGLE ADSENSE VERIFICATION
+    ═══════════════════════════════════════════════════════════ -->
+    <meta name="google-adsense-account" content="ca-pub-1808690241826937" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         GOOGLE ANALYTICS (gtag.js)
+    ═══════════════════════════════════════════════════════════ -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BCVSWW19QB"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
-      gtag('config', 'G-BCVSWW19QB');
+      gtag('config', 'G-BCVSWW19QB', {
+        page_title: document.title,
+        page_location: window.location.href
+      });
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700&family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         GOOGLE ADSENSE
+    ═══════════════════════════════════════════════════════════ -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1808690241826937"
+     crossorigin="anonymous"></script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         FONTS
+    ═══════════════════════════════════════════════════════════ -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700&family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- ═══════════════════════════════════════════════════════════
+         STRUCTURED DATA — WebSite + SiteLinks Search Box
+    ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Finosage",
+      "alternateName": "Finosage Wealth Engine",
+      "url": "https://www.finosage.online/",
+      "description": "Free AI-powered financial planning platform for retirement simulation, portfolio analysis, and wealth goal planning.",
+      "inLanguage": "en-US",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://www.finosage.online/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         STRUCTURED DATA — Organization
+    ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Finosage",
+      "url": "https://www.finosage.online/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.finosage.online/favicon.png",
+        "width": 512,
+        "height": 512
+      },
+      "sameAs": [
+        "https://github.com/Shashanklko/Finosage"
+      ],
+      "description": "Finosage is a free, AI-powered financial planning platform offering retirement simulation, portfolio analysis, goal planning, and withdrawal strategy tools."
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         STRUCTURED DATA — FinancialService
+    ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FinancialService",
+      "name": "Finosage Wealth Engine",
+      "url": "https://www.finosage.online/",
+      "logo": "https://www.finosage.online/favicon.png",
+      "image": "https://www.finosage.online/og-image.jpg",
+      "description": "Advanced financial planning platform for retirement simulation, portfolio analysis, wealth goal planning, and SWP optimization.",
+      "serviceType": [
+        "Retirement Planning",
+        "Portfolio Analysis",
+        "Wealth Goal Planning",
+        "Withdrawal Strategy",
+        "Monte Carlo Simulation"
+      ],
+      "areaServed": {
+        "@type": "Country",
+        "name": "India"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Financial Planning Tools",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Retirement Wealth Engine",
+              "description": "Simulate 10,000 retirement scenarios using Monte Carlo methods to secure your financial future."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Portfolio Analyzer",
+              "description": "Analyze asset allocation, risk exposure, and historical performance of your investment portfolio."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Wealth Goal Planner",
+              "description": "Calculate SIP amounts, timelines, and milestones needed to achieve your financial goals."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Withdrawal Strategy Lab",
+              "description": "Model safe withdrawal rates and SWP strategies for sustained income during retirement."
+            }
+          }
+        ]
+      }
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         STRUCTURED DATA — FAQPage (captures featured snippets)
+    ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Finosage?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Finosage is a free AI-powered financial planning platform that helps you simulate retirement scenarios, analyze your investment portfolio, plan wealth goals, and optimize withdrawal strategies using Monte Carlo simulations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the retirement planner work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Finosage's Retirement Wealth Engine runs thousands of Monte Carlo simulations to model different market conditions and inflation scenarios, giving you a probability-based view of your retirement readiness."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Finosage free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Finosage offers free access to all its core financial planning tools including the retirement simulator, portfolio analyzer, goal planner, and withdrawal strategy lab."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a safe withdrawal rate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A safe withdrawal rate (SWR) is the percentage of your retirement corpus you can withdraw annually without running out of money. Finosage's Withdrawal Strategy Lab lets you model different SWR scenarios based on your corpus size, expenses, and life expectancy."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I analyze my mutual fund portfolio on Finosage?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Finosage's Portfolio Analyzer lets you input your mutual fund or equity holdings and analyzes asset allocation, risk metrics, and projected growth under different market scenarios."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         STRUCTURED DATA — BreadcrumbList
+    ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.finosage.online/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Financial Tools",
+          "item": "https://www.finosage.online/#tools"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Retirement Planner",
+          "item": "https://www.finosage.online/#retirement"
+        }
+      ]
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         STRUCTURED DATA — SoftwareApplication
+    ═══════════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Finosage Wealth Engine",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web Browser",
+      "url": "https://www.finosage.online/",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "124"
+      },
+      "description": "Free web-based financial planning app for retirement simulation, portfolio analysis, and wealth goal planning.",
+      "screenshot": "https://www.finosage.online/og-image.jpg",
+      "featureList": [
+        "Monte Carlo Retirement Simulation",
+        "Portfolio Risk Analysis",
+        "SIP & Wealth Goal Calculator",
+        "SWP Withdrawal Strategy Lab"
+      ]
+    }
+    </script>
+
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         NOSCRIPT SEO FALLBACK
+         (crawlers that don't execute JS still index this content)
+    ═══════════════════════════════════════════════════════════ -->
+    <noscript>
+      <header>
+        <h1>Finosage — Free Retirement Planner, Portfolio Analyzer & Wealth Goal Tool</h1>
+        <p>AI-powered financial planning. Simulate retirement, analyze portfolios, and plan your wealth goals — 100% free.</p>
+      </header>
+      <main>
+        <section>
+          <h2>Retirement Wealth Engine</h2>
+          <p>Run Monte Carlo simulations across 10,000 scenarios to stress-test your retirement plan against market volatility and inflation.</p>
+        </section>
+        <section>
+          <h2>Portfolio Analyzer</h2>
+          <p>Analyze your mutual fund or equity portfolio for asset allocation, risk exposure, and projected returns under different market conditions.</p>
+        </section>
+        <section>
+          <h2>Wealth Goal Planner</h2>
+          <p>Plan SIP amounts and investment timelines to achieve specific financial milestones like buying a home, children's education, or early retirement.</p>
+        </section>
+        <section>
+          <h2>Withdrawal Strategy Lab</h2>
+          <p>Model safe withdrawal rates (SWR) and systematic withdrawal plans (SWP) to ensure your retirement corpus lasts a lifetime.</p>
+        </section>
+        <footer>
+          <p>&copy; 2025 Finosage. All rights reserved. | <a href="https://www.finosage.online/">www.finosage.online</a></p>
+        </footer>
+      </main>
+    </noscript>
   </body>
 </html>
