@@ -15,13 +15,44 @@ import WithdrawalLabPage from './components/engine/WithdrawalLab/WithdrawalLabPa
 import Loader from './components/UI/Loader';
 import './styles/theme.css';
 
+// ── URL ↔ View mapping ──────────────────────────────────────────────────────
+const PATH_TO_VIEW = {
+    '/': 'hero',
+    '/explore': 'discovery',
+    '/engine/retirement': 'retirement',
+    '/engine/analyzer': 'analyzer',
+    '/engine/planner': 'planner',
+    '/engine/lab': 'lab',
+    '/profile': 'profile',
+    '/profile/history': 'history',
+};
+
+const VIEW_TO_PATH = {
+    hero: '/',
+    discovery: '/explore',
+    retirement: '/engine/retirement',
+    analyzer: '/engine/analyzer',
+    planner: '/engine/planner',
+    lab: '/engine/lab',
+    profile: '/profile',
+    history: '/profile/history',
+};
+
+const getViewFromPath = () => PATH_TO_VIEW[window.location.pathname] || 'hero';
+
 const App = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const [view, setViewState] = useState(() => sessionStorage.getItem('finosage_view') || 'hero');
+    const [view, setViewState] = useState(() => getViewFromPath());
     const [theme, setTheme] = useState(() => localStorage.getItem('finosage_theme') || 'dark');
     const prevViewRef = React.useRef(view);
 
-    const setView = (v) => { prevViewRef.current = view; sessionStorage.setItem('finosage_view', v); setViewState(v); };
+    const setView = (v) => {
+        prevViewRef.current = view;
+        sessionStorage.setItem('finosage_view', v);
+        const path = VIEW_TO_PATH[v] || '/';
+        window.history.pushState({ view: v }, '', path);
+        setViewState(v);
+    };
 
     const toggleTheme = () => {
         const newTheme = theme === 'dark' ? 'light' : 'dark';
@@ -44,6 +75,18 @@ const App = () => {
             setUser(JSON.parse(storedUser));
         }
     }, []);
+
+    // Handle browser back/forward navigation
+    useEffect(() => {
+        const handlePopState = (e) => {
+            const v = e.state?.view || getViewFromPath();
+            prevViewRef.current = view;
+            sessionStorage.setItem('finosage_view', v);
+            setViewState(v);
+        };
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, [view]);
 
     // ─────────────────────────────────────────────────────────────────────────
     // BACKEND KEEP-ALIVE (Render Pulse)
