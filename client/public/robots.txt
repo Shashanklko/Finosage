@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /profile/
+Disallow: /profile/history
+
+Sitemap: https://www.finosage.online/sitemap.xml
