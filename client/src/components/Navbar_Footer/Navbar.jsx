@@ -1,7 +1,8 @@
 import React from 'react';
+import { Sun, Moon } from 'lucide-react';
 import './Navbar.css';
 
-const Navbar = ({ onBackClick, backLabel, onAuthClick, user, onLogout, onProfileClick, activeTitle }) => {
+const Navbar = ({ onBackClick, backLabel, onAuthClick, user, onLogout, onProfileClick, activeTitle, theme, onThemeToggle }) => {
     return (
         <nav className="navbar">
             <div className="logo">
@@ -15,6 +16,10 @@ const Navbar = ({ onBackClick, backLabel, onAuthClick, user, onLogout, onProfile
             )}
 
             <div className="nav-right">
+                <button className="theme-toggle-btn" onClick={onThemeToggle} title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}>
+                    {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+                </button>
+
                 {onBackClick && (
                     <button className="nav-back" onClick={onBackClick}>
                         ← {backLabel || 'BACK'}

@@ -46,6 +46,28 @@
     gap: 2rem;
 }
 
+.theme-toggle-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 0.4rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.theme-toggle-btn:hover {
+    border-color: var(--gold-primary);
+    background: var(--bg-card);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px var(--gold-glow);
+}
+
 .navbar .nav-back {
     background: transparent;
     border: none;
