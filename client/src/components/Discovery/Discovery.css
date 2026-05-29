@@ -144,6 +144,18 @@
 }
 
 @media (max-width: 900px) {
+    .discovery-container {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+        padding: 6rem 1.5rem 4rem;
+        justify-content: flex-start;
+    }
+
+    .discovery-header {
+        margin-bottom: 2rem;
+    }
+
     .pillars-grid.four-modules {
         grid-template-columns: 1fr;
         max-width: 400px;

@@ -6,8 +6,12 @@ import numpy as np
 from scipy.stats.qmc import Sobol
 from scipy.stats import norm, t as student_t
 from scipy.optimize import minimize
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
 from pydantic import BaseModel
+from bson import ObjectId
+from database import get_db
+from auth import check_credits
 
 router = APIRouter()
 
@@ -290,5 +294,10 @@ def _analyze_portfolio(req: PortfolioRequest) -> dict:
 
 
 @router.post("/analyze")
-async def analyze_portfolio(req: PortfolioRequest):
-    return _analyze_portfolio(req)
+async def analyze_portfolio(req: PortfolioRequest, user_id: Optional[str] = Depends(check_credits)):
+    res = _analyze_portfolio(req)
+    if user_id:
+        db = get_db()
+        if db is not None:
+            await db.users.update_one({"_id": ObjectId(user_id)}, {"$inc": {"credits": -1}})
+    return res

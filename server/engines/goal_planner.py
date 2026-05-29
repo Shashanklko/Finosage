@@ -5,7 +5,11 @@ Quasi-Monte Carlo + Dynamic Programming multi-goal optimization
 import numpy as np
 from scipy.stats.qmc import Sobol
 from scipy.stats import norm
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
+from bson import ObjectId
+from database import get_db
+from auth import check_credits
 from pydantic import BaseModel
 from typing import Literal
 
@@ -336,5 +340,10 @@ def _optimize_goals(req: GoalRequest) -> dict:
 
 
 @router.post("/optimize")
-async def optimize_goals(req: GoalRequest):
-    return _optimize_goals(req)
+async def optimize_goals(req: GoalRequest, user_id: Optional[str] = Depends(check_credits)):
+    res = _optimize_goals(req)
+    if user_id:
+        db = get_db()
+        if db is not None:
+            await db.users.update_one({"_id": ObjectId(user_id)}, {"$inc": {"credits": -1}})
+    return res

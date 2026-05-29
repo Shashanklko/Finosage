@@ -9,7 +9,11 @@ Dynamic Regime-Switching Monte Carlo with:
 """
 import numpy as np
 from scipy.stats import t as student_t
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
+from bson import ObjectId
+from database import get_db
+from auth import check_credits
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -391,5 +395,10 @@ def _simulate_retirement(req: RetirementRequest) -> dict:
 
 
 @router.post("/simulate")
-async def simulate_retirement(req: RetirementRequest):
-    return _simulate_retirement(req)
+async def simulate_retirement(req: RetirementRequest, user_id: Optional[str] = Depends(check_credits)):
+    res = _simulate_retirement(req)
+    if user_id:
+        db = get_db()
+        if db is not None:
+            await db.users.update_one({"_id": ObjectId(user_id)}, {"$inc": {"credits": -1}})
+    return res

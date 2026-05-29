@@ -13,6 +13,7 @@ import PortfolioAnalyzerPage from './components/engine/PortfolioAnalyzer/Portfol
 import GoalPlannerPage from './components/engine/GoalPlanner/GoalPlannerPage';
 import WithdrawalLabPage from './components/engine/WithdrawalLab/WithdrawalLabPage';
 import Loader from './components/UI/Loader';
+import PaymentModal from './components/UI/PaymentModal';
 import './styles/theme.css';
 
 // ── URL ↔ View mapping ──────────────────────────────────────────────────────
@@ -60,6 +61,7 @@ const App = () => {
         localStorage.setItem('finosage_theme', newTheme);
     };
     const [isAboutOpen, setIsAboutOpen] = useState(false);
+    const [isPaymentOpen, setIsPaymentOpen] = useState(false);
     const [activeAuthModal, setActiveAuthModal] = useState(null); // 'login' or 'signup'
     const [user, setUser] = useState(null);
     const [activeAnalysis, setActiveAnalysis] = useState(null);
@@ -67,12 +69,28 @@ const App = () => {
     const [usageCount, setUsageCount] = useState(() => Number(localStorage.getItem('finosage_usage') || 0));
     const engineBackRef = React.useRef(null);
 
+    const syncUser = async (token) => {
+        try {
+            const res = await fetch(`/api/auth/me?token=${token}`);
+            if (res.ok) {
+                const data = await res.json();
+                setUser(data.user);
+                localStorage.setItem('finosage_user', JSON.stringify(data.user));
+            } else {
+                handleLogout();
+            }
+        } catch (err) {
+            console.error("Failed to sync user session:", err);
+        }
+    };
+
     useEffect(() => {
         // Check local storage for persistent session
         const storedUser = localStorage.getItem('finosage_user');
         const token = localStorage.getItem('finosage_token');
         if (storedUser && token) {
             setUser(JSON.parse(storedUser));
+            syncUser(token); // Background sync to keep credits updated
         }
     }, []);
 
@@ -107,7 +125,24 @@ const App = () => {
             const newCount = usageCount + 1;
             setUsageCount(newCount);
             localStorage.setItem('finosage_usage', newCount);
+        } else {
+            // Decrement client-side local user state credits
+            setUser(prev => {
+                if (!prev) return prev;
+                const updated = { ...prev, credits: Math.max(0, (prev.credits ?? 1) - 1) };
+                localStorage.setItem('finosage_user', JSON.stringify(updated));
+                return updated;
+            });
         }
+    };
+
+    const handlePaymentSuccess = (updatedCredits) => {
+        setUser(prev => {
+            if (!prev) return prev;
+            const updated = { ...prev, credits: updatedCredits };
+            localStorage.setItem('finosage_user', JSON.stringify(updated));
+            return updated;
+        });
     };
 
     const handleAuthStatus = (userData) => {
@@ -134,15 +169,15 @@ const App = () => {
             case 'discovery':
                 return <Discovery onBack={() => setView('hero')} onModuleClick={(id) => { setActiveAnalysis(null); setView(id); }} onAuthClick={() => setActiveAuthModal('login')} />;
             case 'retirement':
-                return <RetirementResultsPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} />;
+                return <RetirementResultsPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount >= 1 ? 2 : 0} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} onOpenPayment={() => setIsPaymentOpen(true)} />;
             case 'analyzer':
-                return <PortfolioAnalyzerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} />;
+                return <PortfolioAnalyzerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount >= 1 ? 2 : 0} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} onOpenPayment={() => setIsPaymentOpen(true)} />;
             case 'planner':
-                return <GoalPlannerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} />;
+                return <GoalPlannerPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount >= 1 ? 2 : 0} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} onOpenPayment={() => setIsPaymentOpen(true)} />;
             case 'lab':
-                return <WithdrawalLabPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} />;
+                return <WithdrawalLabPage onBack={() => setView(activeAnalysis ? 'history' : 'discovery')} initialData={activeAnalysis?.data} backRef={engineBackRef} onPhaseChange={setEngineInResults} user={user} usageCount={usageCount >= 1 ? 2 : 0} onSimulate={incrementUsage} onAuthRedirect={() => setActiveAuthModal('login')} onOpenPayment={() => setIsPaymentOpen(true)} />;
             case 'profile':
-                return <ProfilePage onBack={() => setView(prevViewRef.current || 'discovery')} onHistoryClick={() => setView('history')} />;
+                return <ProfilePage onBack={() => setView(prevViewRef.current || 'discovery')} onHistoryClick={() => setView('history')} onOpenPaymentModal={() => setIsPaymentOpen(true)} />;
             case 'history':
                 return <HistoryPage onBack={() => setView('profile')} onOpenAnalysis={handleOpenHistoryItem} />;
             default:
@@ -217,6 +252,14 @@ const App = () => {
                             <AboutModal
                                 isOpen={isAboutOpen}
                                 onClose={() => setIsAboutOpen(false)}
+                            />
+
+                            <PaymentModal
+                                isOpen={isPaymentOpen}
+                                onClose={() => setIsPaymentOpen(false)}
+                                user={user}
+                                onSuccess={handlePaymentSuccess}
+                                onAuthRedirect={() => setActiveAuthModal('login')}
                             />
                         </div>
                     </motion.div>

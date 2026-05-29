@@ -155,4 +155,8 @@
     .navbar .nav-right {
         gap: 1rem;
     }
+
+    .nav-center {
+        display: none !important;
+    }
 }

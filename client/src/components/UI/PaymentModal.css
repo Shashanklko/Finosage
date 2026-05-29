@@ -1,0 +1,352 @@
+.payment-modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.payment-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 7, 12, 0.88);
+    backdrop-filter: blur(10px);
+}
+
+.payment-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 550px;
+    background: #060a12;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 3.5rem 2.5rem;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(212, 175, 55, 0.05);
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 175, 55, 0.2) transparent;
+}
+
+.payment-close-btn {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 2rem;
+    font-weight: 200;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 10;
+}
+
+.payment-close-btn:hover {
+    color: #fff;
+}
+
+.payment-modal-pre {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    color: var(--gold-primary);
+    display: block;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.payment-modal-title {
+    font-size: 1.6rem;
+    letter-spacing: 0.15em;
+    font-weight: 200;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1.3;
+}
+
+.payment-modal-title.success {
+    color: #34d399;
+}
+
+.payment-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 2rem;
+}
+
+.payment-desc strong {
+    color: #fff;
+    font-weight: 500;
+}
+
+.payment-step-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+}
+
+.step-number {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.6rem;
+    color: var(--gold-primary);
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.step-body h4 {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #fff;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: 0.05em;
+}
+
+.step-body p {
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0 0 1rem 0;
+}
+
+.razorpay-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gold-primary);
+    color: #060a12;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+}
+
+.razorpay-link-btn:hover {
+    transform: translateY(-1px);
+    background: #e5c04a;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+}
+
+.claim-form {
+    margin-top: 0.8rem;
+}
+
+.claim-input-group {
+    display: flex;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+.claim-input-group input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.claim-input-group input:focus {
+    border-color: rgba(212, 175, 55, 0.4);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.claim-submit-btn {
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--gold-primary);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 0 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.claim-submit-btn:hover:not(:disabled) {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: var(--gold-primary);
+}
+
+.claim-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.spinner-icon {
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.claim-error-msg {
+    margin-top: 0.6rem;
+    font-size: 0.7rem;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    padding: 0.5rem 0.8rem;
+    border-radius: 4px;
+}
+
+.payment-unauthorized {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.unauth-icon {
+    color: #ef4444;
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+}
+
+.payment-auth-btn {
+    background: var(--gold-primary);
+    color: #060a12;
+    border: none;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    padding: 0.8rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+}
+
+.payment-auth-btn:hover {
+    transform: translateY(-1px);
+    background: #e5c04a;
+}
+
+.payment-success-screen {
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+.success-check-icon {
+    color: #34d399;
+    margin-bottom: 1.5rem;
+}
+
+.success-credits-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(52, 211, 153, 0.08);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    color: #34d399;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    margin-bottom: 2rem;
+}
+
+.payment-continue-btn {
+    background: transparent;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    color: #34d399;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    padding: 0.8rem 2.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-continue-btn:hover {
+    background: rgba(52, 211, 153, 0.08);
+    border-color: #34d399;
+}
+
+.payment-modal-footer {
+    margin-top: 3rem;
+}
+
+.payment-modal-footer .divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 1rem;
+}
+
+.footer-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-align {
+    display: flex;
+    align-items: center;
+}
+
+/* Custom Scrollbar for Modal */
+.payment-modal-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.payment-modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.payment-modal-content::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.2);
+}
+
+@media (max-width: 576px) {
+    .payment-modal-content {
+        padding: 2.5rem 1.5rem;
+    }
+
+    .payment-modal-title {
+        font-size: 1.3rem;
+    }
+
+    .payment-step-card {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 1.2rem;
+    }
+
+    .claim-input-group {
+        flex-direction: column;
+    }
+
+    .claim-submit-btn {
+        padding: 0.6rem 0;
+    }
+}

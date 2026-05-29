@@ -12,7 +12,7 @@ import WithdrawalExplainer from './WithdrawalExplainer';
 import '../RetirementEngine/RetirementEngine.css';
 import './WithdrawalLab.css';
 
-const WithdrawalLabPage = ({ onBack, initialData, backRef, onPhaseChange, user, usageCount, onSimulate, onAuthRedirect }) => {
+const WithdrawalLabPage = ({ onBack, initialData, backRef, onPhaseChange, user, usageCount, onSimulate, onAuthRedirect, onOpenPayment }) => {
     const [phase, setPhase] = useState(initialData ? 'results' : 'input');
     const [formData, setFormData] = useState(initialData?.formData || null);
     const [results, setResults] = useState(initialData?.results || null);
@@ -32,21 +32,37 @@ const WithdrawalLabPage = ({ onBack, initialData, backRef, onPhaseChange, user, 
     }, [phase, backRef, onPhaseChange]);
 
     const handleGenerate = async (data) => {
+        if (user && (user.credits ?? 1) <= 0) {
+            setPhase('input');
+            if (onOpenPayment) onOpenPayment();
+            return;
+        }
         setFormData(data);
         setPhase('loading');
         setSaveStatus(null);
         try {
+            const token = localStorage.getItem('finosage_token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
             const res = await fetch('/api/withdrawal/stress-test', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(data),
             });
+            if (res.status === 402) {
+                setPhase('input');
+                if (onOpenPayment) onOpenPayment();
+                return;
+            }
             const json = await res.json();
             setResults(json);
             if (onSimulate) onSimulate();
         } catch (err) {
             console.error('Withdrawal API error:', err);
             setResults(null);
+            setPhase('input');
         }
     };
 

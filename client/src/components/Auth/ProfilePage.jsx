@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './Profile.css';
 
-const ProfilePage = ({ onBack, onHistoryClick }) => {
+const ProfilePage = ({ onBack, onHistoryClick, onOpenPaymentModal }) => {
     const [user, setUser] = useState(null);
     const [form, setForm] = useState({
         firstName: '',
@@ -128,6 +128,16 @@ const ProfilePage = ({ onBack, onHistoryClick }) => {
                     <p className="profile-tag">ACCOUNT SETTINGS</p>
                     <h2 className="profile-title">USER PROFILE</h2>
                     <div className="profile-divider" />
+                    
+                    <div className="profile-credits-bar">
+                        <div className="credits-text">
+                            <span className="credits-label">CREDIT LONGEVITY // </span>
+                            <span className="credits-count gold-text">{user?.credits ?? 1} simulations remaining</span>
+                        </div>
+                        <button type="button" className="profile-buy-btn" onClick={onOpenPaymentModal}>
+                            BUY MORE (3 for ₹100)
+                        </button>
+                    </div>
                 </div>
 
                 {error && <div className="profile-error">{error}</div>}

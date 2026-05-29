@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks, Header
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime, timedelta, timezone
@@ -317,6 +317,7 @@ async def verify_otp(req: VerifyOTPRequest):
         "email": pending["email"],
         "password": pending["password"],
         "verified": True,
+        "credits": 1,
         "createdAt": pending.get("createdAt", datetime.now(timezone.utc)),
         "verifiedAt": datetime.now(timezone.utc),
     }
@@ -337,6 +338,7 @@ async def verify_otp(req: VerifyOTPRequest):
             "firstName": user_doc["firstName"],
             "lastName": user_doc["lastName"],
             "email": user_doc["email"],
+            "credits": user_doc["credits"],
         },
     }
 
@@ -388,6 +390,7 @@ async def login(req: LoginRequest):
             "firstName": user.get("firstName", ""),
             "lastName": user.get("lastName", ""),
             "email": user["email"],
+            "credits": user.get("credits", 1),
         },
     }
 
@@ -474,6 +477,7 @@ async def get_me(token: str):
             "firstName": user.get("firstName", ""),
             "lastName": user.get("lastName", ""),
             "email": user["email"],
+            "credits": user.get("credits", 1),
         }
     }
 
@@ -502,6 +506,7 @@ async def get_profile(token: str):
             "firstName": user.get("firstName", ""),
             "lastName": user.get("lastName", ""),
             "email": user["email"],
+            "credits": user.get("credits", 1),
             "age": user.get("age"),
             "retirementAge": user.get("retirementAge"),
             "monthlyExpenses": user.get("monthlyExpenses"),
@@ -548,9 +553,91 @@ async def update_profile(token: str, req: ProfileUpdateRequest):
             "firstName": user.get("firstName", ""),
             "lastName": user.get("lastName", ""),
             "email": user["email"],
+            "credits": user.get("credits", 1),
             "age": user.get("age"),
             "retirementAge": user.get("retirementAge"),
             "monthlyExpenses": user.get("monthlyExpenses"),
             "riskTolerance": user.get("riskTolerance"),
         }
     }
+
+
+# ---------- Credits & Payments Logic ----------
+class ClaimPaymentRequest(BaseModel):
+    token: str
+    paymentId: str
+
+
+@router.post("/claim-payment")
+async def claim_payment(req: ClaimPaymentRequest):
+    db = get_db()
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not connected")
+
+    try:
+        payload = jwt.decode(req.token, settings.JWT_SECRET, algorithms=["HS256"])
+        user_id = payload.get("sub")
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    payment_id_clean = req.paymentId.strip()
+    if not payment_id_clean or len(payment_id_clean) < 6:
+        raise HTTPException(status_code=400, detail="Invalid payment reference ID format")
+
+    # Check if this payment ID has already been claimed
+    existing_payment = await db.payments.find_one({"paymentId": payment_id_clean})
+    if existing_payment:
+        raise HTTPException(status_code=409, detail="This transaction/payment ID has already been claimed")
+
+    # Save the payment record to prevent double claims
+    await db.payments.insert_one({
+        "paymentId": payment_id_clean,
+        "userId": ObjectId(user_id),
+        "amount": 100.0,
+        "creditsGranted": 3,
+        "timestamp": datetime.now(timezone.utc)
+    })
+
+    # Increment user's credits by 3
+    await db.users.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$inc": {"credits": 3}}
+    )
+
+    # Retrieve updated user
+    user = await db.users.find_one({"_id": ObjectId(user_id)})
+
+    return {
+        "success": True,
+        "message": "Payment verified! 3 credits have been added to your account.",
+        "credits": user.get("credits", 1)
+    }
+
+
+async def check_credits(authorization: Optional[str] = Header(None)):
+    """FastAPI dependency to secure simulation routes by verifying credits."""
+    if not authorization:
+        return None
+
+    try:
+        # Expected header format: "Bearer <token>"
+        token = authorization.split(" ")[1]
+        payload = jwt.decode(token, settings.JWT_SECRET, algorithms=["HS256"])
+        user_id = payload.get("sub")
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid authorization token")
+
+    db = get_db()
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not connected")
+
+    user = await db.users.find_one({"_id": ObjectId(user_id)})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    credits = user.get("credits", 1)
+    if credits <= 0:
+        raise HTTPException(status_code=402, detail="Payment Required: 0 credits left")
+
+    return user_id
+
