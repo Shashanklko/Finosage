@@ -118,7 +118,7 @@ const Discovery = ({ onBack, onModuleClick, onAuthClick }) => {
                         onClick={() => moduleRoutes[module.id] && onModuleClick?.(moduleRoutes[module.id])}
                         whileHover={{
                             y: -4,
-                            borderColor: 'rgba(212, 175, 55, 0.35)',
+                            borderColor: 'var(--gold-primary)',
                             transition: { duration: 0.3 }
                         }}
                     >
@@ -128,6 +128,11 @@ const Discovery = ({ onBack, onModuleClick, onAuthClick }) => {
                         </div>
                         <h3 className="pillar-title">{module.title}</h3>
                         <p className="pillar-description">{module.description}</p>
+                        
+                        <div className="card-action">
+                            <span>LAUNCH MODULE</span>
+                            <span className="action-arrow">→</span>
+                        </div>
                     </motion.div>
                 ))}
             </motion.div>

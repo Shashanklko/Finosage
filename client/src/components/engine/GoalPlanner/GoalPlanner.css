@@ -54,7 +54,7 @@
 .goal-row select {
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--text-primary);
     font-size: 0.75rem;
     font-family: 'Inter', sans-serif;
     font-weight: 300;
@@ -62,13 +62,13 @@
 }
 
 .goal-row select {
-    color: #9CA3AF;
+    color: var(--text-secondary);
     cursor: pointer;
 }
 
 .goal-row select option {
-    background: #111827;
-    color: #fff;
+    background: var(--bg-deep);
+    color: var(--text-primary);
 }
 
 .goal-col-label {

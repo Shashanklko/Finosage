@@ -34,7 +34,7 @@
     font-size: 0.8rem;
     font-weight: 400;
     letter-spacing: 0.4em;
-    color: #fff;
+    color: var(--text-primary);
     text-transform: uppercase;
     opacity: 0.9;
     white-space: nowrap;

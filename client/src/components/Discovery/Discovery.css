@@ -8,7 +8,7 @@
     justify-content: center;
     background: radial-gradient(circle at center, var(--bg-deep) 0%, var(--bg-darker) 100%);
     overflow: hidden;
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .discovery-background {
@@ -42,7 +42,7 @@
 .radial-overlay {
     position: absolute;
     inset: 0;
-    box-shadow: inset 0 0 250px rgba(0, 0, 0, 0.9);
+    box-shadow: var(--vignette);
 }
 
 .discovery-header {
@@ -57,7 +57,8 @@
     font-size: 1rem;
     letter-spacing: 0.8em;
     font-weight: 200;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-primary);
+    opacity: 0.9;
     text-transform: uppercase;
 }
 
@@ -80,8 +81,8 @@
 }
 
 .pillar-card.minimal-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     padding: 1.8rem 2rem;
     display: flex;
     flex-direction: column;
@@ -89,12 +90,13 @@
     position: relative;
     backdrop-filter: blur(12px);
     border-radius: 4px;
+    cursor: pointer;
 }
 
 .minimal-card:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(212, 175, 55, 0.35);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    background: var(--bg-card);
+    border-color: var(--gold-primary);
+    box-shadow: 0 8px 30px var(--gold-glow);
 }
 
 .card-top-row {
@@ -130,7 +132,7 @@
     letter-spacing: 0.2em;
     text-transform: uppercase;
     margin-bottom: 0.8rem;
-    color: #fff;
+    color: var(--text-primary);
     line-height: 1.5;
 }
 
@@ -160,4 +162,30 @@
         grid-template-columns: 1fr;
         max-width: 400px;
     }
+}
+
+.card-action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--gold-primary);
+    font-weight: 500;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.action-arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.minimal-card:hover .card-action {
+    opacity: 1;
+}
+
+.minimal-card:hover .action-arrow {
+    transform: translateX(4px);
 }

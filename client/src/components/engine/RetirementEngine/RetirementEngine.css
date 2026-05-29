@@ -6,8 +6,8 @@
 .engine-page {
     height: 100vh;
     width: 100vw;
-    background: #0B0F1C;
-    color: #fff;
+    background: radial-gradient(circle at center, var(--bg-deep) 0%, var(--bg-darker) 100%);
+    color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     position: relative;
     overflow: hidden;
@@ -85,7 +85,7 @@
 .engine-loading {
     position: fixed;
     inset: 0;
-    background: #0B0F1C;
+    background: var(--bg-deep);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -149,11 +149,11 @@
 
 .engine-input-wrap input {
     width: 100%;
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid #1F2937;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 0.75rem 3.2rem 0.75rem 1rem;
-    color: #fff;
+    color: var(--text-primary);
     font-size: 0.85rem;
     font-weight: 300;
     letter-spacing: 0.05em;
@@ -182,9 +182,6 @@
     border-left-color: rgba(239, 68, 68, 0.5);
 }
 
-.engine-input-wrap input::placeholder {
-    color: #374151;
-}
 
 .engine-input-unit {
     position: absolute;
@@ -259,9 +256,9 @@
     text-align: left;
     padding: 1rem 1.2rem;
     border-radius: 8px;
-    border: 1px solid #1F2937;
-    background: rgba(17, 24, 39, 0.4);
-    color: #9CA3AF;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-secondary);
     cursor: pointer;
     transition: all 0.3s;
     font-family: 'Inter', sans-serif;
@@ -272,9 +269,9 @@
 }
 
 .engine-strategy-btn.active {
-    background: rgba(212, 175, 55, 0.08);
-    border-color: rgba(212, 175, 55, 0.3);
-    color: #fff;
+    background: var(--gold-glow);
+    border-color: var(--gold-primary);
+    color: var(--text-primary);
 }
 
 .engine-strategy-btn .strategy-name {

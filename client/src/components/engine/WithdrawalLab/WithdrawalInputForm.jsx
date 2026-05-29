@@ -123,7 +123,7 @@ const WithdrawalInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>Retirement Savings</label>
                         <div className={`engine-input-wrap ${touched['corpus'] && getFieldError('corpus') ? 'has-error' : ''}`}>
-                            <input type="number" value={corpus} onChange={e => setCorpus(e.target.value)} onBlur={() => handleBlur('corpus')} />
+                            <input type="number" value={corpus} onChange={e => setCorpus(e.target.value)} onBlur={() => handleBlur('corpus')} placeholder="5000000" />
                             <span className="engine-input-unit">₹</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => { setCorpus(v => Number(v || 0) + 1000000); handleBlur('corpus'); }}>▲</button>
@@ -134,7 +134,7 @@ const WithdrawalInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>Annual Withdrawal</label>
                         <div className={`engine-input-wrap ${touched['annualWithdrawal'] && getFieldError('annualWithdrawal') ? 'has-error' : ''}`}>
-                            <input type="number" value={annualWithdrawal} onChange={e => setAnnualWithdrawal(e.target.value)} onBlur={() => handleBlur('annualWithdrawal')} />
+                            <input type="number" value={annualWithdrawal} onChange={e => setAnnualWithdrawal(e.target.value)} onBlur={() => handleBlur('annualWithdrawal')} placeholder="200000" />
                             <span className="engine-input-unit">₹</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => { setAnnualWithdrawal(v => Number(v || 0) + 100000); handleBlur('annualWithdrawal'); }}>▲</button>
@@ -145,7 +145,7 @@ const WithdrawalInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>Retirement Age</label>
                         <div className={`engine-input-wrap ${touched['retirementAge'] && getFieldError('retirementAge') ? 'has-error' : ''}`}>
-                            <input type="number" value={retirementAge} onChange={e => setRetirementAge(e.target.value)} onBlur={() => handleBlur('retirementAge')} />
+                            <input type="number" value={retirementAge} onChange={e => setRetirementAge(e.target.value)} onBlur={() => handleBlur('retirementAge')} placeholder="60" />
                             <span className="engine-input-unit">yrs</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => { setRetirementAge(v => Number(v || 0) + 1); handleBlur('retirementAge'); }}>▲</button>
@@ -156,7 +156,7 @@ const WithdrawalInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>How many years to plan for</label>
                         <div className={`engine-input-wrap ${touched['horizon'] && getFieldError('horizon') ? 'has-error' : ''}`}>
-                            <input type="number" value={horizon} onChange={e => setHorizon(e.target.value)} onBlur={() => handleBlur('horizon')} />
+                            <input type="number" value={horizon} onChange={e => setHorizon(e.target.value)} onBlur={() => handleBlur('horizon')} placeholder="30" />
                             <span className="engine-input-unit">yrs</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => { setHorizon(v => Number(v || 0) + 1); handleBlur('horizon'); }}>▲</button>
@@ -167,7 +167,7 @@ const WithdrawalInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>Rising Cost of Living</label>
                         <div className="engine-input-wrap">
-                            <input type="number" value={inflationRate} onChange={e => setInflationRate(e.target.value)} />
+                            <input type="number" value={inflationRate} onChange={e => setInflationRate(e.target.value)} placeholder="6" />
                             <span className="engine-input-unit">%</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => setInflationRate(v => Number(v || 0) + 1)}>▲</button>
@@ -178,7 +178,7 @@ const WithdrawalInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>Estimated Tax Rate</label>
                         <div className="engine-input-wrap">
-                            <input type="number" value={taxRate} onChange={e => setTaxRate(e.target.value)} />
+                            <input type="number" value={taxRate} onChange={e => setTaxRate(e.target.value)} placeholder="10" />
                             <span className="engine-input-unit">%</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => setTaxRate(v => Number(v || 0) + 1)}>▲</button>

@@ -61,7 +61,7 @@
     width: 2.5rem;
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--text-primary);
     font-size: 0.85rem;
     font-weight: 300;
     text-align: right;
@@ -148,8 +148,8 @@
     text-align: center;
     padding: 0.6rem;
     border-radius: 6px;
-    border: 1px solid #1F2937;
-    background: rgba(17, 24, 39, 0.3);
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
     color: #6B7280;
     cursor: pointer;
     transition: all 0.3s;
@@ -163,9 +163,9 @@
 }
 
 .risk-option.active {
-    background: rgba(212, 175, 55, 0.08);
-    border-color: rgba(212, 175, 55, 0.3);
-    color: #fff;
+    background: var(--gold-glow);
+    border-color: var(--gold-primary);
+    color: var(--text-primary);
 }
 
 /* ---- Donut Chart Container ---- */

@@ -12,6 +12,9 @@
     --blue-glow: rgba(0, 100, 255, 0.08);
     --grid-color: rgba(255, 255, 255, 0.03);
     --navbar-bg: rgba(10, 15, 26, 0.8);
+    --vignette: inset 0 0 250px rgba(0, 0, 0, 0.9);
+    --vignette-profile: inset 0 0 300px rgba(0, 0, 0, 0.8);
+    --text-placeholder: rgba(255, 255, 255, 0.25);
 }
 
 .light-theme {
@@ -27,6 +30,9 @@
     --blue-glow: rgba(59, 130, 246, 0.05);
     --grid-color: rgba(15, 23, 42, 0.05);
     --navbar-bg: rgba(248, 250, 252, 0.8);
+    --vignette: inset 0 0 250px rgba(15, 23, 42, 0.04);
+    --vignette-profile: inset 0 0 300px rgba(15, 23, 42, 0.04);
+    --text-placeholder: rgba(15, 23, 42, 0.35);
 }
 
 * {
@@ -42,9 +48,25 @@ body {
     transition: background-color 0.5s ease, color 0.5s ease;
 }
 
+.app-container {
+    background-color: var(--bg-deep);
+    color: var(--text-primary);
+    min-height: 100vh;
+    width: 100%;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
 .gold-text {
     color: var(--gold-primary);
     background: linear-gradient(135deg, var(--gold-primary) 0%, #f1c40f 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+/* Global Placeholder Styling */
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+    color: var(--text-placeholder) !important;
+    opacity: 1 !important;
 }

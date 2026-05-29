@@ -138,6 +138,7 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                                         value={goal.amount}
                                         onChange={e => updateGoal(goal.id, 'amount', e.target.value)}
                                         onBlur={() => handleBlur(`goal-${goal.id}-amount`)}
+                                        placeholder="5000000"
                                     />
                                 </div>
                                 <div>
@@ -147,6 +148,7 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                                         value={goal.years}
                                         onChange={e => updateGoal(goal.id, 'years', e.target.value)}
                                         onBlur={() => handleBlur(`goal-${goal.id}-years`)}
+                                        placeholder="10"
                                         style={{ width: '3rem' }}
                                     />
                                     <span style={{ fontSize: '0.55rem', color: '#4B5563', marginLeft: '0.3rem' }}>yrs</span>
@@ -190,7 +192,7 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>Monthly Savings</label>
                         <div className={`engine-input-wrap ${touched['monthlySavings'] && getFieldError('monthlySavings') ? 'has-error' : ''}`}>
-                            <input type="number" value={monthlySavings} onChange={e => setMonthlySavings(e.target.value)} onBlur={() => handleBlur('monthlySavings')} />
+                            <input type="number" value={monthlySavings} onChange={e => setMonthlySavings(e.target.value)} onBlur={() => handleBlur('monthlySavings')} placeholder="50000" />
                             <span className="engine-input-unit">₹</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => { setMonthlySavings(v => Number(v || 0) + 5000); handleBlur('monthlySavings'); }}>▲</button>
@@ -201,7 +203,7 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>Yearly Savings Increase</label>
                         <div className="engine-input-wrap">
-                            <input type="number" value={stepUpPercent} onChange={e => setStepUpPercent(e.target.value)} onBlur={() => handleBlur('stepUpPercent')} />
+                            <input type="number" value={stepUpPercent} onChange={e => setStepUpPercent(e.target.value)} onBlur={() => handleBlur('stepUpPercent')} placeholder="10" />
                             <span className="engine-input-unit">%</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => { setStepUpPercent(v => Math.min(100, Number(v || 0) + 1)); handleBlur('stepUpPercent'); }}>▲</button>
@@ -212,7 +214,7 @@ const GoalInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>Current Savings</label>
                         <div className="engine-input-wrap">
-                            <input type="number" value={existingCorpus} onChange={e => setExistingCorpus(e.target.value)} onBlur={() => handleBlur('existingCorpus')} />
+                            <input type="number" value={existingCorpus} onChange={e => setExistingCorpus(e.target.value)} onBlur={() => handleBlur('existingCorpus')} placeholder="5000000" />
                             <span className="engine-input-unit">₹</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => { setExistingCorpus(v => Number(v || 0) + 1000000); handleBlur('existingCorpus'); }}>▲</button>

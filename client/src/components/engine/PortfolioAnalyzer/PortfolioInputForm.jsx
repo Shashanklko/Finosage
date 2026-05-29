@@ -131,6 +131,7 @@ const PortfolioInputForm = ({ onGenerate, onBack }) => {
                                         onBlur={() => handleBlur(`weight-${asset.id}`)}
                                         min={0}
                                         max={100}
+                                        placeholder={asset.defaultWeight}
                                     />
                                     <span className="alloc-percent">%</span>
                                     <div className="alloc-stepper">
@@ -156,7 +157,7 @@ const PortfolioInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>Investment Amount</label>
                         <div className={`engine-input-wrap ${touched['amount'] && getFieldError('amount') ? 'has-error' : ''}`}>
-                            <input type="number" value={amount} onChange={e => { setAmount(e.target.value); setError(''); }} onBlur={() => handleBlur('amount')} />
+                            <input type="number" value={amount} onChange={e => { setAmount(e.target.value); setError(''); }} onBlur={() => handleBlur('amount')} placeholder="5000000" />
                             <span className="engine-input-unit">₹</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => { setAmount(a => Number(a || 0) + 100000); handleBlur('amount'); }}>▲</button>
@@ -167,7 +168,7 @@ const PortfolioInputForm = ({ onGenerate, onBack }) => {
                     <div className="engine-field">
                         <label>Time Horizon</label>
                         <div className={`engine-input-wrap ${touched['horizon'] && getFieldError('horizon') ? 'has-error' : ''}`}>
-                            <input type="number" value={horizon} onChange={e => { setHorizon(e.target.value); setError(''); }} onBlur={() => handleBlur('horizon')} />
+                            <input type="number" value={horizon} onChange={e => { setHorizon(e.target.value); setError(''); }} onBlur={() => handleBlur('horizon')} placeholder="10" />
                             <span className="engine-input-unit">years</span>
                             <div className="engine-stepper">
                                 <button className="engine-stepper-btn" onClick={() => { setHorizon(h => Number(h || 0) + 1); handleBlur('horizon'); }}>▲</button>

@@ -4,9 +4,9 @@
     left: 0;
     right: 0;
     height: 36px;
-    background: linear-gradient(to top, rgba(5, 7, 12, 0.9), transparent);
+    background: linear-gradient(to top, var(--bg-deep), transparent);
     backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: center;
     align-items: center;
