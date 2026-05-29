@@ -323,8 +323,8 @@
    HERO STAT CARD
    ============================================ */
 .engine-card {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid #1F2937;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 1rem;
     padding: 3rem;
     position: relative;
@@ -361,14 +361,14 @@
 
 .hero-stat-label {
     font-size: 1rem;
-    color: #9CA3AF;
+    color: var(--text-secondary);
     letter-spacing: 0.15em;
     font-weight: 300;
 }
 
 .hero-stat-desc {
     font-size: 0.8rem;
-    color: #4B5563;
+    color: var(--text-secondary);
     margin-top: 0.75rem;
     max-width: 28rem;
     line-height: 1.6;
@@ -376,7 +376,7 @@
 
 .hero-sparkline-label {
     font-size: 0.55rem;
-    color: #4B5563;
+    color: var(--text-muted);
     letter-spacing: 0.3em;
     text-transform: uppercase;
     text-align: right;
@@ -389,7 +389,7 @@
     gap: 1.5rem;
     margin-top: 2.5rem;
     padding-top: 2rem;
-    border-top: 1px solid rgba(31, 41, 55, 0.5);
+    border-top: 1px solid var(--border-color);
 }
 
 .hero-sub-metric {
@@ -404,7 +404,7 @@
 
 .hero-sub-metric .sub-label {
     font-size: 0.55rem;
-    color: #6B7280;
+    color: var(--text-muted);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     margin-top: 0.5rem;
@@ -466,8 +466,8 @@
 }
 
 .engine-stat-card {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid #1F2937;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 0.8rem;
     padding: 1.2rem;
     text-align: center;
@@ -499,7 +499,7 @@
 
 .engine-stat-label {
     font-size: 0.5rem;
-    color: #6B7280;
+    color: var(--text-muted);
     letter-spacing: 0.15em;
     text-transform: uppercase;
 }
@@ -515,8 +515,8 @@
 }
 
 .insight-card {
-    background: rgba(17, 24, 39, 0.5);
-    border: 1px solid #1F2937;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 0.8rem;
     padding: 1.2rem;
     text-align: center;
@@ -537,7 +537,7 @@
 
 .insight-title {
     font-size: 0.55rem;
-    color: #6B7280;
+    color: var(--text-muted);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     margin-bottom: 0.5rem;
@@ -546,14 +546,14 @@
 .insight-value {
     font-size: 1.3rem;
     font-weight: 300;
-    color: #d4af37;
+    color: var(--gold-primary);
     letter-spacing: 0.03em;
     margin-bottom: 0.4rem;
 }
 
 .insight-desc {
     font-size: 0.65rem;
-    color: #4B5563;
+    color: var(--text-secondary);
     line-height: 1.4;
 }
 
@@ -638,8 +638,8 @@
 }
 
 .explainer-card {
-    background: rgba(17, 24, 39, 0.5);
-    border: 1px solid #1F2937;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 1rem;
     padding: 2rem;
     backdrop-filter: blur(10px);
@@ -647,7 +647,7 @@
 
 .explainer-tag {
     font-size: 0.5rem;
-    color: #6B7280;
+    color: var(--text-muted);
     letter-spacing: 0.3em;
     text-transform: uppercase;
     margin-bottom: 0.5rem;
@@ -657,7 +657,7 @@
     font-size: 1rem;
     letter-spacing: 0.1em;
     text-transform: none;
-    color: #fff;
+    color: var(--text-primary);
     font-weight: 300;
     margin-bottom: 0;
 }
@@ -713,13 +713,13 @@
     font-weight: 500;
     letter-spacing: 0.1em;
     margin-bottom: 0.25rem;
-    color: #E5E7EB;
+    color: var(--text-primary);
 }
 
 .explainer-item-text {
     font-size: 0.65rem;
     line-height: 1.6;
-    color: #9CA3AF;
+    color: var(--text-secondary);
     font-weight: 300;
 }
 

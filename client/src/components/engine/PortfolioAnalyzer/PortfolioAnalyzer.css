@@ -15,8 +15,8 @@
 }
 
 .alloc-field {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid #1F2937;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 0.8rem 1rem;
     display: flex;
@@ -45,7 +45,7 @@
 
 .alloc-name {
     font-size: 0.7rem;
-    color: #9CA3AF;
+    color: var(--text-secondary);
     letter-spacing: 0.08em;
     flex: 1;
 }
@@ -78,7 +78,7 @@
 
 .alloc-percent {
     font-size: 0.6rem;
-    color: #4B5563;
+    color: var(--text-secondary);
     margin-left: 0.1rem;
 }
 
@@ -90,7 +90,7 @@
 }
 
 .alloc-stepper-btn {
-    background: rgba(31, 41, 55, 0.5);
+    background: var(--bg-darker);
     border: none;
     color: #4B5563;
     cursor: pointer;
@@ -150,7 +150,7 @@
     border-radius: 6px;
     border: 1px solid var(--border-color);
     background: var(--bg-card);
-    color: #6B7280;
+    color: var(--text-muted);
     cursor: pointer;
     transition: all 0.3s;
     font-family: 'Inter', sans-serif;
@@ -187,7 +187,7 @@
     align-items: center;
     gap: 0.5rem;
     font-size: 0.65rem;
-    color: #9CA3AF;
+    color: var(--text-secondary);
 }
 
 .donut-legend-color {
@@ -205,7 +205,7 @@
 }
 
 .corr-matrix th {
-    color: #6B7280;
+    color: var(--text-muted);
     font-weight: 400;
     letter-spacing: 0.1em;
     padding: 0.5rem;
@@ -216,7 +216,7 @@
 .corr-matrix td {
     text-align: center;
     padding: 0.5rem;
-    border: 1px solid rgba(31, 41, 55, 0.3);
+    border: 1px solid var(--border-color);
     font-weight: 300;
     font-size: 0.7rem;
 }
@@ -227,7 +227,7 @@
     gap: 1.5rem;
     margin-top: 1rem;
     font-size: 0.6rem;
-    color: #6B7280;
+    color: var(--text-muted);
 }
 
 .mc-legend-dot {

@@ -29,8 +29,8 @@
     grid-template-columns: 2fr 1.2fr 1fr 1fr auto;
     gap: 0.6rem;
     align-items: center;
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid #1F2937;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 0.6rem 0.8rem;
     transition: border-color 0.3s;
@@ -95,7 +95,7 @@
 
 .goal-add-btn {
     background: transparent;
-    border: 1px dashed #1F2937;
+    border: 1px dashed var(--border-color);
     border-radius: 8px;
     color: #4B5563;
     font-size: 0.7rem;
@@ -123,8 +123,8 @@
 }
 
 .goal-success-card {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid #1F2937;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 1rem;
     padding: 1.5rem;
     text-align: center;
@@ -173,14 +173,14 @@
 
 .goal-success-name {
     font-size: 0.7rem;
-    color: #9CA3AF;
+    color: var(--text-secondary);
     letter-spacing: 0.1em;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.35rem;
 }
 
 .goal-success-target {
-    font-size: 0.6rem;
-    color: #4B5563;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
 }
 
 /* ---- Timeline Chart ---- */
@@ -208,7 +208,8 @@
 .timeline-bar-bg {
     flex: 1;
     height: 18px;
-    background: rgba(17, 24, 39, 0.5);
+    background: var(--bg-darker);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     position: relative;
     overflow: hidden;
@@ -274,8 +275,8 @@
 
 /* Base Card Upgrade */
 .advanced-insights-grid .engine-card {
-    background: rgba(17, 24, 39, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 1.5rem;
     position: relative;
@@ -331,7 +332,7 @@
 
 .card-desc {
     font-size: 0.7rem;
-    color: #9CA3AF;
+    color: var(--text-secondary);
     margin-bottom: 1.5rem;
     margin-top: 0;
     line-height: 1.5;
@@ -340,7 +341,7 @@
 
 .metric-label {
     font-size: 0.6rem;
-    color: #6B7280;
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.15em;
     margin-bottom: 0.35rem;
@@ -350,7 +351,7 @@
 .metric-value-sm {
     font-size: 1.25rem;
     font-weight: 300;
-    color: #F3F4F6;
+    color: var(--text-primary);
     letter-spacing: 0.02em;
 }
 
@@ -359,10 +360,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: linear-gradient(145deg, rgba(0, 0, 0, 0.3), rgba(17, 24, 39, 0.6));
+    background: var(--bg-darker);
     padding: 1.25rem;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
 }
 
 .metric-value.highlight {
@@ -414,14 +415,14 @@
 .score-value {
     font-size: 2rem;
     font-weight: 300;
-    color: #fff;
+    color: var(--text-primary);
     line-height: 1;
     margin-top: 0.5rem;
 }
 
 .score-max {
     font-size: 0.65rem;
-    color: #6B7280;
+    color: var(--text-muted);
     letter-spacing: 0.1em;
 }
 
@@ -436,9 +437,9 @@
     display: flex;
     justify-content: space-between;
     font-size: 0.8rem;
-    color: #9CA3AF;
+    color: var(--text-secondary);
     padding-bottom: 0.4rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .breakdown-item:last-child {
@@ -447,7 +448,7 @@
 }
 
 .breakdown-val {
-    color: #E5E7EB;
+    color: var(--text-primary);
     font-weight: 400;
 }
 
@@ -492,18 +493,18 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 1rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--bg-darker);
     border-radius: 6px;
     border-left: 2px solid transparent;
     transition: background 0.2s;
 }
 
 .cushion-item:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-card);
 }
 
 .cushion-name {
-    color: #D1D5DB;
+    color: var(--text-secondary);
     font-size: 0.85rem;
     font-weight: 300;
 }
@@ -530,8 +531,8 @@
 }
 
 .inflation-item {
-    background: linear-gradient(145deg, rgba(0, 0, 0, 0.2), rgba(17, 24, 39, 0.4));
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     padding: 1.25rem;
     border-radius: 8px;
     transition: transform 0.2s;
@@ -539,11 +540,11 @@
 
 .inflation-item:hover {
     transform: translateY(-2px);
-    border-color: rgba(212, 175, 55, 0.1);
+    border-color: var(--gold-primary);
 }
 
 .inf-name {
-    color: #d4af37;
+    color: var(--gold-primary);
     font-size: 0.8rem;
     margin-bottom: 1.2rem;
     font-weight: 400;
@@ -559,14 +560,14 @@
 
 .inf-label {
     font-size: 0.55rem;
-    color: #6B7280;
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 0.35rem;
 }
 
 .inf-val-sm {
-    color: #D1D5DB;
+    color: var(--text-primary);
     font-size: 1.15rem;
     font-weight: 300;
 }
