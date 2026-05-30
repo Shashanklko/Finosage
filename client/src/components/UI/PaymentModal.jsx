@@ -94,7 +94,7 @@ const PaymentModal = ({ isOpen, onClose, user, onSuccess, onAuthRedirect }) => {
                                         <h4>Pay ₹100 via Razorpay</h4>
                                         <p>Make your instant payment using standard UPI, Cards or NetBanking on our secure Razorpay portal.</p>
                                         <a 
-                                            href="https://razorpay.me/@nowayside" 
+                                            href="https://rzp.io/rzp/finosage" 
                                             target="_blank" 
                                             rel="noopener noreferrer" 
                                             className="razorpay-link-btn"
